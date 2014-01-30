@@ -1,0 +1,10 @@
+<link rel="import" href="../components/polymer/polymer.html">
+
+<polymer-element name="data-field" noscript attributes="data label">
+  <template>
+    <template if="{{data!=null}}">
+      <strong>{{label}}:</strong> {{data}}<br/>
+    </template>
+  </template>
+  <script>Polymer('data-field');</script>
+</polymer-element>

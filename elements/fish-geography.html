@@ -1,0 +1,61 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<script src="../js/d3/d3.v3.min.js"></script>
+<script src="../js/topojson/topojson.v1.min.js"></script>
+<script src="../js/datamaps.world.min.js"></script>
+
+<polymer-element name="fish-geography" noscript attributes="width countries">
+  <template>
+    <style>
+      #container {
+	position:relative;
+	border: 1px solid #DDDDDD;
+	border-radius: 10px;
+	background-color: #56A5EC;
+      }
+    </style>
+    <div id="container" style="width:{{width}}px;height:{{width*0.425}}px;"></div>
+  </template>
+  <script>
+  //https://github.com/markmarkoh/datamaps/blob/master/README.md#getting-started
+  
+    Polymer('fish-geography', {
+      map: null,
+      countriesChanged: function(attrName, oldVal, newVal) {
+	
+      	var filled = { fillKey: 'MEDIUM' };
+	var countriesToFill = {};
+	var c = this.countries;
+	for(i = 0; i < c.length;i++){
+	  countriesToFill[c[i]] = filled;
+	}
+	console.log(countriesToFill);
+	      
+	this.map = new Datamap({element: this.$.container,	
+	  fills: {
+	      MEDIUM: '#FBB917',
+	      defaultFill: '#ABDDA4'
+	  },
+	  data: countriesToFill,
+	  geographyConfig: {
+	      dataUrl: null, //if not null, datamaps will fetch the map JSON (currently only supports topojson)
+	      hideAntarctica: false,
+	      borderWidth: 1,
+	      borderColor: '#99C68E',
+	      popupTemplate: function(geography, data) { //this function should just return a string
+		if(c.indexOf(geography.id)>-1){
+		  return '<div class="hoverinfo"><strong>' + geography.properties.name + '</strong></div>';
+		}else{
+		  return '';
+		}
+	      },
+	      popupOnHover: true, //disable the popup while hovering
+	      highlightOnHover: true,
+	      highlightFillColor: '#FC8D59',
+	      highlightBorderColor: 'rgba(250, 15, 160, 0.2)',
+	      highlightBorderWidth: 2
+	  }	  
+	});
+      }
+    });
+  </script>    
+</polymer-element>

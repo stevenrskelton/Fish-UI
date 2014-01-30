@@ -2,7 +2,7 @@
 
 <polymer-element name="data-range" noscript attributes="data label">
   <template>
-    <strong>{{label}}:</strong> {{data.min + '-' + data.max + ' ' + data.unit }}
+    <strong>{{label}}:</strong> {{data.min + (data.max != null ? ('-' + data.max) : '') + ' ' + data.unit }}
   </template>
   <script>Polymer('data-range');</script>
 </polymer-element>

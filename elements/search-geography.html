@@ -1,16 +1,21 @@
 <link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../components/polymer-flex-layout/polymer-flex-layout.html">
+
 <script src="../js/d3/d3.v3.min.js"></script>
 <script src="../js/topojson/topojson.v1.min.js"></script>
 <script src="../js/datamaps.world.min.js"></script>
+
 <polymer-element name="search-geography" noscript>  
   <template>
-    <div id="container" style="position: relative; width: 1000px; height: 600px;"></div>
+    <div id="container" style="position:relative;width:100%;background-color:#C2DFFF"></div>
   </template>
-  
   <script>
     Polymer('search-geography', {
       ready: function(){
-	var map = new Datamap({element: this.$.container});	
+	this.$.container.style.height = (window.innerWidth * 0.425) + 'px';
+      },
+      attached: function(){
+	var map = new Datamap({element: this.$.container});
       }
     });
   </script>    
