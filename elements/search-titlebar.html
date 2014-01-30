@@ -1,0 +1,66 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../components/polymer-localstorage/polymer-localstorage.html">
+<link rel="import" href="../components/polymer-signals/polymer-signals.html">
+
+<polymer-element name="search-titlebar" noscript attributes="tankSize currentItems purchases budget purchasesTotal">
+  <template>
+    <polymer-signals on-polymer-signal-foo="{{calculateTotalsEvent}}"></polymer-signals>
+    <div style="width:60%;display:inline-block;">Budget Remaining: <strong style="color:{{ budget - purchasesTotal >= 0 ? '' : '#ff0000'}}">${{budget - purchasesTotal}}</strong></div><!--
+    --><div style="width:40%;display:inline-block;">Bio-Load: <strong style="color:{{bioloadColour}}">{{bioload}}</strong></div>
+  </template>
+  <script>
+    Polymer('search-titlebar',{
+      bioloadColour: '',
+      bioload: '',
+      observe: {
+	budget: 'calculateTotals',
+	purchases: 'calculateTotals',
+	currentItems: 'calculateTotals',
+	tankSize: 'calculateTotals'
+      },
+      calculateTotalsEvent: function(e, detail, sender) {
+	this.calculateTotals();
+      },
+      ready: function(){ this.calculateTotals() },
+      calculateTotals: function(){
+	console.log("calculateTotals");
+	this.purchasesTotal = 0;
+
+	var s = 0;
+	var bionumber = 0;	
+	if(this.purchases != null){
+	  var c = this.purchases;
+	  for(i = 0; i < c.length; i++){
+	    s = s + (c[i].number * c[i].price);
+	    bionumber = bionumber + (c[i].number * c[i].bioload);
+	  }
+	}
+	this.purchasesTotal = s;
+      
+	var c = this.currentItems || []
+	for(i = 0; i < c.length; i++){
+	  bionumber = bionumber + (c[i].number * c[i].bioload);
+	}
+	
+	//console.log(this.tankSize);
+	//console.log(bionumber);
+	
+	var tankSize = this.tankSize * 1
+	
+	if(bionumber > tankSize){
+	  this.bioloadColour = '#ff0000';  
+	  this.bioload = 'Hazardous';
+	}else if((tankSize - bionumber) < (0.1 * tankSize)){
+	  this.bioloadColour = '#e56717';
+	  this.bioload = 'High';
+	}else if((tankSize - bionumber) < (0.25 * tankSize)){
+	  this.bioloadColour = '#fff380';
+	  this.bioload = 'Near Capacity';
+	}else{
+	  this.bioloadColour = '#00ff00';
+	  this.bioload = 'Safe';
+	}
+      }
+    });
+  </script>    
+</polymer-element>

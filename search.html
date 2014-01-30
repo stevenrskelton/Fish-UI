@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Sample app</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <script src="components/platform/platform.js"></script>
+    <link rel="import" href="components/polymer/polymer.html">
+    <link rel="stylesheet" href="components/polymer-ui-base/base.css">
+    <link rel="stylesheet" href="css/mybootstrap.css">
+    
+    <link rel="import" href="elements/search-titlebar.html">
+    <link rel="import" href="elements/search-tank.html">
+    <link rel="import" href="elements/search-purchases.html">
+    <link rel="import" href="elements/search-habitat.html">
+    <link rel="import" href="elements/search-behaviour.html">
+    <link rel="import" href="elements/search-geography.html">
+    <link rel="import" href="elements/search-results.html">
+ 
+    <link rel="import" href="components/polymer-collapse/polymer-collapse.html">
+    <link rel="import" href="components/polymer-ui-toolbar/polymer-ui-toolbar.html">
+    <link rel="import" href="components/polymer-ui-menu-button/polymer-ui-menu-button.html">
+    <link rel="import" href="components/polymer-ui-menu-item/polymer-ui-menu-item.html">
+
+    <style>
+      [navigation] {
+        width: 256px;
+        height: 100%;
+      }
+    </style>    
+  </head>
+  <body unresolved>  
+
+<polymer-element name="search-add" noscript>
+  <template>  
+    <polymer-ui-toolbar theme="polymer-ui-dark-theme" class="align-center polymer-ui-dark-theme flexbox">
+    
+      <polymer-ui-menu-button selected="2" theme="polymer-ui-dark-theme" icon="menu" id="searchMenu" on-polymer-select="{{selectPanel}}">
+	<polymer-ui-menu-item targetId="collapseTank">Tank</polymer-ui-menu-item>
+	<polymer-ui-menu-item targetId="collapseResults">Search Results</polymer-ui-menu-item>
+	<polymer-ui-menu-item targetId="collapseList">Purchase List</polymer-ui-menu-item>
+	<polymer-ui-menu-item targetId="collapseHabitat">Habitat</polymer-ui-menu-item>
+	<polymer-ui-menu-item targetId="collapseBehaviour">Behaviour</polymer-ui-menu-item>
+	<polymer-ui-menu-item targetId="collapseGeography">Geographics</polymer-ui-menu-item>
+      </polymer-ui-menu-button>
+      
+      <div tool flex>Find your New Livestock</div>    
+    
+      <polymer-ui-toolbar responsive class="align-center polymer-ui-dark-theme flexbox" flex style="text-align:center">
+      
+	<polymer-flex-layout align="center" style="display: none;">
+	</polymer-flex-layout>
+    
+	<polymer-media-query query="max-width: 800px">
+	</polymer-media-query>
+	
+	<search-titlebar style="width:100%" tankSize="{{tankSize}}" currentItems="{{currentItems}}" budget="{{budget}}" purchases="{{purchases}}" purchasesTotal="{{purchasesTotal}}"></search-titlebar>
+
+      </polymer-ui-toolbar>       
+      
+      <polymer-ui-icon-button tool icon="trash" class="polymer-ui-dark-theme" on-click="{{trash}}">
+      </polymer-ui-icon-button> 
+      
+    </polymer-ui-toolbar>      
+
+    <search-tank id="tank" tankSize="{{tankSize}}"></search-tank>
+    <polymer-collapse closed id="collapseTank" targetId="tank" duration="0"></polymer-collapse>
+
+    <search-purchases id="list" currentItems="{{currentItems}}" budget="{{budget}}" purchases="{{purchases}}" purchasesTotal="{{purchasesTotal}}"></search-purchases>
+    <polymer-collapse closed id="collapseList" targetId="list" duration="0"></polymer-collapse>
+    
+    <search-results id="results"></search-results>
+    <polymer-collapse closed id="collapseResults" targetId="results" duration="0"></polymer-collapse>    
+
+    <search-habitat id="habitat"></search-habitat>
+    <polymer-collapse closed id="collapseHabitat" targetId="habitat" duration="0"></polymer-collapse>
+      
+    <search-behaviour id="behaviour"></search-behaviour>
+    <polymer-collapse closed id="collapseBehaviour" targetId="behaviour" duration="0"></polymer-collapse>
+  
+    <search-geography id="geography"></search-geography>
+    <polymer-collapse closed id="collapseGeography" targetId="geography" duration="0"></polymer-collapse>
+    
+    <polymer-localstorage name="currentItems" value="{{currentItems}}" autoSaveDisabled></polymer-localstorage>
+    <polymer-localstorage name="budget" value="{{budget}}"></polymer-localstorage>
+    <polymer-localstorage name="purchases" value="{{purchases}}"></polymer-localstorage>
+  </template>
+  <script>
+    Polymer('search-add',{
+      selectPanel: function(){
+	if(this.$.searchMenu.selection==null){
+	  var f = function(item){
+	    if(!item.closed) item.toggle();
+	  }
+	  f(this.$.collapseTank);
+	  f(this.$.collapseList);
+	  f(this.$.collapseHabitat);
+	  f(this.$.collapseBehaviour);
+	  f(this.$.collapseGeography);
+	  f(this.$.collapseResults);
+	}else{
+	  var collapser = this.$[this.$.searchMenu.selection.getAttribute('targetId')];
+	  if(collapser.closed) collapser.toggle();
+	}
+      },
+      trash: function(){
+	if(confirm('Do you want clear all your selections and start a new tank?')){
+	  document.location.href='index.html'
+	}
+      }      
+    });
+  </script>
+</polymer-element>
+
+    <search-add></search-add>
+  </body> 
+</html>

@@ -1,0 +1,32 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../components/polymer-ui-icon-button/polymer-ui-icon-button.html">
+<link rel="import" href="data-search.html">
+
+<polymer-element name="search-results" noscript>
+  <template>
+    <h2>Search Results</h2>
+    <template repeat="{{results}}">
+      <div class="panel" style="vertical-align:top;clear:both;background-color:#ffffe0;">
+      
+	<polymer-ui-icon-button icon="maximize" style="float:right;margin-left:15px"></polymer-ui-icon-button>
+	<polymer-ui-icon-button icon="add" style="float:right;margin-left:15px"></polymer-ui-icon-button>
+	<polymer-ui-icon-button icon="dialog" style="float:right;margin-left:15px" onclick="document.location.href='fish.html'"></polymer-ui-icon-button>
+	<div style="float:right;margin:-3px 0 -3px;">
+	  <input id="number" type="text" class="form-control input-lg" placeholder="#" style="width:100px;text-align:right" value="{{number}}"/>
+	  <span class="input-group-addon">Many</span>
+	</div>
+	
+	<img title="{{species}}" alt="{{species}}" src="{{src}}" width="100px" height="50px" style="float:left;border-radius:4px;margin:-5px 10px 0 -5px;" />
+	
+	<strong>{{name}}</strong><br/>
+	{{species}}
+      </div>
+    </template>
+    <data-search response="{{results}}"></data-search>
+  </template>
+  <script> 
+    Polymer('search-results', {      
+      expand: function(){}
+    });
+  </script>    
+</polymer-element>

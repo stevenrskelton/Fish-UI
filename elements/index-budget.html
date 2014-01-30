@@ -1,0 +1,78 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../components/polymer-localstorage/polymer-localstorage.html">
+<link rel="import" href="../components/polymer-ui-tabs/polymer-ui-tabs.html">
+    
+<polymer-element name="index-budget" noscript>
+  <template>
+    <style type="text/css">      
+      polymer-ui-tabs div {
+	width: 100px;
+	border: 1px solid black;
+	display: inline-block;
+	height: 30px;
+	line-height: 30px;
+      }
+    </style>
+    <div class="input-group" style="width:250px;margin-left:auto;margin-right:auto;">
+      <div class="input-group-addon" style="margin-right:-25px;margin-top:4px;position:relative;display:inline-block;font-weight:normal;">$</div><input id="budgetInput" type="text" class="form-control" style="text-align:right;margin-left:12px;" value="{{budget}}" on-keyup="{{budgetChange}}" onfocus="this.select()">
+    </div>
+    
+    <polymer-ui-tabs style="width:300px;margin:0px auto 10px auto;" id="budgetTab">
+      <div on-click="{{setStarterBudget}}" style="border-radius:4px 0px 0px 4px;">Starter</div>
+      <div on-click="{{setAverageBudget}}">Average</div>
+      <div on-click="{{setHighEndBudget}}" style="border-radius:0px 4px 4px 0px;">High-End</div>
+    </polymer-ui-tabs>
+    
+    <div class="panel-body">
+    
+      <button type="button" class="btn button1" style="margin-bottom:10px;margin-top:15px;" on-click="{{startNewAquarium}}">
+	<polymer-ui-icon icon="shortcut"></polymer-ui-icon> Start a new aquarium
+      </button>
+
+
+      <button type="button" class="btn button1" on-click="{{addToCurrent}}">
+	<polymer-ui-icon icon="add"></polymer-ui-icon> Add to your aquarium
+      </button>
+    
+    </div>    
+    
+    <polymer-localstorage name="budget" value="{{budget}}" on-polymer-localstorage-load="{{budgetChange}}"></polymer-localstorage>
+  </template>
+  <script>
+    Polymer('index-budget', {
+      setStarterBudget: function(){ this.budget = 10; },
+      setAverageBudget: function(){ this.budget = 25; },
+      setHighEndBudget: function(){ this.budget = 50; },
+      budgetChange: function(){
+	if(this.budget != null){
+	  var v = (this.budget + '').replace(/[^\d]/,'');
+	  if(v=='') v = 10;
+	  this.budget = v * 1;
+	  if(v <= 15){
+	    this.$.budgetTab.selected = 0
+	  }else if(v <= 25){
+	    this.$.budgetTab.selected = 1
+	  }else{
+	    this.$.budgetTab.selected = 2
+	  }
+	}
+      },
+      startNewAquarium: function(){
+	if(this.budget>0){
+	  document.location.href='search.html';
+	}else{
+	  alert('Please enter a budget for your purchases.');
+	  this.$.budgetInput.focus();
+	}
+      },
+      addToCurrent: function(){
+	if(this.budget>0){
+	  document.location.href='current.html';
+	}else{
+	  alert('Please enter a budget for your purchases.');
+	  this.$.budgetInput.focus();
+	}
+      }
+    });
+  </script>    
+</polymer-element>

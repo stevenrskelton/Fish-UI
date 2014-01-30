@@ -1,0 +1,11 @@
+<link rel="import" href="../components/polymer/polymer.html">
+
+<polymer-element name="data-checkbox" noscript attributes="data label">
+  <template if="data">
+    <div style="display:inline;color:green;">✓</div>{{label}}
+  </template>
+  <template if="!data">
+    <div style="display:inline;color:red;">x</div>{{label}}
+  </template>  
+  <script>Polymer('data-checkbox');</script>
+</polymer-element>

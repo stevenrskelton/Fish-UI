@@ -1,0 +1,20 @@
+<link rel="import" href="../components/polymer/polymer.html">
+
+<polymer-element name="data-current" noscript attributes="params response">
+  <script>
+    Polymer('data-current',{
+      ready: function(){
+	this.response = [
+	  { species: "Beaufortia kweichowensis", name: "Hillstream Loach", src: "../img/species/hillstreamloach.jpg", bioload: 1 },
+	  { species: "Danio margaritatus", name: "Celestial Pearl Danio", src: "../img/species/Celestichthys_margaritatus.jpg", bioload: 1 },
+	  { species: "Paracheirodon innesi", name: "Neon Tetra", src: "../img/species/800px-Paracheirodon_innesi_(aka).jpg", bioload: 1 },
+	  { species: "Mikrogeophagus altispinosus", name: "Bolivian Ram", src: "../img/species/Female_Bolivian.jpg", bioload: 3 },
+	  { species: "Osteoglossum bicirrhosum", name: "Silver Arowana", src: "../img/species/800px-Osteoglossum_bicirrhosum1.jpg", bioload: 5 },
+	  { species: "Paracheirodon axelrodi", name: "Cardinal Tetra ", src: "../img/species/Cardinal_tetra.jpg", bioload: 1 },
+	  { species: "Ariopsis seemanni", name: "Columbian Shark Catfish ", src: "../img/species/Shark_catfish1.jpg", bioload: 7 },
+	  { species: "Synodontis multipunctatus", name: "Cuckoo Synodontis", src: "../img/species/Synodontis multipunctatus cuckoo catfish.jpg", bioload: 3 }
+	];
+      }    
+    });
+  </script>    
+</polymer-element>

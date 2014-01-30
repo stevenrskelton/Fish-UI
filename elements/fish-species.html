@@ -1,0 +1,64 @@
+<link rel="import" href="../components/polymer/polymer.html">
+
+<link rel="import" href="data-species.html">
+<link rel="import" href="data-range.html">
+<link rel="import" href="data-checkbox.html">
+<link rel="import" href="temperature-range.html">
+
+<polymer-element name="fish-species" noscript attributes="species text">
+  <template>
+    <div style="display:inline-block;margin:10px;vertical-align:top;">
+      <h1 style="margin:0">{{ result.name }}</h1>
+      <em>{{ result.class + " > " + result.order + " > " + result.family + (result.subfamily != null ? " (" + result.subfamily + ")" : "") + " > " + result.genus + " " + result.species }}</em><br/>
+      <strong>Care Level:</strong> {{ result.difficulty }}<br/>
+      <strong>Average Cost:</strong> ${{ result.cost }}<br/>
+      <data-range label="Size" data="{{result.size}}"></data-range><br/>
+      <data-range label="Life Span" data="{{result.lifeSpan}}"></data-range><br/>
+      <div style="max-width:425px;display:inline-block;vertical-align:top;">
+	<template repeat="{{result.images}}">
+	  <img src="{{}}" style="width:100px;vertical-align:top;margin:1px;" />
+	</template>
+      </div>
+     </div>
+     <div style="width:275px;display:inline-block;margin:10px;vertical-align:top;">
+      <h3 style="margin-top:0">Water Parameters</h3>
+      <strong>Temperature</strong>: <temperature-range style="display:inline-block;vertical-align:top" rangeMin="{{result.temperature.min}}" rangeMax="{{result.temperature.max}}" unit="{{result.temperature.unit}}" width="200"></temperature-range><br/>
+      <data-range label="ph" data="{{result.ph}}"></data-range><br/>
+      <data-range label="Hardness" data="{{result.hardness}}"></data-range><br/>
+      <data-range label="Salinity" data="{{result.salinity}}"></data-range><br/>
+     </div>
+     <div style="width:275px;display:inline-block;margin:10px;vertical-align:top;">
+      <h3 style="margin-top:0">Food</h3>
+      <strong>{{ result.diet }}</strong><br/>
+      <data-checkbox label="Pellet" data="{{result.pellet}}"></data-checkbox><br/>
+      <data-checkbox label="Flake" data="{{result.flake}}"></data-checkbox><br/>
+      <data-checkbox label="Algae" data="{{result.algae}}"></data-checkbox><br/>
+      <template if="{{result.other.length > 0}}">
+	Other: {{result.other}}
+      </template>
+    </div>
+    <data-species response="{{result}}"></data-species>
+  </template>  
+  <script>
+  /*
+    PolymerExpressions.prototype.range = function(r){
+    console.log('range');
+    console.log(arguments);
+      return r.min + '-' + r.max + ' ' + r.unit;
+    };
+    PolymerExpressions.prototype.checkbox = function(b){
+      if(b){
+	return 'TRUE!';
+      }else{
+	return 'FALSE!';
+      }
+    };*/
+    Polymer('fish-species',{      
+      ready: function(){
+	
+	//console.log(this.result.temperature);
+	//console.log(this.result.temperature.min);
+      }
+    });
+  </script>
+</polymer-element>

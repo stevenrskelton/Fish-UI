@@ -1,0 +1,51 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="current-searchresult.html">
+<link rel="import" href="data-current.html">
+<link rel="import" href="../components/polymer-ui-overlay/polymer-ui-overlay.html">
+<link rel="import" href="../components/polymer-flex-layout/polymer-flex-layout.html">
+<link rel="import" href="../components/polymer-ui-icon/polymer-ui-icon.html">
+
+<polymer-element name="current-search" noscript attributes="toggle search add selectedItems">
+  <template>
+    <polymer-ui-overlay backdrop id="overlay" style="width:100%;position:fixed;top:0;height:100%;padding-bottom:10px;">
+      <div class="modal-content" style="height:100%;width:400px;margin:5px auto;" flex>
+	<polymer-flex-layout vertical></polymer-flex-layout>
+	<div class="modal-header" style="height:50px;">
+	  <div class="modal-title">Search Results for <strong>{{search}}</strong></div>
+	</div>
+	<div class="modal-body" flex style="overflow-y:scroll">
+	  <template repeat="{{s in searchResults}}">
+	    <current-searchresult name="{{s.name}}" species="{{s.species}}" src="{{s.src}}" bioload="{{s.bioload}}" on-add="{{add}}" disabled="{{s.disabled}}"></current-searchresult>
+	  </template>
+	</div>
+	<div class="modal-footer">
+	  <button type="button" class="btn" overlay-toggle>
+	    <polymer-ui-icon icon="close"></polymer-ui-icon> Close
+	  </button>
+	</div>
+      </div>
+    </polymer-ui-overlay>
+    <data-current response="{{results}}"></data-current>
+  </template>
+  <script>
+    Polymer('current-search', {
+      toggle: function(s){
+	console.log(s);
+	console.log('modal-toggle');
+	this.$.overlay.toggle();
+	
+	var r = this.results;
+	var s = this.selectedItems;
+	
+	if(s != null){
+	  for(i = 0; i < r.length; i++){
+	    for(j = 0; j < s.length; j++){
+	      if(s[j].species == r[i].species) r[i].disabled = true;
+	    }
+	  }
+	}
+	this.searchResults = r; 
+      }      
+    });
+  </script>    
+</polymer-element>

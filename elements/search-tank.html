@@ -1,0 +1,60 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../components/polymer-ui-icon/polymer-ui-icon.html">
+<!--<link rel="import" href="../components/polymer-ui-icon-button/polymer-ui-icon-button.html">
+<link rel="import" href="../components/polymer-localstorage/polymer-localstorage.html">-->
+
+<link rel="import" href="temperature-range.html">
+<link rel="import" href="tank-dimensions.html">
+
+<polymer-element name="search-tank" noscript attributes="tankSize">
+  <template>
+    <form>
+      <polymer-ui-icon icon="settings"></polymer-ui-icon>Units of Measure:
+      <div style="display:inline-block">
+	<input type="radio" name="units" value="metric" disabled/>Metric
+      </div>
+      <div style="display:inline-block">
+	<input type="radio" name="units" value="usa" checked disabled/>USA
+      </div>
+    </form>
+    
+    <br/>
+    <div style="width:275px;display:inline-block;margin:10px;vertical-align:top;">
+      <h2>Tank</h2>
+      <tank-dimensions tankSize="{{tankSize}}"></tank-dimensions>
+    </div>
+    <div style="width:400px;display:inline-block;margin:10px;vertical-align:top;">
+      <h2>Water Parameters</h2>
+      
+      <h3>Freshwater</h3>
+      <h3>Temperature<h3>
+      <temperature-range width="400" rangeMin="75" rangeMax="85" min="65" max="90" unit="F"></temperature-range>
+      <br/>
+      <temperature-range width="400" rangeMin="70" rangeMax="78" min="65" max="90" unit="F"></temperature-range>
+      <br/>
+      <temperature-range width="400" rangeMin="86" rangeMax="90" min="65" max="90" unit="F"></temperature-range>
+      <br/>
+      <temperature-range width="400" rangeMin="65" rangeMax="90" min="65" max="90" unit="F"></temperature-range>      
+      <br/>
+      <temperature-range width="400" rangeMin="65" rangeMax="67" min="65" max="90" unit="F"></temperature-range>      
+      <br/>
+      <temperature-range width="400" rangeMin="89" rangeMax="90" min="65" max="90" unit="F"></temperature-range>            
+      <p/>
+      Water Current:
+      <p/>
+      Water Hardness:
+    </div>
+    <div style="width:400px;display:inline-block;margin:10px;vertical-align:top;">
+      <h2>Aquarium Equipment</h2>
+      Heater?<br/> 
+      Powerheads?<br/> 
+      Lighting?<br/> 
+      Substrate?<br/> 
+    </div>   
+  </template>
+  <script>
+    Polymer('search-tank', {
+
+    });
+  </script>    
+</polymer-element>

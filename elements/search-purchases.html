@@ -1,0 +1,141 @@
+<link rel="import" href="../components/polymer/polymer.html">
+
+<link rel="import" href="../components/polymer-ui-icon-button/polymer-ui-icon-button.html">
+
+<polymer-element name="search-purchases" noscript attributes="currentItems purchases budget purchasesTotal">
+  <template>
+    <template if="{{currentItems.length > 0}}">  
+      <div class="panel">
+	<polymer-ui-icon-button icon="settings" style="float:right;" on-click="{{editCurrent}}"></polymer-ui-icon-button>
+	<h2 style="margin-top:0;margin-right:10px;display:inline;vertical-align:middle;">Current Livestock</h2>
+	<div style="display:inline">
+	  <template repeat="{{c in currentItems}}">
+	    <div style="display:inline-block;margin-right:4px;">
+	      <img title="{{c.name}}" alt="{{c.name}}" src="{{c.src}}" width="75px" height="37px" style="vertical-align:middle;border-radius:4px;" />
+	      x{{c.number}}
+	    </div>
+	  </template>
+	</div>
+      </div>
+    </template>  
+    <div class="panel">
+      <h2 style="margin-top:0">Purchase List</h2>
+      <template if="{{!(purchases.length >= 1)}}">
+	Empty!
+      </template>
+      <template if="{{purchases.length >= 1}}" id="numericTable">
+	<table class="numberTable" style="font-size:18px">
+	  <tr>
+	    <th on-click="{{sortSpecies}}" style="{{sortField==0 ? (sortFieldDesc ? 'text-decoration:overline' : 'text-decoration:underline') : ''}}">Fish</th>
+	    <th on-click="{{sortQuantity}}" style="width:100px;{{sortField==1 ? (sortFieldDesc ? 'text-decoration:overline' : 'text-decoration:underline') : ''}}">Quantity</th>
+	    <th on-click="{{sortCost}}" style="{{sortField==2 ? (sortFieldDesc ? 'text-decoration:overline' : 'text-decoration:underline') : ''}}">Cost ($)</th>
+	    <th on-click="{{sortTotal}}" style="{{sortField==3 ? (sortFieldDesc ? 'text-decoration:overline' : 'text-decoration:underline') : ''}}">Total ($)</th>
+	  </tr>
+	  <template repeat="{{ purchases | sortBy(sortFieldOp, sortFieldDesc) }}">
+	    <tr>
+	      <td style="font-size:14px">
+		<img title="{{species}}" alt="{{species}}" src="{{src}}" width="90px" height="45px" style="vertical-align:middle;border-radius:4px;" />
+		<strong>{{name}}</strong> - <em>{{species}}</em>
+	      </td>
+	      <td>
+	      	<input id="number" type="text" class="form-control input-lg" placeholder="#" style="width:100px;text-align:right" value="{{number}}" onfocus="this.select()" on-keyup="{{calculateTotals}}"/>
+	      </td>
+	      <td>{{price}}</td>
+	      <td>{{number*price}}</td>
+	    </tr>
+	  </template>
+	  <tr>
+	    <td><div style="width:125px;margin: 0 auto;text-align:right"><div style="float:left">Budget:</div>${{budget}}</div></td>
+	    <td style="background-color:#555;" colspan="2"></td>
+	    <td style="color:{{ budget - purchasesTotal >= 0 ? '' : '#ff0000'}}">{{purchasesTotal}}</td>
+	  </tr>
+	</table>
+      </template>
+    </div>
+  </template>
+  <script>
+    function sortByKey(array, op, desc) {
+	return array.sort(function(a, b) {
+	    var x = op(a);
+	    var y = op(b);
+		      
+	    if (typeof x == "string"){
+	      x = x.toLowerCase(); 
+	      y = y.toLowerCase();
+	    }
+	    if(desc){
+	      return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+	    }else{
+	      return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+	    }
+	});
+    }
+    PolymerExpressions.prototype.sortBy = function(value, op, dir) {
+      return sortByKey(value, op, dir);
+    };
+    Polymer('search-purchases',{
+      editCurrent: function(){
+	document.location.href = 'current.html';
+      },
+      ready: function(){
+	this.purchases = [
+	  { species: "Beaufortia kweichowensis", name: "Hillstream Loach", src: "../img/species/hillstreamloach.jpg", bioload: 1, price: 6, number: 8 },
+	  { species: "Danio margaritatus", name: "Celestial Pearl Danio", src: "../img/species/Celestichthys_margaritatus.jpg", bioload: 1, price: 5, number: 9 },
+	  { species: "Paracheirodon innesi", name: "Neon Tetra", src: "../img/species/800px-Paracheirodon_innesi_(aka).jpg", bioload: 1, price: 1, number: 14 },
+	  { species: "Mikrogeophagus altispinosus", name: "Bolivian Ram", src: "../img/species/Female_Bolivian.jpg", bioload: 3, price: 12, number: 2  },
+	  { species: "Osteoglossum bicirrhosum", name: "Silver Arowana", src: "../img/species/800px-Osteoglossum_bicirrhosum1.jpg", bioload: 5, price: 18, number: 2 },
+	  { species: "Paracheirodon axelrodi", name: "Cardinal Tetra ", src: "../img/species/Cardinal_tetra.jpg", bioload: 1, price: 1, number: 3 },
+	  { species: "Ariopsis seemanni", name: "Columbian Shark Catfish ", src: "../img/species/Shark_catfish1.jpg", bioload: 7, price: 8, number: 2 },
+	  { species: "Synodontis multipunctatus", name: "Cuckoo Synodontis", src: "../img/species/Synodontis multipunctatus cuckoo catfish.jpg", bioload: 3, price: 5, number: 4 }
+	];
+      },
+      calculateTotals: function(){
+	console.log('calculateTotals fired.');
+	this.asyncFire('polymer-signal', {name: "foo", data: "Foo!"});
+      },
+      sortSpecies: function(){
+	if(this.sortField != 0){
+	  this.sortField = 0;
+	  this.sortFieldDesc = false;
+	}else{
+	  this.sortFieldDesc = !this.sortFieldDesc;
+	}
+	
+	this.sortFieldOp = function(o){ return o.name || o.species; };
+      },
+      sortQuantity: function(){
+	if(this.sortField != 1){
+	  this.sortField = 1;
+	  this.sortFieldDesc = true;
+	}else{
+	  this.sortFieldDesc = !this.sortFieldDesc;
+	}
+	
+	this.sortFieldOp = function(o){ return o.number * 1; };
+      },
+      sortCost: function(){
+	if(this.sortField != 2){
+	  this.sortField = 2;
+	  this.sortFieldDesc = true;
+	}else{
+	  this.sortFieldDesc = !this.sortFieldDesc;
+	}
+	
+	this.sortFieldOp = function(o){ return o.price; };
+      },
+      sortTotal: function(){
+	if(this.sortField != 3){
+	  this.sortField = 3;
+	  this.sortFieldDesc = true;
+	}else{
+	  this.sortFieldDesc = !this.sortFieldDesc;
+	}
+	
+	this.sortFieldOp = function(o){ return o.number * o.price; };
+      },
+      sortFieldOp: function(o){ return o.number * o.price; },
+      sortFieldDesc: true,
+      sortField: 3
+    });
+  </script>    
+</polymer-element>

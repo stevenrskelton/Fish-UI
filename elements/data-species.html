@@ -1,0 +1,73 @@
+<link rel="import" href="../components/polymer/polymer.html">
+
+<polymer-element name="data-species" noscript attributes="params response">
+  <script>
+    Polymer('data-species',{
+      ready: function(){
+	this.response = {
+	  name: "Neon Tetra",
+	  bioload: 1,
+
+	  alternativeScientificNames: '',
+	  class: 'Actinopterygii',
+	  order: 'Characiformes',
+	  family: 'Characidae',
+	  subfamilty: '',
+	  genus: 'Paracheirodon',
+	  species: 'innesi',
+	
+	  geographic: {},
+	  habitat: {},
+	  availability: {},
+	  colorations: [],
+	  countries: [],
+	  ecosystems: [],
+	  
+	  temperature: { min: 71.6, max: 78.8, unit: 'F' },
+	  ph: { min: 4.6, max: 7.6, unit: '' },
+	  hardness: { min: 4, max: 10, unit: 'dH' },
+	  salinity: { min: 0, max: 0, unit: 'ppm' },
+
+	  difficulty: 'Easy',
+	  cost: 1,
+	  tankSize: 0,
+	  waterflow: {},
+	  
+	  images: [ 
+	    'img/species/790px-NeonTetra.JPG', 
+	    'img/species/800px-Neonfische.jpg',
+	    'img/species/800px-Neonsalmler_Paracheirodon_innesi.jpg',
+	    'img/species/800px-Paracheirodon_innesi_(aka).jpg',
+	    'img/species/Neonka_obecna_paracheirodon_innesi.jpg',
+	    'img/species/Neontetra_tmy.JPG'
+	  ],
+	  
+	  //animal
+	  dimorphic: false,
+	  size: { min: 2, max: 3, unit: 'cm' },
+	  lifeSpan: { min: 3, max: 10, unit: 'year' },
+
+	  //behaviour
+	  location: {},
+	  depth: 0,
+	  territorial: false,
+	  temperament: {},
+	  nocturnal: false,
+	  breeds: true,
+	  amphidromous: false,
+	  reefCompatible: false,
+	  maleRatio: 1,
+	  femaleRatio: 2,
+  
+	  //food
+	  diet: 'Omnivore',
+	  pellet: true,
+	  flake: true,
+	  live: true,
+	  algae: false,
+	  other: {}
+	};
+      }    
+    });
+  </script>    
+</polymer-element>
