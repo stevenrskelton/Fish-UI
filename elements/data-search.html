@@ -1,6 +1,6 @@
 <link rel="import" href="../components/polymer/polymer.html">
 
-<polymer-element name="data-search" noscript attributes="go polymer-response name current tanksize budget">
+<polymer-element name="data-search" noscript attributes="go polymer-response name current tanksize budget skip limit">
   <script>
     var data = [
       { species: "Beaufortia kweichowensis", name: "Hillstream Loach", src: "../img/species/hillstreamloach.jpg", bioload: 1, countries : ['CHN'] },
@@ -26,7 +26,9 @@
       name: null,
       current: [],
       tanksize: 0,
-      budget: 0,    
+      budget: 0,
+      skip: 0,
+      limit: 0,
       go: function(){
 	var results = [];
 	if(this.name==null){
@@ -46,8 +48,15 @@
 	  }
 	}
 	
+	var limitedResults;
+	if(this.limit > 0){
+	  limitedResults = results.slice(this.skip,this.skip + this.limit);
+	}else{
+	  limitedResults = results.slice(this.skip);
+	}
+	
 	//return results
-      	this.fire('polymer-response', results);
+      	this.fire('polymer-response', limitedResults);
       }
     });
   </script>    

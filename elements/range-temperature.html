@@ -30,6 +30,8 @@
 	<div class="range" style="width:{{boxWidth}}px;left:{{boxLeft}}px;"><div class="range1"><div style="visibility:{{boxVisible ? 'visible' : 'hidden'}}">{{averageOfRange}}°[[unit]]</div></div></div>
       </div>
       <div style="text-align:center;width:100%;font-weight:normal;{{smallText}}">Acceptable Range: {{rangeMin}}°[[unit]] - {{rangeMax}}°[[unit]]</div>
+      
+      <!--boxleft: {{boxLeft}}, width: {{width}}, boxWidth: {{boxWidth}}-->      
     </div>
   </template>
   <script>
@@ -55,10 +57,7 @@
 	this.boxWidth = Math.floor(this.width * (this.rangeMax - this.rangeMin) / (this.max - this.min));
 	this.boxLeft = Math.floor((this.width / (this.max - this.min)) * (this.rangeMin - this.min));
 	this.averageOfRange = Math.round(((this.rangeMax - this.rangeMin) / 2 ) + (this.rangeMin * 1));
-	if(this.boxWidth < 50 && (this.boxLeft < 50 || (this.width - this.boxLeft < 50))) this.boxVisible = false;
-	//console.log('1: ' + this.boxWidth * this.width)
-	//console.log('2: ' + this.boxLeft)
-	//console.log('3: ' + this.averageOfRange)
+	if(this.boxWidth < 100 && (this.boxLeft < 50 || ((this.width - this.boxLeft) < 100))) this.boxVisible = false;
       }
     });
   </script>    

@@ -1,5 +1,6 @@
 <link rel="import" href="../components/polymer/polymer.html">
 <link rel="import" href="../components/polymer-ui-icon-button/polymer-ui-icon-button.html">
+<link rel="import" href="../components/polymer-media-query/polymer-media-query.html">
 <link rel="import" href="data-search.html">
 
 <polymer-element name="search-results" noscript>
@@ -18,29 +19,88 @@
 	
 	<img title="{{species}}" alt="{{species}}" src="{{src}}" width="100px" height="50px" style="float:left;border-radius:4px;margin:-5px 10px 0 -5px;" />
 	
-	<strong>{{name}}</strong><br/>
-	{{species}}
+	<div>
+	  <strong>{{name}}</strong><br/>
+	  {{species}}
+	</div>
+	<div>
+	  {{care}}
+	</div>
+      </div>
+    </template>
+    <template if="{{searchResults.length>0 && lastResult}}">
+      <div style="width:100%;height:{{titlebarBelow ? 60 : 5}}px;background-color:black"></div>
+    </template>
+    <template if="{{!(searchResults.length>0)}}">
+      <div class="panel"style="background-color:#ffffe0;padding-bottom:2em;">
+	<h2>No search results!</h2>
+	No species were found that are suitable for your setup.
+<!--	Factors
+	<ul>
+	  
+	</ul>-->
       </div>
     </template>
     <data-search id="searchQuery" on-polymer-response="{{loadSearchResults}}"></data-search>
+    <polymer-media-query query="max-width: 800px" queryMatches="{{titlebarBelow}}"></polymer-media-query>    
   </template>
-  <script> 
+  <script>
     Polymer('search-results', {
+      skip: 0,
+      countPerPage: 0,
+      lastResult: false,
+      pendingQuery: false,
       expand: function(){},
       go: function(){
-      	//construct search params
-	//this.$.searchQuery.name = '';
-	//this.$.searchQuery.current = [];
-	//this.$.searchQuery.tanksize = 0;
-	//this.$.searchQuery.budget = 0;
-	this.$.searchQuery.go();
+	console.log('go ' + this.pendingQuery + "," + this.lastResult);
+	if(this.pendingQuery==false && this.lastResult==false){
+	  this.pendingQuery = true;
+	  //construct search params
+	  //this.$.searchQuery.name = '';
+	  //this.$.searchQuery.current = [];
+	  //this.$.searchQuery.tanksize = 0;
+	  //this.$.searchQuery.budget = 0;
+	  this.$.searchQuery.skip = this.skip;
+	  this.$.searchQuery.limit = this.countPerPage;
+	  console.log('GO: skip ' + this.skip + ', limit ' + this.countPerPage);
+	  this.$.searchQuery.go();
+	}
       },
       loadSearchResults: function(e){
-	console.log('loadSearchResults');
 	var r = e.detail;
-	this.searchResults = r; 
+	console.log('loadSearchResults ' + r.length);
+	if(r.length == 0){
+	  this.lastResult = true;
+	}else{
+	  if(this.searchResults==undefined){
+	    this.searchResults = r;
+	  }else{
+	    console.log('prepush');
+	    console.log(this.searchResults.length);
+	    //for(var i=0;i<r.length;i++){
+	    //  this.searchResults.push(r[i]);
+	    //}
+	    Array.prototype.push.apply(this.searchResults, r);
+	    console.log(this.searchResults.length);
+	    console.log('postpush'); 
+	  }
+	  this.skip += r.length;
+	}
+	this.pendingQuery = false;
       },
       attached: function(){
+	var self = this;
+	window.onscroll = function(ev) {
+	    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+	      console.log('bottom');
+	      self.go();
+	    }
+	};
+	var resultHeight = 70;
+	this.countPerPage = Math.ceil(window.innerHeight / resultHeight);
+	window.onresize = function(ev) {
+	  this.countPerPage = document.body.offsetHeight / resultHeight;
+	};      
 	this.go();
       }
     });

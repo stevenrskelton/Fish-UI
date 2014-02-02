@@ -21,7 +21,7 @@
     <div class="panel">
       <h2 style="margin-top:0">Purchase List</h2>
       <template if="{{!(purchases.length >= 1)}}">
-	Empty!
+	Empty!  Add new purchases from the <strong>Search Results</strong> screen.
       </template>
       <template if="{{purchases.length >= 1}}" id="numericTable">
 	<table class="numberTable" style="font-size:18px">
@@ -85,18 +85,6 @@
     Polymer('search-purchases',{
       editCurrent: function(){
 	document.location.href = 'current.html';
-      },
-      ready: function(){
-	this.purchases = [
-	  { species: "Beaufortia kweichowensis", name: "Hillstream Loach", src: "../img/species/hillstreamloach.jpg", bioload: 1, price: 6, number: 8 },
-	  { species: "Danio margaritatus", name: "Celestial Pearl Danio", src: "../img/species/Celestichthys_margaritatus.jpg", bioload: 1, price: 5, number: 9 },
-	  { species: "Paracheirodon innesi", name: "Neon Tetra", src: "../img/species/800px-Paracheirodon_innesi_(aka).jpg", bioload: 1, price: 1, number: 14 },
-	  { species: "Mikrogeophagus altispinosus", name: "Bolivian Ram", src: "../img/species/Female_Bolivian.jpg", bioload: 3, price: 12, number: 2  },
-	  { species: "Osteoglossum bicirrhosum", name: "Silver Arowana", src: "../img/species/800px-Osteoglossum_bicirrhosum1.jpg", bioload: 5, price: 18, number: 2 },
-	  { species: "Paracheirodon axelrodi", name: "Cardinal Tetra ", src: "../img/species/Cardinal_tetra.jpg", bioload: 1, price: 1, number: 3 },
-	  { species: "Ariopsis seemanni", name: "Columbian Shark Catfish ", src: "../img/species/Shark_catfish1.jpg", bioload: 7, price: 8, number: 2 },
-	  { species: "Synodontis multipunctatus", name: "Cuckoo Synodontis", src: "../img/species/Synodontis multipunctatus cuckoo catfish.jpg", bioload: 3, price: 5, number: 4 }
-	];
       },
       calculateTotals: function(){
 	console.log('calculateTotals fired.');

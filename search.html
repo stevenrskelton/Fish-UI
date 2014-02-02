@@ -29,22 +29,24 @@
       }
     </style>    
   </head>
-  <body unresolved>  
+  <body unresolved style="padding-top:60px">  
 
 <polymer-element name="search-add" noscript>
   <template>  
-    <polymer-ui-toolbar theme="polymer-ui-dark-theme" class="align-center polymer-ui-dark-theme flexbox">
+    <polymer-ui-toolbar theme="polymer-ui-dark-theme" class="align-center polymer-ui-dark-theme flexbox" style="position:fixed;top:0;width:100%;">
     
-      <polymer-ui-menu-button selected="1" theme="polymer-ui-dark-theme" icon="menu" id="searchMenu" on-polymer-select="{{selectPanel}}">
-	<polymer-ui-menu-item targetId="collapseTank">Tank</polymer-ui-menu-item>
-	<polymer-ui-menu-item targetId="collapseResults">Search Results</polymer-ui-menu-item>
-	<polymer-ui-menu-item targetId="collapseList">Purchase List</polymer-ui-menu-item>
-	<polymer-ui-menu-item targetId="collapseHabitat">Habitat</polymer-ui-menu-item>
-	<polymer-ui-menu-item targetId="collapseBehaviour">Behaviour</polymer-ui-menu-item>
-	<polymer-ui-menu-item targetId="collapseGeography">Geographics</polymer-ui-menu-item>
+      <polymer-ui-menu-button selected="0" theme="polymer-ui-dark-theme" icon="menu" id="searchMenu" on-polymer-select="{{selectPanel}}">
+	<polymer-ui-menu-item targetId="collapseResults" title="Find New Livestock">Search Results</polymer-ui-menu-item>
+	<polymer-ui-menu-item targetId="collapseHabitat" title="Filter for a Habitat" icon="filter">Habitat</polymer-ui-menu-item>
+	<polymer-ui-menu-item targetId="collapseBehaviour" title="Filter for Behaviour" icon="filter">Behaviour</polymer-ui-menu-item>
+	<hr/>
+	<polymer-ui-menu-item targetId="collapseTank" title="Optimal Tank Setup">Optimal Tank Setup</polymer-ui-menu-item>
+	<polymer-ui-menu-item targetId="collapseGeography" title="Native Locations">Geographics</polymer-ui-menu-item>
+	<hr/>
+	<polymer-ui-menu-item targetId="collapseList" title="Review Your Purchases">Purchase List</polymer-ui-menu-item>
       </polymer-ui-menu-button>
       
-      <div tool flex>Find your New Livestock</div>    
+      <div tool flex id="titleText"></div>
     
       <polymer-ui-toolbar responsive class="align-center polymer-ui-dark-theme flexbox" flex style="text-align:center">
       
@@ -61,7 +63,7 @@
       <polymer-ui-icon-button tool icon="trash" class="polymer-ui-dark-theme" on-click="{{trash}}">
       </polymer-ui-icon-button> 
       
-    </polymer-ui-toolbar>      
+    </polymer-ui-toolbar>
 
     <search-tank id="tank" tankSize="{{tankSize}}"></search-tank>
     <polymer-collapse closed id="collapseTank" targetId="tank" duration="0"></polymer-collapse>
@@ -101,10 +103,12 @@
 	}else{
 	  var collapser = this.$[this.$.searchMenu.selection.getAttribute('targetId')];
 	  if(collapser.closed) collapser.toggle();
+	  this.$.titleText.innerHTML = this.$.searchMenu.selection.getAttribute('title');
 	}
       },
       trash: function(){
 	if(confirm('Do you want clear all your selections and start a new tank?')){
+	  localStorage.clear();
 	  document.location.href='index.html'
 	}
       }      

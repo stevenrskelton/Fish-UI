@@ -1,0 +1,77 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../components/polymer-localstorage/polymer-localstorage.html">
+<link rel="import" href="../components/polymer-ui-tabs/polymer-ui-tabs.html">
+
+<link rel="import" href="index-budget.html">
+
+<polymer-element name="index-index" noscript>
+  <template>
+    <style>
+      input[type="radio"]:checked+label {
+	font-weight: bold;
+      }
+      input[type="radio"]+label {
+      	cursor: pointer;
+      }
+    </style>
+    <h1>Aquarium Manager</h1>
+    <hr style="width:90%"/>
+    <div style="font-size:12px;">
+      Units of Measure:
+      <div style="display:inline-block;width:70px;">
+	<input type="radio" name="units" id="metricUnits" checked?="{{units.base==='metric'}}" on-focus="{{selectMetric}}"/>
+	<label for="metricUnits">Metric</label>
+      </div>
+      <div style="display:inline-block;width:70px;">
+	<input type="radio" name="units" id="usaUnits" checked?="{{units.base!=='metric'}}" on-focus="{{selectUSA}}"/>
+	<label for="usaUnits">USA</label>
+      </div>
+    </div>
+    <hr style="width:90%"/>
+    
+    <index-budget id="budget" budget="{{budget}}"></index-budget>
+    
+    <div class="panel-body">
+    
+      <button type="button" class="btn button1" style="margin-bottom:10px;margin-top:15px;" on-click="{{startNewAquarium}}">
+	<polymer-ui-icon icon="shortcut"></polymer-ui-icon> Start a new aquarium
+      </button>
+
+
+      <button type="button" class="btn button1" on-click="{{addToCurrent}}">
+	<polymer-ui-icon icon="add"></polymer-ui-icon> Add to your aquarium
+      </button>
+    
+    </div>    
+    <polymer-localstorage name="units" value="{{units}}" id="units"></polymer-localstorage>
+  </template>
+  <script>
+    Polymer('index-index', {
+      units: { base : 'usa' },
+      startNewAquarium: function(){
+	if(this.budget>0){
+	  document.location.href='search.html';
+	}else{
+	  alert('Please enter a budget for your purchases.');
+	  this.$.budget.focus();
+	}
+      },
+      addToCurrent: function(){
+	if(this.budget>0){
+	  document.location.href='current.html';
+	}else{
+	  alert('Please enter a budget for your purchases.');
+	  this.$.budget.focus();
+	}
+      },
+      selectMetric: function(){
+	this.units.base = 'metric';
+	this.$.units.save();
+      },
+      selectUSA: function(){
+	this.units.base = 'usa';
+	this.$.units.save();
+      }
+    });
+  </script>    
+</polymer-element>
