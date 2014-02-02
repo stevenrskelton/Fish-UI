@@ -38,7 +38,8 @@
 		<strong>{{name}}</strong> - <em>{{species}}</em>
 	      </td>
 	      <td>
-	      	<input id="number" type="text" class="form-control input-lg" placeholder="#" style="width:100px;text-align:right" value="{{number}}" onfocus="this.select()" on-keyup="{{calculateTotals}}"/>
+	      	<input id="number" type="text" class="form-control input-lg" placeholder="#" style="width:100px;text-align:right" value="{{number}}" onblur="replaceNumberInput(this)" on-keyup="{{calculateTotals}}"/>
+	      	<div style="height:100%;width:100px;background-color:blue"></div>
 	      </td>
 	      <td>{{price}}</td>
 	      <td>{{number*price}}</td>
@@ -54,6 +55,14 @@
     </div>
   </template>
   <script>
+    function replaceNumberInput(element){
+      if(element.value==0  || element.value==''){
+	element.style.display = 'none';
+	//element.parentNode.addChild(
+//	console.log(element);
+//	console.log(element.value);
+      }
+    }
     function sortByKey(array, op, desc) {
 	return array.sort(function(a, b) {
 	    var x = op(a);

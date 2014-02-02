@@ -3,19 +3,101 @@
 
 <script src="../js/d3/d3.v3.min.js"></script>
 <script src="../js/topojson/topojson.v1.min.js"></script>
-<script src="../js/datamaps.world.min.js"></script>
+<script src="../js/datamaps.js"></script>
 
-<polymer-element name="search-geography" noscript>  
+<polymer-element name="search-geography" noscript attributes="currentItems purchases">  
   <template>
-    <div id="container" style="position:relative;width:100%;background-color:#C2DFFF"></div>
+    <div id="container" style="position:relative;width:100%;background-color:#C2DFFF;border-bottom:1px solid black;cursor:crosshair;"></div>
   </template>
   <script>
-    Polymer('search-geography', {
+    var fillColorsRange = [
+      '#CC0000', '#CC0033', '#CC0066', '#CC0099', '#CC00CC', '#CC00FF'
+    ];
+
+    Polymer('search-geography', {      
+      map: null,
+      nativeFish: {},
       ready: function(){
-	this.$.container.style.height = (window.innerWidth * 0.425) + 'px';
+	this.$.container.style.height = (window.innerWidth * 0.435) + 'px';
       },
-      attached: function(){
-	var map = new Datamap({element: this.$.container});
+      observe: {
+	purchases: 'compute',
+	currentItems: 'compute'
+      },      
+      compute: function(){
+	console.log('compute Choropleth');
+	var fillColors = {};
+	var fillColorsCount = {};
+	
+	function fill(f, nativeFish){
+	  if(f.countries!=null){
+	    for(var i=0;i<f.countries.length;i++){
+	      var country = f.countries[i];
+	      var count = fillColorsCount[country];
+	      if(count != null){
+		nativeFish[country].push(f.name);
+	      }else{
+		count = 0;
+		nativeFish[country] = [f.name];
+	      }
+	      count++;
+	      fillColorsCount[country] = count;
+	      fillColors[country] = fillColorsRange[count];
+	    }
+	  }
+	}
+	if(this.purchases!=null){
+	  var a = this.purchases;
+	  for(var i=0;i<a.length;i++){
+	    fill(a[i], this.nativeFish);
+	  }
+	}
+	if(this.currentItems!=null){
+	  var a = this.currentItems;
+	  for(var i=0;i<a.length;i++){
+	    fill(a[i], this.nativeFish);
+	  }
+	}
+	this.map.updateChoropleth(fillColors);
+      },
+      attached: function(){	
+	this.map = new Datamap({element: this.$.container,
+	  geographyConfig: {
+	      dataUrl: 'js/world.topo.json', //if not null, datamaps will fetch the map JSON (currently only supports topojson)
+	      hideAntarctica: false,
+	      borderWidth: 1,
+	      borderColor: '#FDFDFD',
+	      popupTemplate: function(geography, data) { //this function should just return a string
+		var fishInCountry = this.nativeFishByCountry[geography.id];
+		var s = '';
+		if(fishInCountry != undefined){
+		  s = fishInCountry.join(', ');
+		}
+		return '<div class="hoverinfo"><strong>' + geography.properties.name + '</strong><br/>' + s + '</div>';
+	      },
+	      popupOnHover: true, //disable the popup while hovering
+	      highlightOnHover: true,
+	      highlightFillColor: '#FC8D59',
+	      highlightBorderColor: 'rgba(250, 15, 160, 0.2)',
+	      highlightBorderWidth: 2,
+	      nativeFishByCountry: this.nativeFish
+	  }/*,
+		  setProjection: function(element) {
+			  var projection = d3.geo.equirectangular()
+			    .center([19, -3])
+			    .rotate([4.4, 0])
+			    .scale(300)
+			    .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
+			  var path = d3.geo.path()
+			    .projection(projection);
+
+			  return {path: path, projection: projection};
+		  }*/
+	, done: function(datamap) {
+	    this.parent.compute();
+	  },
+	  parent: this
+	});
       }
     });
   </script>    

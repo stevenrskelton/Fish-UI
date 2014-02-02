@@ -13,13 +13,13 @@
     
     <link rel="import" href="components/polymer-ui-icon/polymer-ui-icon.html">
   </head>
-  <body class="polymer-ui-body-text" style="height: 100%;" unresolved>
+  <body theme="polymer-ui-dark-theme" class="polymer-ui-body-text" style="height: 100%;" unresolved>
     <style>
       #vcentered {
 	position:absolute;
 	top:50%;
 	margin-top:-200px;
-	height:400px;
+	height:450px;
 	width:400px;
       }
       #centered {
@@ -41,7 +41,15 @@
 	font-family: "Open Sans",​Helvetica,​Arial,​sans-serif;
 	color:#333333;
 	text-decoration: none;
+      }   
+      polymer-ui-tabs div {
+	width: 100px;
+	border: 1px solid black;
+	display: inline-block;
+	height: 30px;
+	line-height: 30px;
       }
+    </style>
     </style>
     <a class="logos polymer-logo" href="http://polymer-project.org" title="This site was created using the Polymer Project and Web Components.">
       <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px"
@@ -76,20 +84,14 @@
 
     <img src="img/html5css3.png" alt="HTML5 CSS3" title="HTML5 CSS3" class="logos" style="height:48px;top:60px;" />
     
-    <img src="img/webcomponents.png" alt="Web Components" title="Web Components" class="logos" style="height:48px;top:125px;" />
+    <a href="http://www.w3.org/TR/components-intro/"><img src="img/webcomponents.png" alt="Web Components" title="Web Components" class="logos" style="height:48px;top:125px;" /></a>
     
     <a href="http://www.gnu.org/licenses/agpl-3.0.html"><img src="img/agplv3-88x31.png" alt="GNU AFFERO GENERAL PUBLIC LICENSE V3" title="GNU AFFERO GENERAL PUBLIC LICENSE V3" class="logos" style="height:31px;top:190px;" /></a>
 
-    <a href="https://github.com/stevenrskelton/Fish-UI"><img src="img/github.png" alt="GitHub" title="Code is available on GitHub" class="logos" style="height:48px;top:240px;" /></a>
+    <a href="https://github.com/stevenrskelton/Fish-UI"><img src="img/github.png" alt="GitHub" title="Code for this site is available on GitHub" class="logos" style="height:48px;top:240px;" /></a>
     
     <div id="centered">
-      <div id="vcentered" class="polymer-ui-dark-theme" style="text-align:center; border-radius: 5px;">
-
-	<h1>Aquarium Manager</h1>
-	<hr style="width:90%"/>
-	<h2 style="margin:10px 0">Budget your next purchase</h2>
-	<index-budget></index-budget>
-      </div>      
+      <index-budget id="vcentered" class="polymer-ui-dark-theme" style="text-align:center; border-radius: 5px;"></index-budget>
     </div>
   </body>
 </html>

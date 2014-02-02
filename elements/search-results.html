@@ -5,7 +5,7 @@
 <polymer-element name="search-results" noscript>
   <template>
     <h2>Search Results</h2>
-    <template repeat="{{results}}">
+    <template repeat="{{searchResults}}">
       <div class="panel" style="vertical-align:top;clear:both;background-color:#ffffe0;">
       
 	<polymer-ui-icon-button icon="maximize" style="float:right;margin-left:15px"></polymer-ui-icon-button>
@@ -22,11 +22,27 @@
 	{{species}}
       </div>
     </template>
-    <data-search response="{{results}}"></data-search>
+    <data-search id="searchQuery" on-polymer-response="{{loadSearchResults}}"></data-search>
   </template>
   <script> 
-    Polymer('search-results', {      
-      expand: function(){}
+    Polymer('search-results', {
+      expand: function(){},
+      go: function(){
+      	//construct search params
+	//this.$.searchQuery.name = '';
+	//this.$.searchQuery.current = [];
+	//this.$.searchQuery.tanksize = 0;
+	//this.$.searchQuery.budget = 0;
+	this.$.searchQuery.go();
+      },
+      loadSearchResults: function(e){
+	console.log('loadSearchResults');
+	var r = e.detail;
+	this.searchResults = r; 
+      },
+      attached: function(){
+	this.go();
+      }
     });
   </script>    
 </polymer-element>

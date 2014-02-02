@@ -1,21 +1,25 @@
 <link rel="import" href="../components/polymer/polymer.html">
 <link rel="import" href="current-searchresult.html">
-<link rel="import" href="data-current.html">
+<link rel="import" href="data-search.html">
 <link rel="import" href="../components/polymer-ui-overlay/polymer-ui-overlay.html">
 <link rel="import" href="../components/polymer-flex-layout/polymer-flex-layout.html">
 <link rel="import" href="../components/polymer-ui-icon/polymer-ui-icon.html">
+<link rel="import" href="../components/polymer-ui-icon-button/polymer-ui-icon-button.html">
 
 <polymer-element name="current-search" noscript attributes="toggle search add selectedItems">
   <template>
     <polymer-ui-overlay backdrop id="overlay" style="width:100%;position:fixed;top:0;height:100%;padding-bottom:10px;">
-      <div class="modal-content" style="height:100%;width:400px;margin:5px auto;" flex>
+      <div class="modal-content" style="height:100%;min-width:400px;max-width:600px;margin:5px auto;" flex>
 	<polymer-flex-layout vertical></polymer-flex-layout>
-	<div class="modal-header" style="height:50px;">
-	  <div class="modal-title">Search Results for <strong>{{search}}</strong></div>
+	<div class="modal-header" style="height:60px;padding:10px;">  
+	    <polymer-flex-layout></polymer-flex-layout>
+	    <div style="display:inline-block;line-height:40px;padding-right:10px;">Search Results for</div>
+	    <input type="text" class="form-control" value="{{search}}" onfocus="this.select()" flex/>
+	    <polymer-ui-icon-button icon="refresh" on-click="{{go}}"></polymer-ui-icon-button> 
 	</div>
 	<div class="modal-body" flex style="overflow-y:scroll">
 	  <template repeat="{{s in searchResults}}">
-	    <current-searchresult name="{{s.name}}" species="{{s.species}}" src="{{s.src}}" bioload="{{s.bioload}}" on-add="{{add}}" disabled="{{s.disabled}}"></current-searchresult>
+	    <current-searchresult species="{{s}}" on-add="{{add}}" disabled="{{s.disabled}}"></current-searchresult>
 	  </template>
 	</div>
 	<div class="modal-footer">
@@ -25,7 +29,7 @@
 	</div>
       </div>
     </polymer-ui-overlay>
-    <data-current response="{{results}}"></data-current>
+    <data-search id="searchQuery" on-polymer-response="{{loadSearchResults}}"></data-search>
   </template>
   <script>
     Polymer('current-search', {
@@ -34,7 +38,19 @@
 	console.log('modal-toggle');
 	this.$.overlay.toggle();
 	
-	var r = this.results;
+	this.go();
+      },
+      go: function(){
+      	//construct search params
+	this.$.searchQuery.name = this.search;
+	//this.$.searchQuery.current = [];
+	//this.$.searchQuery.tanksize = 0;
+	//this.$.searchQuery.budget = 0;
+	this.$.searchQuery.go();
+      },
+      loadSearchResults: function(e){
+	console.log('loadSearchResults');
+	var r = e.detail;
 	var s = this.selectedItems;
 	
 	if(s != null){
@@ -45,7 +61,7 @@
 	  }
 	}
 	this.searchResults = r; 
-      }      
+      }
     });
   </script>    
 </polymer-element>

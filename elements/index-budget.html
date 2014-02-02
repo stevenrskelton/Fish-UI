@@ -4,15 +4,30 @@
     
 <polymer-element name="index-budget" noscript>
   <template>
-    <style type="text/css">      
-      polymer-ui-tabs div {
-	width: 100px;
-	border: 1px solid black;
-	display: inline-block;
-	height: 30px;
-	line-height: 30px;
+    <style>
+      input[type="radio"]:checked+label {
+	font-weight: bold;
+      }
+      input[type="radio"]+label {
+      	cursor: pointer;
       }
     </style>
+    <h1>Aquarium Manager</h1>
+    <hr style="width:90%"/>
+    <div style="font-size:12px;">
+      Units of Measure:
+      <div style="display:inline-block;width:70px;">
+	<input type="radio" name="units" id="metricUnits" checked?="{{units.base==='metric'}}" on-focus="{{selectMetric}}"/>
+	<label for="metricUnits">Metric</label>
+      </div>
+      <div style="display:inline-block;width:70px;">
+	<input type="radio" name="units" id="usaUnits" checked?="{{units.base!=='metric'}}" on-focus="{{selectUSA}}"/>
+	<label for="usaUnits">USA</label>
+      </div>
+    </div>
+    <hr style="width:90%"/>
+    <h2 style="margin:20px 0 10px 0">Budget your next purchase</h2>
+	
     <div class="input-group" style="width:250px;margin-left:auto;margin-right:auto;">
       <div class="input-group-addon" style="margin-right:-25px;margin-top:4px;position:relative;display:inline-block;font-weight:normal;">$</div><input id="budgetInput" type="text" class="form-control" style="text-align:right;margin-left:12px;" value="{{budget}}" on-keyup="{{budgetChange}}" onfocus="this.select()">
     </div>
@@ -35,11 +50,12 @@
       </button>
     
     </div>    
-    
+    <polymer-localstorage name="units" value="{{units}}" id="units"></polymer-localstorage>
     <polymer-localstorage name="budget" value="{{budget}}" on-polymer-localstorage-load="{{budgetChange}}"></polymer-localstorage>
   </template>
   <script>
     Polymer('index-budget', {
+      units: { base : 'metric' },
       setStarterBudget: function(){ this.budget = 10; },
       setAverageBudget: function(){ this.budget = 25; },
       setHighEndBudget: function(){ this.budget = 50; },
@@ -72,6 +88,14 @@
 	  alert('Please enter a budget for your purchases.');
 	  this.$.budgetInput.focus();
 	}
+      },
+      selectMetric: function(){
+	this.units.base = 'metric';
+	this.$.units.save();
+      },
+      selectUSA: function(){
+	this.units.base = 'usa';
+	this.$.units.save();
       }
     });
   </script>    

@@ -35,7 +35,7 @@
   <template>  
     <polymer-ui-toolbar theme="polymer-ui-dark-theme" class="align-center polymer-ui-dark-theme flexbox">
     
-      <polymer-ui-menu-button selected="5" theme="polymer-ui-dark-theme" icon="menu" id="searchMenu" on-polymer-select="{{selectPanel}}">
+      <polymer-ui-menu-button selected="1" theme="polymer-ui-dark-theme" icon="menu" id="searchMenu" on-polymer-select="{{selectPanel}}">
 	<polymer-ui-menu-item targetId="collapseTank">Tank</polymer-ui-menu-item>
 	<polymer-ui-menu-item targetId="collapseResults">Search Results</polymer-ui-menu-item>
 	<polymer-ui-menu-item targetId="collapseList">Purchase List</polymer-ui-menu-item>
@@ -78,7 +78,7 @@
     <search-behaviour id="behaviour"></search-behaviour>
     <polymer-collapse closed id="collapseBehaviour" targetId="behaviour" duration="0"></polymer-collapse>
   
-    <search-geography id="geography"></search-geography>
+    <search-geography id="geography" currentItems="{{currentItems}}" purchases="{{purchases}}"></search-geography>
     <polymer-collapse closed id="collapseGeography" targetId="geography" duration="0"></polymer-collapse>
     
     <polymer-localstorage name="currentItems" value="{{currentItems}}" autoSaveDisabled></polymer-localstorage>

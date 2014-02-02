@@ -1,20 +1,54 @@
 <link rel="import" href="../components/polymer/polymer.html">
 
-<polymer-element name="data-search" noscript attributes="params response">
+<polymer-element name="data-search" noscript attributes="go polymer-response name current tanksize budget">
   <script>
+    var data = [
+      { species: "Beaufortia kweichowensis", name: "Hillstream Loach", src: "../img/species/hillstreamloach.jpg", bioload: 1, countries : ['CHN'] },
+      { species: "Danio margaritatus", name: "Celestial Pearl Danio", src: "../img/species/Celestichthys_margaritatus.jpg", bioload: 1, countries : ['MMR'] },
+      { species: "Paracheirodon innesi", name: "Neon Tetra", src: "../img/species/800px-Paracheirodon_innesi_(aka).jpg", bioload: 1, countries : ['BRA', 'COL', 'PER'] },
+      { species: "Mikrogeophagus altispinosus", name: "Bolivian Ram", src: "../img/species/Female_Bolivian.jpg", bioload: 3, countries : ['BOL','BRA'] },
+      { species: "Osteoglossum bicirrhosum", name: "Silver Arowana", src: "../img/species/800px-Osteoglossum_bicirrhosum1.jpg", bioload: 5, countries : ['BRA','COL','ECU','GUF','GUY','PER'] },
+      { species: "Paracheirodon axelrodi", name: "Cardinal Tetra ", src: "../img/species/Cardinal_tetra.jpg", bioload: 1, countries : ['BRA','COL','VEN'] },
+      { species: "Ariopsis seemanni", name: "Colombian Shark Catfish ", src: "../img/species/Shark_catfish1.jpg", bioload: 7, countries : ['COL', 'CRI', 'ECU', 'SLV', 'GTM', 'MEX', 'NIC', 'PAN', 'PER'] },
+      { species: "Synodontis multipunctatus", name: "Cuckoo Synodontis", src: "../img/species/Synodontis multipunctatus cuckoo catfish.jpg", bioload: 3, countries : ['BDI','COD','TZA','ZMB'] },
+      { species: "Betta splendens", name: "Siamese Fighting Fish", src: "../img/species/713px-HM_Imbellis_betta-2027.jpg", bioload: 2, countries : ['KHM','LAO','THA','VNM'] },
+      { species: "Cryptoheros spilurus", name: "Blue-Eye Cichlid", src: "../img/species/Cryptoheros_spilurus3453.png", bioload: 2 },
+      { species: "Pseudotropheus crabro", name: "Bumblebee Cichlid", src: "../img/species/Bumblebee-full.jpg", bioload: 2, countries : ['MWI'] },
+      { species: "Pseudotropheus elongatus", name: "Slender Mbuna", src: "../img/species/Pseudotropheus_elongatus.jpg", bioload: 2, countries : ['MWI','TZA'] },
+      { species: "Pseudotropheus estherae", name: "Red Zebra Mbuna", src: "../img/species/800px-Metriaclima_estherae-4960.jpg", bioload: 2, countries : ['MOZ'] },
+      { species: "Pseudotropheus lombardoi", name: "Kenyi Cichlid", src: "../img/species/Pseudotropheus_lombardoi_3.jpg", bioload: 2, countries : ['ISR','MWI'] },
+      { species: "Pseudotropheus saulosi", name: "Saulosi Mbuna", src: "../img/species/Saulosi_Malesm.jpg", bioload: 2, countries : ['MWI'] },
+      { species: "Pseudotropheus socolofi", name: "Powder Blue Cichlid", src: "../img/species/Pseudotropheus_Socolofi-5882.jpg", bioload: 2, countries : ['MWI','MOZ'] },
+      { species: "Pseudotropheus zebra", name: "Red Zebra Mbuna 'Cobalt Blue'", src: "../img/species/768px-Juvviemaylandiazebra-4412.jpg", bioload: 2, countries : ['MWI'] },
+      { species: "Puntius tetrazona", name: "Tiger Barb", src: "../img/species/Puntius_tetrazona85387.jpg", bioload: 2, countries : ['IDN','MYS'] }
+    ];
     Polymer('data-search',{
-      ready: function(){
-	this.response = [
-	  { type: 'fish', species: "Beaufortia kweichowensis", name: "Hillstream Loach", src: "../img/species/hillstreamloach.jpg", bioload: 1 },
-	  { type: 'fish', species: "Danio margaritatus", name: "Celestial Pearl Danio", src: "../img/species/Celestichthys_margaritatus.jpg", bioload: 1 },
-	  { type: 'fish', species: "Paracheirodon innesi", name: "Neon Tetra", src: "../img/species/800px-Paracheirodon_innesi_(aka).jpg", bioload: 1 },
-	  { type: 'fish', species: "Mikrogeophagus altispinosus", name: "Bolivian Ram", src: "../img/species/Female_Bolivian.jpg", bioload: 3 },
-	  { type: 'fish', species: "Osteoglossum bicirrhosum", name: "Silver Arowana", src: "../img/species/800px-Osteoglossum_bicirrhosum1.jpg", bioload: 5 },
-	  { type: 'fish', species: "Paracheirodon axelrodi", name: "Cardinal Tetra ", src: "../img/species/Cardinal_tetra.jpg", bioload: 1 },
-	  { type: 'fish', species: "Ariopsis seemanni", name: "Columbian Shark Catfish ", src: "../img/species/Shark_catfish1.jpg", bioload: 7 },
-	  { type: 'fish', species: "Synodontis multipunctatus", name: "Cuckoo Synodontis", src: "../img/species/Synodontis multipunctatus cuckoo catfish.jpg", bioload: 3 }
-	]
-      }    
+      name: null,
+      current: [],
+      tanksize: 0,
+      budget: 0,    
+      go: function(){
+	var results = [];
+	if(this.name==null){
+	  results = data;
+	}else{
+	  var n = this.name.toLowerCase();
+	  for(var i=0;i<data.length;i++){
+	    if(data[i].species.toLowerCase().indexOf(n) != -1 
+	      || data[i].name.toLowerCase().indexOf(n) != -1
+	    ){
+	    
+	      //update status
+	      
+	      
+	      results.push(data[i]);
+	    }
+	  }
+	}
+	
+	//return results
+      	this.fire('polymer-response', results);
+      }
     });
   </script>    
 </polymer-element>

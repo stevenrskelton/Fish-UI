@@ -5,8 +5,16 @@
 <polymer-element name="search-titlebar" noscript attributes="tankSize currentItems purchases budget purchasesTotal">
   <template>
     <polymer-signals on-polymer-signal-foo="{{calculateTotalsEvent}}"></polymer-signals>
-    <div style="width:60%;display:inline-block;">Budget Remaining: <strong style="color:{{ budget - purchasesTotal >= 0 ? '' : '#ff0000'}}">${{budget - purchasesTotal}}</strong></div><!--
-    --><div style="width:40%;display:inline-block;">Bio-Load: <strong style="color:{{bioloadColour}}">{{bioload}}</strong></div>
+    <div style="width:60%;display:inline-block;">
+      <div style="cursor:help;display:inline-block;">
+	Budget Remaining: <strong style="color:{{ budget - purchasesTotal >= 0 ? '' : '#ff0000'}}">${{budget - purchasesTotal}}</strong>
+      </div>
+    </div><!--
+    --><div style="width:40%;display:inline-block;">
+      <div style="cursor:help;display:inline-block;">
+	Bio-Load: <strong style="color:{{bioloadColour}}">{{bioload}}</strong>
+      </div>
+    </div>
   </template>
   <script>
     Polymer('search-titlebar',{

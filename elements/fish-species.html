@@ -4,7 +4,7 @@
 <link rel="import" href="data-range.html">
 <link rel="import" href="data-field.html">
 <link rel="import" href="data-checkbox.html">
-<link rel="import" href="temperature-range.html">
+<link rel="import" href="range-temperature.html">
 <link rel="import" href="fish-geography.html">
 
 <polymer-element name="fish-species" noscript attributes="species text">
@@ -27,7 +27,7 @@
      </div>
      <div style="width:275px;display:inline-block;margin:10px;vertical-align:top;">
       <h3 style="margin-top:0;margin-bottom:5px;">Water Parameters</h3>
-      <strong>Temperature</strong>: <temperature-range style="display:inline-block;vertical-align:top" rangeMin="{{result.temperature.min}}" rangeMax="{{result.temperature.max}}" unit="{{result.temperature.unit}}" width="200"></temperature-range><br/>
+      <strong>Temperature</strong>: <range-temperature style="display:inline-block;vertical-align:top" rangeMin="{{result.temperature.min}}" rangeMax="{{result.temperature.max}}" unit="{{result.temperature.unit}}" width="200"></range-temperature><br/>
       <data-range label="ph" data="{{result.ph}}"></data-range><br/>
       <data-range label="Hardness" data="{{result.hardness}}"></data-range><br/>
       <data-range label="Salinity" data="{{result.salinity}}"></data-range><br/>
