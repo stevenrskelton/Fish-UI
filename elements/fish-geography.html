@@ -1,7 +1,7 @@
 <link rel="import" href="../components/polymer/polymer.html">
 <script src="../js/d3/d3.v3.min.js"></script>
 <script src="../js/topojson/topojson.v1.min.js"></script>
-<script src="../js/datamaps.js"></script>
+<script src="../js/datamaps/datamaps.js"></script>
 
 <polymer-element name="fish-geography" noscript attributes="width countries">
   <template>
@@ -37,7 +37,7 @@
 	  },
 	  data: countriesToFill,
 	  geographyConfig: {
-	      dataUrl: 'js/world.topo.json', //if not null, datamaps will fetch the map JSON (currently only supports topojson)
+	      dataUrl: 'js/datamaps/world.topo.json', //if not null, datamaps will fetch the map JSON (currently only supports topojson)
 	      hideAntarctica: false,
 	      borderWidth: 1,
 	      borderColor: '#99C68E',
