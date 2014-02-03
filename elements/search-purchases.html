@@ -28,14 +28,14 @@
 	  <tr>
 	    <th on-click="{{sortSpecies}}" style="{{sortField==0 ? (sortFieldDesc ? 'text-decoration:overline' : 'text-decoration:underline') : ''}}">Fish</th>
 	    <th on-click="{{sortQuantity}}" style="width:100px;{{sortField==1 ? (sortFieldDesc ? 'text-decoration:overline' : 'text-decoration:underline') : ''}}">Quantity</th>
-	    <th on-click="{{sortCost}}" style="{{sortField==2 ? (sortFieldDesc ? 'text-decoration:overline' : 'text-decoration:underline') : ''}}">Cost ($)</th>
+	    <th on-click="{{sortPrice}}" style="{{sortField==2 ? (sortFieldDesc ? 'text-decoration:overline' : 'text-decoration:underline') : ''}}">Price ($)</th>
 	    <th on-click="{{sortTotal}}" style="{{sortField==3 ? (sortFieldDesc ? 'text-decoration:overline' : 'text-decoration:underline') : ''}}">Total ($)</th>
 	  </tr>
 	  <template repeat="{{ purchases | sortBy(sortFieldOp, sortFieldDesc) }}">
 	    <tr>
 	      <td style="font-size:14px">
-		<img title="{{species}}" alt="{{species}}" src="{{src}}" width="90px" height="45px" style="vertical-align:middle;border-radius:4px;" />
-		<strong>{{name}}</strong> - <em>{{species}}</em>
+		<img title="{{scientificName}}" alt="{{scientificName}}" src="{{src}}" width="90px" height="45px" style="vertical-align:middle;border-radius:4px;" />
+		<strong>{{name}}</strong> - <em>{{scientificName}}</em>
 	      </td>
 	      <td>
 	      	<input id="number" type="text" class="form-control input-lg" placeholder="#" style="width:100px;text-align:right" value="{{number}}" onblur="replaceNumberInput(this)" on-keyup="{{calculateTotals}}"/>
@@ -98,7 +98,7 @@
 	  this.sortFieldDesc = !this.sortFieldDesc;
 	}
 	
-	this.sortFieldOp = function(o){ return o.name || o.species; };
+	this.sortFieldOp = function(o){ return o.name || o.scientificName; };
       },
       sortQuantity: function(){
 	if(this.sortField != 1){
@@ -110,7 +110,7 @@
 	
 	this.sortFieldOp = function(o){ return o.number * 1; };
       },
-      sortCost: function(){
+      sortPrice: function(){
 	if(this.sortField != 2){
 	  this.sortField = 2;
 	  this.sortFieldDesc = true;

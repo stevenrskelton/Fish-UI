@@ -44,7 +44,7 @@
     </polymer-ui-toolbar>
 
     <template repeat="{{c in currentItems}}" id="currentItemsTemplate">
-      <current-item species="{{c.species}}" name="{{c.name}}" src="{{c.src}}" number="{{c.number}}" on-remove="{{removeItem}}"></currentItem>
+      <current-item species="{{c.scientificName}}" name="{{c.name}}" src="{{c.src}}" number="{{c.number}}" on-remove="{{removeItem}}"></currentItem>
     </template>
 
     <polymer-localstorage id="currentItemsStorage" name="currentItems" value="{{currentItems}}" autoSaveDisabled></polymer-localstorage>
@@ -71,7 +71,7 @@
 	var species = e.detail;
 	var c = this.currentItems;
 	for(i = 0; i < c.length; i++){
-	  if(c[i].species != species) newArray.push(c[i]);
+	  if(c[i].scientificName != scientificName) newArray.push(c[i]);
 	}
 	this.currentItems = newArray;
       },
@@ -83,7 +83,7 @@
 	for(i = 0; i < currentItemNodes.length; i++){
 	  console.log(currentItemNodes[i].number);
 	  if(currentItemNodes[i].number == null || currentItemNodes[i].number == ''){
-	    alert('Please enter the number of [' + currentItemNodes[i].species + '] specimen, or remove the species from the list.');
+	    alert('Please enter the number of [' + currentItemNodes[i].scientificName + '] specimen, or remove the species from the list.');
 	    currentItemNodes[i].focus();
 	    return;
 	  }

@@ -10,8 +10,30 @@
     <link rel="stylesheet" href="css/mybootstrap.css">
     
     <link rel="import" href="elements/search-geography.html">
+    <link rel="import" href="elements/data-search.html">
   </head>
   <body unresolved>
-    <search-geography></search-geography>
+    
+  <polymer-element name="stats-geography" noscript>
+    <template>
+      <search-geography currentItems="{{currentItems}}"></search-geography>
+      <data-search id="searchQuery" on-polymer-response="{{loadSearchResults}}"></data-search>    
+    </template>
+    <script>
+    Polymer('stats-geography', {
+      currentItems: null,
+      loadSearchResults: function(e){
+	console.log(e.detail);
+	this.currentItems = e.detail;
+      },
+      ready: function(){
+	this.$.searchQuery.go();
+      }
+    });
+    </script>
+  </polymer-element>
+  
+  <stats-geography></stats-geography>
+  
   </body>
 </html>

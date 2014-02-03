@@ -6,10 +6,10 @@
     <div class="panel" style="{{ disabled ? 'opacity:0.15' : ''}};background-color:#ffffe0;" >
       <polymer-ui-icon-button id="addButton" icon="add" style="float:right;{{ disabled ? 'display:none' : ''}}" on-click="{{add}}"></polymer-ui-icon-button>
       
-      <img title="{{species.species}}" alt="{{species.species}}" src="{{species.src}}" width="100px" height="50px" style="float:left;border-radius:4px;margin:-5px 10px 0 -5px;" />
+      <img title="{{species.scientificName}}" alt="{{species.scientificName}}" src="{{species.src}}" width="100px" height="50px" style="float:left;border-radius:4px;margin:-5px 10px 0 -5px;" />
       
       <strong>{{species.name}}</strong><br/>
-      {{species.species}}
+      {{species.scientificName}}
     </div>
   </template>
   <script>

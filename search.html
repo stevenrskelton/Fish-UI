@@ -17,7 +17,6 @@
     <link rel="import" href="elements/search-geography.html">
     <link rel="import" href="elements/search-results.html">
  
-    <link rel="import" href="components/polymer-collapse/polymer-collapse.html">
     <link rel="import" href="components/polymer-ui-toolbar/polymer-ui-toolbar.html">
     <link rel="import" href="components/polymer-ui-menu-button/polymer-ui-menu-button.html">
     <link rel="import" href="components/polymer-ui-menu-item/polymer-ui-menu-item.html">
@@ -36,14 +35,14 @@
     <polymer-ui-toolbar theme="polymer-ui-dark-theme" class="align-center polymer-ui-dark-theme flexbox" style="position:fixed;top:0;width:100%;">
     
       <polymer-ui-menu-button selected="0" theme="polymer-ui-dark-theme" icon="menu" id="searchMenu" on-polymer-select="{{selectPanel}}">
-	<polymer-ui-menu-item targetId="collapseResults" title="Find New Livestock">Search Results</polymer-ui-menu-item>
-	<polymer-ui-menu-item targetId="collapseHabitat" title="Filter for a Habitat" icon="filter">Habitat</polymer-ui-menu-item>
-	<polymer-ui-menu-item targetId="collapseBehaviour" title="Filter for Behaviour" icon="filter">Behaviour</polymer-ui-menu-item>
+	<polymer-ui-menu-item tab="results" title="Find New Livestock">Search Results</polymer-ui-menu-item>
+	<polymer-ui-menu-item tab="habitat" title="Filter for a Habitat" icon="filter">Habitat</polymer-ui-menu-item>
+	<polymer-ui-menu-item tab="behaviour" title="Filter for Behaviour" icon="filter">Behaviour</polymer-ui-menu-item>
 	<hr/>
-	<polymer-ui-menu-item targetId="collapseTank" title="Optimal Tank Setup">Optimal Tank Setup</polymer-ui-menu-item>
-	<polymer-ui-menu-item targetId="collapseGeography" title="Native Locations">Geographics</polymer-ui-menu-item>
+	<polymer-ui-menu-item tab="tank" title="Optimal Tank Setup">Optimal Tank Setup</polymer-ui-menu-item>
+	<polymer-ui-menu-item tab="geography" title="Native Locations">Geographics</polymer-ui-menu-item>
 	<hr/>
-	<polymer-ui-menu-item targetId="collapseList" title="Review Your Purchases">Purchase List</polymer-ui-menu-item>
+	<polymer-ui-menu-item tab="purchases" title="Review Your Purchases">Purchase List</polymer-ui-menu-item>
       </polymer-ui-menu-button>
       
       <div tool flex id="titleText"></div>
@@ -65,23 +64,30 @@
       
     </polymer-ui-toolbar>
 
-    <search-tank id="tank" tankSize="{{tankSize}}"></search-tank>
-    <polymer-collapse closed id="collapseTank" targetId="tank" duration="0"></polymer-collapse>
-
-    <search-purchases id="list" currentItems="{{currentItems}}" budget="{{budget}}" purchases="{{purchases}}" purchasesTotal="{{purchasesTotal}}"></search-purchases>
-    <polymer-collapse closed id="collapseList" targetId="list" duration="0"></polymer-collapse>
-    
-    <search-results id="results"></search-results>
-    <polymer-collapse closed id="collapseResults" targetId="results" duration="0"></polymer-collapse>    
-
-    <search-habitat id="habitat"></search-habitat>
-    <polymer-collapse closed id="collapseHabitat" targetId="habitat" duration="0"></polymer-collapse>
-      
-    <search-behaviour id="behaviour"></search-behaviour>
-    <polymer-collapse closed id="collapseBehaviour" targetId="behaviour" duration="0"></polymer-collapse>
-  
-    <search-geography id="geography" currentItems="{{currentItems}}" purchases="{{purchases}}"></search-geography>
-    <polymer-collapse closed id="collapseGeography" targetId="geography" duration="0"></polymer-collapse>
+    <template if="{{selectedTab=='tank'}}">
+      <search-tank tankSize="{{tankSize}}"></search-tank>
+      <script>document.body.style.overflow='auto';</script>      
+    </template>
+    <template if="{{selectedTab=='purchases'}}">
+      <search-purchases currentItems="{{currentItems}}" budget="{{budget}}" purchases="{{purchases}}" purchasesTotal="{{purchasesTotal}}"></search-purchases>
+      <script>document.body.style.overflow='auto';</script>
+    </template>
+    <template if="{{selectedTab=='results'}}">
+      <search-results></search-results>
+      <script>document.body.style.overflow='auto';</script>
+    </template>
+    <template if="{{selectedTab=='habitat'}}">
+      <search-habitat></search-habitat>
+      <script>document.body.style.overflow='auto';</script>
+    </template>
+    <template if="{{selectedTab=='behaviour'}}">
+      <search-behaviour></search-behaviour>
+      <script>document.body.style.overflow='auto';</script>
+    </template>
+    <template if="{{selectedTab=='geography'}}">
+      <search-geography currentItems="{{currentItems}}" purchases="{{purchases}}"></search-geography>
+      <script>document.body.style.overflow='hidden';</script>
+    </template>
     
     <polymer-localstorage name="currentItems" value="{{currentItems}}" autoSaveDisabled></polymer-localstorage>
     <polymer-localstorage name="budget" value="{{budget}}"></polymer-localstorage>
@@ -89,20 +95,11 @@
   </template>
   <script>
     Polymer('search-add',{
+      selectedTab: null,
       selectPanel: function(){
-	if(this.$.searchMenu.selection==null){
-	  var f = function(item){
-	    if(!item.closed) item.toggle();
-	  }
-	  f(this.$.collapseTank);
-	  f(this.$.collapseList);
-	  f(this.$.collapseHabitat);
-	  f(this.$.collapseBehaviour);
-	  f(this.$.collapseGeography);
-	  f(this.$.collapseResults);
-	}else{
-	  var collapser = this.$[this.$.searchMenu.selection.getAttribute('targetId')];
-	  if(collapser.closed) collapser.toggle();
+	var selection = this.$.searchMenu.selection;
+	if(selection!=null){
+	  this.selectedTab = this.$.searchMenu.selection.getAttribute('tab');
 	  this.$.titleText.innerHTML = this.$.searchMenu.selection.getAttribute('title');
 	}
       },

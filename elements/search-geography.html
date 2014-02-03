@@ -28,8 +28,6 @@
       top:100px;
       left:25px;
       width:54px;
-      /*border:1px solid black;*/
-      /*background:gray;*/
       z-index:10;
       text-align:center;
       border-radius:4px;
@@ -51,9 +49,9 @@
     </style>
     <div style="z-index:-1;background-color:rgb(68, 68, 68);overflow:hidden;width:100%;height:100%;position:fixed;"></div>
     
-    <div id="buttons">
+    <div id="buttons" data-style="max-height:75%;overflow-y:scroll;overflow-x:hidden;">
       <template if="{{currentItems.length>0}}">
-      	Current
+      	<div on-mouseover="{{currentSelected}}" style="cursor:pointer">Current</div>
 	<template repeat="{{o in currentItems}}">
 	  <search-geography-selection species="{{o}}" on-selected="{{speciesSelected}}"></search-geography-selection>
 	</template>
@@ -69,10 +67,6 @@
     <div id="container" style="position:relative;width:100%;background-color:#C2DFFF;border-bottom:1px solid black;cursor:crosshair;"></div>
   </template>
   <script>
-    var fillColorsRange = [
-      '#CC0000', '#CC0033', '#CC0066', '#CC0099', '#CC00CC', '#CC00FF'
-    ];
-
     Polymer('search-geography', {
       map: null,
       nativeFish: {},
@@ -88,16 +82,21 @@
 	this.selectedSpecies = e.detail;
 	this.compute();
       },
+      currentSelected: function(e){
+	console.log('current selected');
+      },
       compute: function(){
 	console.log('compute Choropleth');
+	if(this.map==null) return;
+
 	var fillColors = {};
-	var fillColorsCount = {};
-	
+	var maxColorsCount = 0;
+
 	function fill(f, nativeFish){
 	  if(f.countries!=null){
 	    for(var i=0;i<f.countries.length;i++){
 	      var country = f.countries[i];
-	      var count = fillColorsCount[country];
+	      var count = fillColors[country];
 	      if(count != null){
 		nativeFish[country].push(f.name);
 	      }else{
@@ -105,11 +104,12 @@
 		nativeFish[country] = [f.name];
 	      }
 	      count++;
-	      fillColorsCount[country] = count;
-	      fillColors[country] = fillColorsRange[count];
+	      fillColors[country] = count;
+	      if(count > maxColorsCount) maxColorsCount = count;
 	    }
 	  }
 	}
+	
 	if(this.purchases!=null){
 	  var a = this.purchases;
 	  for(var i=0;i<a.length;i++){
@@ -122,6 +122,16 @@
 	    fill(a[i], this.nativeFish);
 	  }
 	}
+	
+	//replace count with colors
+	for (var property in fillColors) {
+	    if (fillColors.hasOwnProperty(property)) {
+	      var count = fillColors[property];
+	      var color = 'rgb(204,30,' + Math.floor(255 * count / maxColorsCount) + ')';
+	      fillColors[property] = color;
+	    }
+	}
+	
 	//selected
 	if(this.selectedSpecies!=null){
 	  var c = this.selectedSpecies.countries;
@@ -133,9 +143,10 @@
 	  }
 	}
 	
+	console.log(fillColors);
 	this.map.updateChoropleth(fillColors);
       },
-      attached: function(){	
+      attached: function(){
 	this.map = new Datamap({element: this.$.container,
 	  fills: {
 	      defaultFill: '#339933' //any hex, color name or rgb/rgba value
