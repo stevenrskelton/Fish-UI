@@ -85,7 +85,7 @@
 	}else{
 	  sortedResults = results;
 	}
-	
+
 	var limitedResults;
 	if(this.limit > 0){
 	  limitedResults = sortedResults.slice(this.skip,this.skip + this.limit);
@@ -96,7 +96,7 @@
 	var self = this;
 	setTimeout(function(){
 	  self.fire('polymer-response', limitedResults);
-	},100);
+	},2000);
       }
     });
   </script>    

@@ -1,7 +1,7 @@
 <link rel="import" href="../components/polymer/polymer.html">
 <link rel="import" href="../components/polymer-ui-icon-button/polymer-ui-icon-button.html">  
 
-<polymer-element name="current-item" noscript attributes="species name number src remove focus">
+<polymer-element name="current-item" noscript attributes="scientificName name number src remove focus">
   <template>
   
     <div class="panel" style="vertical-align:top;clear:both;background-color:#ffffe0;">
@@ -12,17 +12,17 @@
 	<span class="input-group-addon">Many</span>
       </div>
       
-      <img title="{{species}}" alt="{{species}}" src="{{src}}" width="100px" height="50px" style="float:left;border-radius:4px;margin:-5px 10px 0 -5px;" />
+      <img title="{{scientificName}}" alt="{{scientificName}}" src="{{src}}" width="100px" height="50px" style="float:left;border-radius:4px;margin:-5px 10px 0 -5px;" />
       
       <strong>{{name}}</strong><br/>
-      {{species}}
+      {{scientificName}}
     </div>
   </template>
   <script>
     Polymer('current-item', {
       remove: function() {
-	if(confirm('Remove [' + this.species + '] from the list?')){
-	  this.fire('remove', this.species);
+	if(confirm('Remove `' + this.name + '` (' + this.scientificName + ') from the list?')){
+	  this.fire('remove', this.scientificName);
 	}
       },
       focus: function() {

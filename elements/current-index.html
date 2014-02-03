@@ -23,7 +23,6 @@
       </polymer-ui-icon-button>
       <div flex>What is your Current Livestock?</div>
       
-      
       <polymer-ui-toolbar responsive="" class="align-center polymer-ui-dark-theme flexbox" style="text-align:center" flex="">
       
 	<polymer-flex-layout align="center" style="display: none;">
@@ -44,22 +43,27 @@
     </polymer-ui-toolbar>
 
     <template repeat="{{c in currentItems}}" id="currentItemsTemplate">
-      <current-item species="{{c.scientificName}}" name="{{c.name}}" src="{{c.src}}" number="{{c.number}}" on-remove="{{removeItem}}"></currentItem>
+      <current-item scientificName="{{c.scientificName}}" name="{{c.name}}" src="{{c.src}}" number="{{c.number}}" on-remove="{{removeItem}}"></currentItem>
     </template>
+    <template if="{{!(currentItems.length>0)}}">
+      <div class="panel warning">
+	<strong>Empty!</strong> Search for your current aquarium inhabitants.
+      </div>
+    </template>    
 
     <polymer-localstorage id="currentItemsStorage" name="currentItems" value="{{currentItems}}" autoSaveDisabled></polymer-localstorage>
   </template>
   <script>
     Polymer('current-index',{
       search: function search(){
-	var searchText = document.getElementById('searchText').value;
+	var searchText = this.$.searchText.value;
 	if(searchText == ''){
 	  alert('Please select a species to search for.');
 	}else{
-	  var modal = document.getElementById('currentSearchModal');
+	  var modal = this.$.currentSearchModal;
 	  modal.search = searchText;
 	  modal.selectedItems = this.currentItems;
-	  modal.toggle('hi');
+	  modal.toggle();
 	}
       },
       addItem: function(e){
@@ -68,7 +72,7 @@
       },
       removeItem: function(e){
 	var newArray = [];
-	var species = e.detail;
+	var scientificName = e.detail;
 	var c = this.currentItems;
 	for(i = 0; i < c.length; i++){
 	  if(c[i].scientificName != scientificName) newArray.push(c[i]);

@@ -7,23 +7,24 @@
     <template if="{{currentItems.length > 0}}">  
       <div class="panel">
 	<polymer-ui-icon-button icon="settings" style="float:right;" on-click="{{editCurrent}}"></polymer-ui-icon-button>
-	<h2 style="margin-top:0;margin-right:10px;display:inline;vertical-align:middle;">Current Livestock</h2>
+	<h2 style="margin-right:10px;display:inline;vertical-align:middle;">Current Livestock</h2>
 	<div style="display:inline">
 	  <template repeat="{{c in currentItems}}">
 	    <div style="display:inline-block;margin-right:4px;">
-	      <img title="{{c.name}}" alt="{{c.name}}" src="{{c.src}}" width="75px" height="37px" style="vertical-align:middle;border-radius:4px;" />
+	      <img title="{{c.name}}" alt="{{c.name}}" src="{{c.src}}" width="75px" height="42px" style="vertical-align:middle;border-radius:4px;" />
 	      x{{c.number}}
 	    </div>
 	  </template>
 	</div>
       </div>
     </template>  
-    <div class="panel">
-      <h2 style="margin-top:0">Purchase List</h2>
+    <h2 style="margin-left:20px;">Purchase List</h2>
       <template if="{{!(purchases.length >= 1)}}">
-	Empty!  Add new purchases from the <strong>Search Results</strong> screen.
-      </template>
-      <template if="{{purchases.length >= 1}}" id="numericTable">
+	<div class="panel warning">
+	  Empty! Add new purchases from the <strong>Search Results</strong> screen.
+	</div>
+      </template>      
+      <template if="{{purchases.length >= 1}}" id="numericTable" class="panel info">
 	<table class="numberTable" style="font-size:18px">
 	  <tr>
 	    <th on-click="{{sortSpecies}}" style="{{sortField==0 ? (sortFieldDesc ? 'text-decoration:overline' : 'text-decoration:underline') : ''}}">Fish</th>

@@ -267,3 +267,17 @@ table.numberTable th {
 table.numberTable td:first-of-type {
   text-align: left;
 }
+
+.warning {
+  background-color: #f2dede;
+  padding: 20px;
+}
+
+.go {
+  background-color: #dff0d8;
+  padding: 20px;
+}
+
+.info {
+  background-color: #ffffe0;
+}

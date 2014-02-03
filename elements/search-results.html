@@ -18,11 +18,13 @@
 	
     <template if="{{searchResults==null || searchResults.length==0}}">
       <template if="{{pendingQuery}}">
-	Searching!!      
+	<div class="panel go">
+	  Searching.
+	</div>
       </template>
       <template if="{{!pendingQuery}}">
-	<div class="panel"style="background-color:#ffffe0;padding-bottom:2em;">
-	  <h2>No search results!</h2>
+	<div class="panel warning">
+	  <h2 style="margin-top:0px;">No search results!</h2>
 	  No species were found that are suitable for your setup.
   <!--	Factors
 	  <ul>
@@ -33,7 +35,7 @@
     </template>
     <template if="{{searchResults!=null && searchResults.length>0}}">
       <template repeat="{{searchResults}}">
-	<div class="panel" style="vertical-align:top;clear:both;background-color:#ffffe0;">
+	<div class="panel info" style="vertical-align:top;clear:both;">
 		  
 	  <polymer-ui-icon-button icon="add" style="float:right;margin-left:15px"></polymer-ui-icon-button>
 	  <!--<polymer-ui-icon-button icon="dialog" style="float:right;margin-left:15px" onclick="document.location.href='fish.html'"></polymer-ui-icon-button>-->
@@ -72,21 +74,23 @@
       sortDesc: false,
       changeSort: function(e) {
 	//console.log("change");
-	var menuItem = e.impl.originalTarget.offsetParent;
-	var id = menuItem.id;
-	var field = menuItem.getAttribute('field');
-	if(field != null){
-	  if(field === this.sortField){
-	    //change sort order
-	    if(this.$[id].icon == 'up'){
-	      this.$[id].icon = 'down';
-	    }else{
-	      this.$[id].icon = 'up';
-	    }   
+	if(!this.pendingQuery){
+	  var menuItem = e.impl.originalTarget.offsetParent;
+	  var id = menuItem.id;
+	  var field = menuItem.getAttribute('field');
+	  if(field != null){
+	    if(field === this.sortField){
+	      //change sort order
+	      if(this.$[id].icon == 'up'){
+		this.$[id].icon = 'down';
+	      }else{
+		this.$[id].icon = 'up';
+	      }   
+	    }
+	    this.sortField = field;
+	    this.sortDesc = (this.$[id].icon == 'down');
+	    this.refresh();
 	  }
-	  this.sortField = field;
-	  this.sortDesc = (this.$[id].icon == 'down');
-	  this.refresh();
 	}
       },
       refresh: function(){
@@ -101,6 +105,7 @@
       go: function(){
 	console.log('go ' + this.pendingQuery + "," + this.lastResult);
 	if(this.pendingQuery==false && this.lastResult==false){
+	  document.body.style.cursor = 'progress';	
 	  this.pendingQuery = true;
 	  
 	  console.log('GO: skip ' + this.skip + ', limit ' + this.countPerPage + ', sort ' + this.sortField);
@@ -114,7 +119,6 @@
 	  this.$.searchQuery.limit = this.countPerPage;
 	  this.$.searchQuery.sort = this.sortField;
 	  this.$.searchQuery.desc = this.sortDesc;
-	  document.body.style.cursor = 'progress';
 	  this.$.searchQuery.go();
 	}
       },

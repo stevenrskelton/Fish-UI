@@ -3,7 +3,7 @@
 
 <polymer-element name="current-searchresult" noscript attributes="species add disabled">
   <template>
-    <div class="panel" style="{{ disabled ? 'opacity:0.15' : ''}};background-color:#ffffe0;" >
+    <div class="panel info" style="{{ disabled ? 'opacity:0.15' : ''}};" >
       <polymer-ui-icon-button id="addButton" icon="add" style="float:right;{{ disabled ? 'display:none' : ''}}" on-click="{{add}}"></polymer-ui-icon-button>
       
       <img title="{{species.scientificName}}" alt="{{species.scientificName}}" src="{{species.src}}" width="100px" height="50px" style="float:left;border-radius:4px;margin:-5px 10px 0 -5px;" />
