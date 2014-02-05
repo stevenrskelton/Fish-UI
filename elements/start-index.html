@@ -1,0 +1,61 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../components/polymer-ui-toolbar/polymer-ui-toolbar.html">
+<link rel="import" href="../components/polymer-ui-icon-button/polymer-ui-icon-button.html">
+<link rel="import" href="../components/polymer-ui-icon/polymer-ui-icon.html">
+<link rel="import" href="../components/polymer-localstorage/polymer-localstorage.html">
+
+<link rel="import" href="tank-dimensions.html">
+
+
+<polymer-element name="start-index" noscript>
+  <template>
+    <polymer-ui-toolbar theme="polymer-ui-dark-theme" class="align-center polymer-ui-dark-theme flexbox">
+
+      <polymer-ui-icon-button icon="trash" class="polymer-ui-dark-theme" on-click="{{trash}}"></polymer-ui-icon-button>
+      
+      <div flex>How large is your aquarium tank?</div> 
+      
+      <polymer-ui-toolbar responsive class="align-center polymer-ui-dark-theme flexbox" style="text-align:center;font-size:16px;" flex>
+	<div style="width:280px;margin:0 auto">
+	  Units of Measure:
+	  <div style="display:inline-block;width:70px;">
+	    <input type="radio" name="units" id="metricUnits" checked?="{{units==='metric'}}" on-focus="{{selectMetric}}"/>
+	    <label for="metricUnits" class="btnLabel">Metric</label>
+	  </div>
+	  <div style="display:inline-block;width:70px;">
+	    <input type="radio" name="units" id="usaUnits" checked?="{{units!=='metric'}}" on-focus="{{selectUSA}}"/>
+	    <label for="usaUnits" class="btnLabel">USA</label>
+	  </div>
+	</div>
+      </polymer-ui-toolbar>
+      
+      <button type="button" class="btn btn-primary btn-lg" style="margin-right:10px;height:46px;" on-click="{{save}}">Next <polymer-ui-icon icon="shortcut"></polymer-ui-icon></button>
+    </polymer-ui-toolbar>
+
+    <tank-dimensions style="padding-top:20px;display:block;" units="{{units}}"></tank-dimensions>
+ 
+     <polymer-localstorage name="units" value="{{units}}" id="units" autoSaveDisabled="false"></polymer-localstorage>
+  </template>
+  <script>
+    Polymer('start-index',{
+      units: 'usa',    
+      save: function(){
+	document.location.href = 'search.html';
+      },
+      selectMetric: function(){
+	this.units = 'metric';
+	this.$.units.save();
+      },
+      selectUSA: function(){
+	this.units = 'usa';
+	this.$.units.save();
+      },      
+      trash: function(){
+	if(confirm('Do you want clear all your selections and start a new tank?')){
+	  localStorage.clear();
+	  document.location.href='index.html'
+	}
+      }
+    });
+  </script>    
+</polymer-element>

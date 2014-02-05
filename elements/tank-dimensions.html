@@ -2,61 +2,128 @@
 <link rel="import" href="../components/polymer-ui-icon-button/polymer-ui-icon-button.html">
 <link rel="import" href="../components/polymer-localstorage/polymer-localstorage.html">
 
-<polymer-element name="tank-dimensions" noscript attributes="tankSize">
+<polymer-element name="tank-dimensions" noscript attributes="tankSize units">
   <template>
-    <div style="width:250px;height:180px;background:url('../img/emptyTank.png');text-align:center;"> 
-      <div style="padding-top:60px">
-	<polymer-ui-icon-button icon="left" on-click={{smallerTank}}></polymer-ui-icon-button><div style="vertical-align:middle;display:inline"><input type="text" id="tankSize" size="1" value="{{tankSize}}" onfocus="this.select()" style="text-align:right;border:none;font-size:16pt;padding-right:2px" on-keyup="{{customTankSize}}"/>{{volumeUnit}}</div><polymer-ui-icon-button icon="right" on-click="{{largerTank}}"></polymer-ui-icon-button>
-      </div>      
-      <div style="margin-top:-10px;height:20px;">{{tankLabel}}</div>
-      <div>
-	<div style="position:relative;top:55px;left:10px;display:{{tankWidth == '' ? 'none' : 'inline'}}">{{tankWidth}}{{lengthUnit}}</div>
-	<div style="position:relative;top:45px;left:125px;display:{{tankWidth == '' ? 'none' : 'inline'}}">{{tankDepth}}{{lengthUnit}}</div>
-	<div style="position:relative;top:-25px;left:110px;display:{{tankWidth == '' ? 'none' : 'inline'}}">{{tankHeight}}{{lengthUnit}}</div>
+    <div style="width:{{
+      phoneScreen ? '400px' : '680px'
+    }};margin:0 auto;">
+      <div style="width:250px;height:220px;background:url('../img/emptyTank.png');background-repeat:no-repeat;text-align:center;{{
+	phoneScreen ? 'margin-left:auto;margin-right:auto' : 'display:inline-block'
+      }};vertical-align:top;margin-bottom:20px;"> 
+	<div style="padding-top:60px;white-space:nowrap;">
+	  <polymer-ui-icon-button icon="left" on-click={{smallerTank}}></polymer-ui-icon-button>
+	  <div style="vertical-align:middle;display:inline-block;width:75px;">
+	    <input type="text" id="tankSize" value="{{tankSize}}" onfocus="this.select()" style="text-align:right;border:none;font-size:16pt;padding-right:2px;width:55px;" on-keyup="{{customTankSize}}"/>
+	    {{volumeUnit}}
+	  </div>
+	  <polymer-ui-icon-button icon="right" on-click="{{largerTank}}"></polymer-ui-icon-button>
+	</div>      
+	<div style="margin-top:-10px;height:20px;">{{tankLabel}}</div>
+	<div style="height:85px;">
+	  <div style="position:relative;top:55px;left:10px;display:{{tankWidth == '' ? 'none' : 'inline-block'}};text-align:right;width:40px;">{{tankWidth}}{{lengthUnit}}</div>
+	  <div style="position:relative;top:45px;left:130px;display:{{tankWidth == '' ? 'none' : 'inline-block'}};text-align:left;width:40px;">{{tankDepth}}{{lengthUnit}}</div>
+	  <div style="position:relative;top:-25px;left:96px;display:{{tankWidth == '' ? 'none' : 'inline-block'}};text-align:left;width:40px;">{{tankHeight}}{{lengthUnit}}</div>
+	</div>
+	<template if="{{tankPrice}}">
+	    <strong>Approximate price:</strong> ${{tankPrice.min ? tankPrice.min + ' - ' + tankPrice.max : tankPrice }}	  
+	</template>
       </div>
-    </div>
+      <div class="panel info" style="width:400px;{{
+	phoneScreen ? 'margin:0 auto' : 'display:inline-block;margin: 0 0 0 25px'
+      }};vertical-align:top;">
+	<strong>Tank size</strong> effects many things, such as what species you can support, as well as how many fish you can keep.
+	Other effects are cost: larger tanks cost more, and maintainance: very small and larger tanks require more maintain while average size tanks (
+	{{units=='usa' ? '20 - 55 gal' : '75 - 210 L'}}
+	) require the least amount of maintainance.
+      </div>
+
+      <div class="panel" style="width:100%;margin-left:0;margin-right:0;">
+	<h3>Types of Tanks</h3>
+	<strong>Glass</strong> tanks are the least expensive and most common.<br/>
+	<strong>Starphire Glass</strong> are a more expensive, low iron glass that is much clearer than standard glass.<br/>
+	<strong>Acrylic</strong> is much lighter and clearer than regular glass, but can be easily scratched during regular algae removal.<br/>
+	<br/>
+	<h3>Styles of Tanks</h3>
+	<strong>Rectangular</strong> is the standard format, but <strong>Bow Front, Hex, and Corner</strong> models are available.<br/>
+	<strong>Rimless</strong> remove the need for a top center brace by creating extra think walls.<br/>
+	<strong>Euro Brace</strong> also removes the need for a center brace, but by adding extra material around the top edge.<br/>
+      </div>
+    </div>    
+    <polymer-media-query query="max-width: 640px" queryMatches="{{phoneScreen}}"></polymer-media-query>    
     <polymer-localstorage name="tankSize" value="{{tankSize}}"></polymer-localstorage>
   </template>
   <script>
+    function inchesToCm(inches){ return Math.round(inches * 2.54); }
+    function cmToInches(cm){ return Math.round(cm / 2.54); }
+    function gallonToLitre(gallon){ 
+      var raw = gallon * 3.78541;
+      if(raw < 10){
+	return Math.round(raw * 10) / 10;
+      }else{
+	return Math.round(raw);
+      }
+    }
+    function litreToGallon(litre){ 
+      var raw = litre / 3.78541; 
+      if(raw < 5){
+	return Math.round(raw * 10) / 10;
+      }else{
+	return Math.round(raw);
+      }
+    }
+    
     Polymer('tank-dimensions',{
+      units: 'usa',
       volumeUnit: 'gal',
       lengthUnit: '"',
+      unitsChanged: function(oldVal, newVal) {
+	if(newVal == 'usa'){
+	  this.volumeUnit = 'gal';
+	  this.lengthUnit = '"';
+	  if(oldVal == 'metric') this.tankSize = litreToGallon(this.tankSize);
+	}else{
+	  this.volumeUnit = 'L';
+	  this.lengthUnit = 'cm';
+	  if(oldVal == 'usa') this.tankSize = gallonToLitre(this.tankSize);
+	}
+      },
       tankSize: 20,
       tankWidth: 24,
       tankDepth: 12,
       tankHeight: 16,
+      tankPrice: 31,
       tankSizes: [
-	{gal:2.5, w:12,d:6, h:8},
-	{gal:5, w:16,d:8, h:10},
-	{gal:10,w:20,d:10,h:12},
-	{gal:15,w:24,d:12,h:12},
-	{gal:16,w:20,d:10,h:18,label:'High'},
-	{gal:20,w:24,d:12,h:16,label:'High'},
-	{gal:20,w:30,d:12,h:12,label:'Long'},
+	{gal:2.5, w:12,d:6, h:8, price: 16},
+	{gal:5, w:16,d:8, h:10, price: 15},
+	{gal:10,w:20,d:10,h:12, price: 18},
+	{gal:15,w:24,d:12,h:12, price: 32},
+	{gal:16,w:20,d:10,h:18,label:'High', price: 32},
+	{gal:20,w:24,d:12,h:16,label:'High', price: 31},
+	{gal:20,w:30,d:12,h:12,label:'Long', price: 34},
 	{gal:20,w:20,d:10,h:24,label:'Extra High'},
 	{gal:25,w:24,d:12,h:20},
-	{gal:29,w:30,d:12,h:18},
-	{gal:30,w:36,d:13,h:16},
+	{gal:29,w:30,d:12,h:18, price:54},
+	{gal:30,w:36,d:13,h:16, price: 61},
 	{gal:30,w:24,d:12,h:24,label:'Extra High'},
 	{gal:30,w:30,d:18,h:12,label:'Breeder'},
-	{gal:37,w:30,d:12,h:22},
-	{gal:40,w:48,d:13,h:16},
-	{gal:40,w:36,d:18,h:16,label:'Breeder'},
-	{gal:40,w:36,d:13,h:20,label:'High'},
-	{gal:55,w:48,d:13,h:20},
+	{gal:37,w:30,d:12,h:22, price: 71},
+	{gal:40,w:48,d:13,h:16, price: 100},
+	{gal:40,w:36,d:18,h:16,label:'Breeder', price: 85},
+	{gal:40,w:36,d:13,h:20,label:'High', price: {min: 70, max: 80}},
+	{gal:55,w:48,d:13,h:20, price: {min: 80, max: 112}},
 	{gal:60,w:48,d:13,h:24},
-	{gal:65,w:36,d:18,h:24},
-	{gal:75,w:48,d:18,h:21},
-	{gal:90,w:48,d:18,h:24},
-	{gal:110,w:48,d:18,h:30},
-	{gal:120,w:48,d:24,h:24},
-	{gal:120,w:60,d:18,h:26,label:'Extra High'},
-	{gal:125,w:72,d:18,h:22},
-	{gal:150,w:72,d:18,h:27},
-	{gal:150,w:48,d:24,h:30,label:'Extra High'},
-	{gal:180,w:72,d:24,h:30},
-	{gal:220,w:72,d:24,h:30,label:'Extra High'},
-	{gal:265,w:82,d:24,h:30}
+	{gal:65,w:36,d:18,h:24, price: {min:90, max:136}},
+	{gal:75,w:48,d:18,h:21, price: {min:100, max:140}},
+	{gal:90,w:48,d:18,h:24, price: {min:170, max:258}},
+	{gal:110,w:48,d:18,h:30, price: 363},
+	{gal:120,w:48,d:24,h:24, price: 370},
+	{gal:120,w:60,d:18,h:26,label:'Extra High', price: {min:200, max:290}},
+	{gal:125,w:72,d:18,h:22, price: {min:240, max:342}},
+	{gal:150,w:72,d:18,h:27, price: 525},
+	{gal:150,w:48,d:24,h:30,label:'Extra High', price: 458},
+	{gal:180,w:72,d:24,h:30, price: 665},
+	{gal:220,w:72,d:24,h:30,label:'Extra High', price: 745},
+	{gal:265,w:82,d:24,h:30, price: 1314}
       ],
       smallerTank: function(){
 	var tIndex = this.findTankIndex();
@@ -80,24 +147,47 @@
 	  this.setTankIndex(tIndex+1);
 	}
       },
-      setTankIndex: function(i){	
+      setTankIndex: function(i){
 	var t = this.tankSizes[i];
-	this.tankSize=t.gal;
-	this.tankWidth=t.w;
-	this.tankDepth=t.d;
-	this.tankHeight=t.h;
+	if(this.units == 'usa'){
+	  this.tankSize=t.gal;
+	  this.tankWidth=t.w;
+	  this.tankDepth=t.d;
+	  this.tankHeight=t.h;
+	}else{
+	  this.tankSize=gallonToLitre(t.gal);
+	  this.tankWidth=inchesToCm(t.w);
+	  this.tankDepth=inchesToCm(t.d);
+	  this.tankHeight=inchesToCm(t.h);
+	}
 	this.tankLabel=t.label;
+	this.tankPrice=t.price;
       },
       findTankIndex: function(){
+	var s = this.tankSize;
+	var w = this.tankWidth;
+	var d = this.tankDepth;
+	var h = this.tankHeight;      
+	if(this.units != 'usa'){
+	  s = litreToGallon(s);
+	  w = cmToInches(w);
+	  d = cmToInches(d);
+	  h = cmToInches(h);
+	}
+      
 	for (var i = 0; i < this.tankSizes.length; i++) {
 	  var t = this.tankSizes[i];
-	  if(this.tankSize==t.gal && this.tankWidth==t.w && this.tankDepth==t.d && this.tankHeight==t.h) return i;
+	  if(s==t.gal && w==t.w && d==t.d && h==t.h) return i;
 	}
 	return -1;
       },
       customTankSize: function(){
+      	var s = this.tankSize;
+      	if(this.units != 'usa'){
+	  s = litreToGallon(s);
+      	}
 	for (var i = 0; i < this.tankSizes.length; i++) {
-	  if(this.tankSizes[i].gal == this.tankSize){
+	  if(this.tankSizes[i].gal == s){
 	    this.setTankIndex(i);
 	    return;
 	  }
@@ -105,6 +195,7 @@
 	this.tankWidth='';
 	this.tankDepth='';
 	this.tankHeight='';
+	this.tankPrice=null;
 	this.tankLabel='Custom';
       }
     });

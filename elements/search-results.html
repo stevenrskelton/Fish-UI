@@ -3,8 +3,9 @@
 <link rel="import" href="../components/polymer-ui-icon-button/polymer-ui-icon-button.html">
 <link rel="import" href="../components/polymer-media-query/polymer-media-query.html">
 <link rel="import" href="data-search.html">
+<link rel="import" href="search-searchresult.html">
 
-<polymer-element name="search-results" noscript>
+<polymer-element name="search-results" noscript attributes="purchases">
   <template>
     <polymer-ui-menu-button selected="0" selected="0" on-click="{{changeSort}}" icon="sort" selected="0" style="float:left;margin:12px;">
       <polymer-ui-menu-item id="menuItemSortByName" icon="up" label="Sort by Name" theme="polymer-ui-light-theme" field="name"></polymer-ui-menu-item>
@@ -13,7 +14,7 @@
     </polymer-ui-menu-button>
       
     <polymer-ui-icon-button icon="refresh" style="float:right;margin:12px" on-click="{{refresh}}"></polymer-ui-icon-button>
-    <polymer-ui-icon-button icon="maximize" style="float:right;margin:12px"></polymer-ui-icon-button>
+    <polymer-ui-icon-button icon="maximize" style="float:right;margin:12px" on-click="{{toggleSize}}"></polymer-ui-icon-button>
     <h2 style="margin-left:20px;">Search Results</h2>    
 	
     <template if="{{searchResults==null || searchResults.length==0}}">
@@ -35,24 +36,11 @@
     </template>
     <template if="{{searchResults!=null && searchResults.length>0}}">
       <template repeat="{{searchResults}}">
-	<div class="panel info" style="vertical-align:top;clear:both;">
-		  
-	  <polymer-ui-icon-button icon="add" style="float:right;margin-left:15px"></polymer-ui-icon-button>
-	  <!--<polymer-ui-icon-button icon="dialog" style="float:right;margin-left:15px" onclick="document.location.href='fish.html'"></polymer-ui-icon-button>-->
-	  <div style="float:right;margin:-3px 0 -3px;">
-	    <input id="number" type="text" class="form-control input-lg" placeholder="#" style="width:75px;text-align:right;" value="{{number}}"/>
-	    <span class="input-group-addon" style="padding-left:0px;">Many</span>
-	  </div>
-	  
-	  <img title="{{scientificName}}" alt="{{scientificName}}" src="{{src}}" width="100px" height="50px" style="float:left;border-radius:4px;margin:-5px 10px 0 -5px;" />
-	  
-	  <div style="display:inline-block">
-	    <strong>{{name}}</strong><br/>
-	    {{scientificName}}
-	  </div>
-	  <div class="input-group-addon" style="float:right;">
-	    ${{price}}
-	  </div>
+	<search-searchresult species="{{}}" on-add="{{addItem}}" maximize="{{maximize}}"></search-searchresult>
+      </template>
+      <template if="{{pendingQuery}}">
+	<div class="polymer-ui-dark-theme" style="width:100%;padding:10px;">
+	  Loading...
 	</div>
       </template>
       <template if="{{lastResult}}">
@@ -65,6 +53,11 @@
   </template>
   <script>
     Polymer('search-results', {
+      maximize: true,
+      toggleSize: function(){
+	console.log('maximize');
+	this.maximize = true;
+      },
       skip: 0,
       countPerPage: 0,
       lastResult: false,
@@ -164,6 +157,14 @@
 	//  this.countPerPage = document.body.offsetHeight / resultHeight;
 	//};      
 	this.go();
+      },
+      addItem: function(e){
+	console.log(this.purchases);
+	if(this.purchases==null){
+	  this.purchases = [e.detail];
+	}else{
+	  this.purchases.push(e.detail); 
+	}
       }
     });
   </script>    

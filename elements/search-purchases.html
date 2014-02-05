@@ -38,9 +38,9 @@
 		<img title="{{scientificName}}" alt="{{scientificName}}" src="{{src}}" width="90px" height="45px" style="vertical-align:middle;border-radius:4px;" />
 		<strong>{{name}}</strong> - <em>{{scientificName}}</em>
 	      </td>
-	      <td>
-	      	<input id="number" type="text" class="form-control input-lg" placeholder="#" style="width:100px;text-align:right" value="{{number}}" onblur="replaceNumberInput(this)" on-keyup="{{calculateTotals}}"/>
-	      	<div style="height:100%;width:100px;background-color:blue"></div>
+	      <td style="text-align:center">
+	      	<input type="text" class="form-control input-lg" placeholder="#" style="width:100px;text-align:right" value="{{number}}" onfocus="this.select()" onblur="replaceNumberInput(this)" on-keyup="{{calculateTotals}}"/>
+	      	<polymer-ui-icon-button icon="trash" style="display:none" on-click="{{remove}}"></polymer-ui-icon-button>
 	      </td>
 	      <td>{{price}}</td>
 	      <td>{{number*price}}</td>
@@ -57,7 +57,9 @@
   </template>
   <script>
     function replaceNumberInput(element){
-      if(element.value==0  || element.value==''){
+      if(element.value==0 || element.value==''){
+	console.log(element.nextSibling.nextSibling);
+	element.nextSibling.nextSibling.style.display = 'block';
 	element.style.display = 'none';
 	//element.parentNode.addChild(
 //	console.log(element);
@@ -84,6 +86,10 @@
       return sortByKey(value, op, dir);
     };
     Polymer('search-purchases',{
+      remove: function(e){
+	console.log('remove');
+	console.log(e);      
+      },
       editCurrent: function(){
 	document.location.href = 'current.html';
       },

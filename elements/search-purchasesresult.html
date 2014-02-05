@@ -1,0 +1,33 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../components/polymer-ui-icon-button/polymer-ui-icon-button.html">
+
+<polymer-element name="search-purchasesresult" noscript attributes="species add">
+  <template>
+    <tr>
+      <td style="font-size:14px">
+	<img title="{{species.scientificName}}" alt="{{species.scientificName}}" src="{{species.src}}" width="90px" height="45px" style="vertical-align:middle;border-radius:4px;" />
+	<strong>{{species.name}}</strong> - <em>{{scientificName}}</em>
+      </td>
+      <td style="text-align:center">
+	<input id="number" type="text" class="form-control input-lg" placeholder="#" style="width:100px;text-align:right" value="{{species.number}}" onblur="replaceNumberInput(this)" on-keyup="{{species.calculateTotals}}"/>
+	<!--<polymer-ui-icon-button icon="trash"></polymer-ui-icon-button>-->
+      </td>
+      <td>{{species.price}}</td>
+      <td>{{species.number * species.price}}</td>
+    </tr>
+  </template>
+  <script>
+    Polymer('search-purchasesresult', {
+    /*
+      add: function() {
+	if(this.species.number == null || this.species.number == ''){
+	  alert('Please enter the number of [' + this.species.scientificName + '] specimen you wish to purchase.');
+	  this.$.number.focus();
+	}else{
+	  this.fire('add', this.species);
+	  this.disabled = true;
+	}
+      }    */
+    });
+  </script>    
+</polymer-element>  
