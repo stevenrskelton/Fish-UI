@@ -39,7 +39,7 @@
 	<search-searchresult species="{{}}" on-add="{{addItem}}" maximize="{{maximize}}"></search-searchresult>
       </template>
       <template if="{{pendingQuery}}">
-	<div class="polymer-ui-dark-theme" style="width:100%;padding:10px;">
+	<div class="polymer-ui-dark-theme" style="width:100%;padding:10px;text-align:center;font-weight:bold;">
 	  Loading...
 	</div>
       </template>
@@ -101,7 +101,7 @@
 	  document.body.style.cursor = 'progress';	
 	  this.pendingQuery = true;
 	  
-	  console.log('GO: skip ' + this.skip + ', limit ' + this.countPerPage + ', sort ' + this.sortField);
+	  //console.log('GO: skip ' + this.skip + ', limit ' + this.countPerPage + ', sort ' + this.sortField);
 	  
 	  //construct search params
 	  //this.$.searchQuery.name = '';
@@ -116,24 +116,18 @@
 	}
       },
       loadSearchResults: function(e){
-	console.log('loadSearchResults');
+	//console.log('loadSearchResults');
+	//console.log(this.countPerPage);
 	document.body.style.cursor = 'default';      
 	var r = e.detail;
-	console.log('loadSearchResults ' + r.length);
+	//console.log('loadSearchResults ' + r.length);
 	if(r.length == 0){
 	  this.lastResult = true;
 	}else{
 	  if(this.searchResults==undefined){
 	    this.searchResults = r;
 	  }else{
-	    console.log('prepush');
-	    console.log(this.searchResults.length);
-	    //for(var i=0;i<r.length;i++){
-	    //  this.searchResults.push(r[i]);
-	    //}
 	    Array.prototype.push.apply(this.searchResults, r);
-	    console.log(this.searchResults.length);
-	    console.log('postpush'); 
 	  }
 	  this.skip += r.length;
 	}
@@ -144,22 +138,26 @@
 	this.pendingQuery = false;
       },
       attached: function(){
+	document.body.style.overflow='auto';      
 	var self = this;
 	window.onscroll = function(ev) {
 	    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-	      console.log('bottom');
+	      //console.log('bottom');
 	      self.go();
 	    }
 	};
 	var resultHeight = 70;
 	this.countPerPage = Math.ceil(window.innerHeight / resultHeight);
-	//window.onresize = function(ev) {
-	//  this.countPerPage = document.body.offsetHeight / resultHeight;
-	//};      
+	window.onresize = function(ev) {
+	  self.countPerPage = document.body.offsetHeight / resultHeight;
+	};      
 	this.go();
       },
+      detached: function(){
+	window.onscroll = null;
+      },
       addItem: function(e){
-	console.log(this.purchases);
+	//console.log(this.purchases);
 	if(this.purchases==null){
 	  this.purchases = [e.detail];
 	}else{

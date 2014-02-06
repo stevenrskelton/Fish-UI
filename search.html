@@ -65,28 +65,22 @@
     </polymer-ui-toolbar>
 
     <template if="{{selectedTab=='tank'}}">
-      <search-tank tankSize="{{tankSize}}"></search-tank>
-      <script>document.body.style.overflow='auto';</script>      
+      <search-tank tankSize="{{tankSize}}"></search-tank>     
     </template>
     <template if="{{selectedTab=='purchases'}}">
       <search-purchases currentItems="{{currentItems}}" budget="{{budget}}" purchases="{{purchases}}" purchasesTotal="{{purchasesTotal}}"></search-purchases>
-      <script>document.body.style.overflow='auto';</script>
     </template>
     <template if="{{selectedTab=='results'}}">
       <search-results purchases="{{purchases}}"></search-results>
-      <script>document.body.style.overflow='auto';</script>
     </template>
     <template if="{{selectedTab=='habitat'}}">
       <search-habitat></search-habitat>
-      <script>document.body.style.overflow='auto';</script>
     </template>
     <template if="{{selectedTab=='behaviour'}}">
       <search-behaviour></search-behaviour>
-      <script>document.body.style.overflow='auto';</script>
     </template>
     <template if="{{selectedTab=='geography'}}">
       <search-geography currentItems="{{currentItems}}" purchases="{{purchases}}"></search-geography>
-      <script>document.body.style.overflow='hidden';</script>
     </template>
     
     <polymer-localstorage name="currentItems" value="{{currentItems}}" autoSaveDisabled></polymer-localstorage>

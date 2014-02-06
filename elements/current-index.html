@@ -20,7 +20,7 @@
       <polymer-ui-toolbar responsive class="align-center polymer-ui-dark-theme flexbox" style="text-align:center" flex>
 	<form class="navbar-form navbar-left" role="search" style="width:600px;margin-left:auto;margin-right:auto;padding:0 10px;">
 	  <polymer-flex-layout></polymer-flex-layout>
-	  <input type="text" class="form-control input-lg" placeholder="Species or Common Name" flex style="margin-right:10px" onfocus="this.select()" id="searchText">
+	  <input type="text" class="form-control input-lg" placeholder="Species or Common Name" flex style="margin-right:10px" onfocus="this.select()" id="searchText" on-keypress="{{searchEnter}}">
 	  <button type="button" class="btn btn-primary btn-lg" on-click="{{search}}"><polymer-ui-icon icon="search"></polymer-ui-icon> Search</button>
 	</form>
       </polymer-ui-toolbar>
@@ -41,6 +41,12 @@
   </template>
   <script>
     Polymer('current-index',{
+      searchEnter: function(e){
+	if (e.keyCode == 13) {
+	  e.preventDefault();
+	  this.search();
+	}
+      },
       search: function search(){
 	var searchText = this.$.searchText.value;
 	if(searchText == ''){

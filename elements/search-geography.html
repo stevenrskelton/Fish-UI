@@ -147,6 +147,7 @@
 	this.map.updateChoropleth(fillColors);
       },
       attached: function(){
+	document.body.style.overflow='hidden';
 	this.map = new Datamap({element: this.$.container,
 	  fills: {
 	      defaultFill: '#339933' //any hex, color name or rgb/rgba value
@@ -187,7 +188,8 @@
 	  },
 	  parent: this
 	});
-      }
+      },
+      detached: function() { document.body.style.overflow='auto'; }
     });
   </script>    
 </polymer-element>

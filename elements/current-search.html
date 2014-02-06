@@ -14,7 +14,7 @@
 	<div class="modal-header" style="height:60px;">  
 	    <polymer-flex-layout></polymer-flex-layout>
 	    <div style="display:inline-block;line-height:40px;padding-right:10px;">Search Results for</div>
-	    <input type="text" class="form-control input-sm" value="{{search}}" onfocus="this.select()" flex/>
+	    <input type="text" class="form-control input-sm" value="{{search}}" onfocus="this.select()" flex on-keypress="{{searchEnter}}"/>
 	    <polymer-ui-icon-button icon="refresh" on-click="{{go}}"></polymer-ui-icon-button> 
 	</div>
 	<div class="modal-body" flex style="overflow-y:scroll">
@@ -56,6 +56,12 @@
 	
 	this.go();
       },
+      searchEnter: function(e){
+	if (e.keyCode == 13) {
+	  e.preventDefault();
+	  this.go();
+	}
+      },      
       go: function(){
 	this.searchResults = null;
 	if(!this.pendingQuery){
