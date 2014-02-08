@@ -32,9 +32,9 @@
       <button type="button" class="btn btn-primary btn-lg" style="margin-right:10px;height:46px;" on-click="{{save}}">Next <polymer-ui-icon icon="shortcut"></polymer-ui-icon></button>
     </polymer-ui-toolbar>
 
-    <tank-dimensions style="padding-top:20px;display:block;" units="{{units}}"></tank-dimensions>
+    <tank-dimensions style="padding:20px 0 60px 0;display:block;" units="{{units}}"></tank-dimensions>
  
-     <polymer-localstorage name="units" value="{{units}}" id="units" autoSaveDisabled="false"></polymer-localstorage>
+    <polymer-localstorage name="units" value="{{units}}" id="units" autoSaveDisabled="false"></polymer-localstorage>
   </template>
   <script>
     Polymer('start-index',{
