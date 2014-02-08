@@ -1,6 +1,5 @@
 <link rel="import" href="../components/polymer/polymer.html">
 <link rel="import" href="../components/polymer-ui-icon-button/polymer-ui-icon-button.html">
-<link rel="import" href="../components/polymer-localstorage/polymer-localstorage.html">
 
 <polymer-element name="tank-dimensions" noscript attributes="tankSize units">
   <template>
@@ -44,10 +43,10 @@
 
       <div class="panel" style="width:100%;margin-left:0;margin-right:0;">
 	<h3>Shapes of Tanks</h3>
-	<label><input type="radio" name="tankshape" on-click="{{selectRectangularTank}}" checked/><strong>Rectangular</strong></label> is the standard format,<br/>
-	<label><input type="radio" name="tankshape" on-click="{{selectBowTank}}"/><strong>Bow Front</strong></label> offer better viewing at angles,<br/>
-	<label><input type="radio" name="tankshape" on-click="{{selectHexTank}}"/><strong>Hexagon</strong></label> are best suited for 360° viewing, while <br/>
-	<label><input type="radio" name="tankshape" on-click="{{selectCornerTank}}"/><strong>Corner</strong></label> models are best if the tank sits in a corner.<br/>
+	<label><input type="radio" name="tankshape" on-click="{{selectRectangularTank}}" checked?="{{tankSize.shape=='rect'}}"/><strong>Rectangular</strong></label> is the standard format,<br/>
+	<label><input type="radio" name="tankshape" on-click="{{selectBowTank}}" checked?="{{tankSize.shape=='bow'}}"/><strong>Bow Front</strong></label> offer better viewing at angles,<br/>
+	<label><input type="radio" name="tankshape" on-click="{{selectHexTank}}" checked?="{{tankSize.shape=='hex'}}"/><strong>Hexagon</strong></label> are best suited for 360° viewing, while <br/>
+	<label><input type="radio" name="tankshape" on-click="{{selectCornerTank}}" checked?="{{tankSize.shape=='corner'}}"/><strong>Corner</strong></label> models are best if the tank sits in a corner.<br/>
 	<h3>Tank Materials</h3>
 	<strong>Glass</strong> tanks are the least expensive and most common,<br/>
 	<strong>Starphire Glass</strong> are a more expensive, low iron glass that is much clearer than standard glass.<br/>
@@ -59,7 +58,6 @@
       </div>
     </div>    
     <polymer-media-query query="max-width: 640px" queryMatches="{{phoneScreen}}"></polymer-media-query>    
-    <polymer-localstorage name="tankSize" value="{{tankSize}}"></polymer-localstorage>
   </template>
   <script>
     function isNumberPress(e){
@@ -130,13 +128,13 @@
 	console.log('oldVal: ' + oldVal + ',newVal:' + newVal);
 	this.customTankSize();
       },
-      tankSize: { gal: 20, litre: 75},
+      tankSize: { gal: 20, litre: 75, shape: 'rect' },
       tankWidth: 24,
       tankDepth: 12,
       tankHeight: 16,
       tankPrice: 31,
-      tankShapes: [
-	{ name: 'rect', img: '../img/emptyTank.png', wtop: 90, wleft: 10, dtop: 80, dleft: 160, htop: -25, hleft: 140,
+      tankShapes: {
+	rect: { img: '../img/emptyTank.png', wtop: 90, wleft: 10, dtop: 80, dleft: 160, htop: -25, hleft: 140,
 	  data: [
 	    {gal:2.5, w:12,d:6, h:8, price: 16},
 	    {gal:5, w:16,d:8, h:10, price: 15},
@@ -171,7 +169,7 @@
 	    {gal:265,w:82,d:24,h:30, price: 1314}
 	  ]
 	},
-	{ name: 'bow', img: '../img/emptyBowTank.png', wtop: 100, wleft: 10, dtop: 80, dleft: 135, htop: -25, hleft: 105,
+	bow: { img: '../img/emptyBowTank.png', wtop: 100, wleft: 10, dtop: 80, dleft: 135, htop: -25, hleft: 105,
 	  data: [
 	    {gal:16, w:20.3,d:12.9,h:17.8},
 	    {gal:26, w:24.2,d:14.8,h:20.9},
@@ -181,47 +179,55 @@
 	    {gal:155,w:72.4,d:24.5,h:25.5}
 	  ]
 	},
-	{ name: 'hex', img: '../img/emptyHexTank.png', wtop: 100, wleft: 10, dtop: 70, dleft: 120, htop: -25, hleft: 76,
+	hex: { img: '../img/emptyHexTank.png', wtop: 100, wleft: 10, dtop: 70, dleft: 120, htop: -25, hleft: 76,
 	  data: [
 	    {gal:10,w:14.5,d:12.6,h:18.4},
 	    {gal:20,w:18.8,d:16.3,h:20.7},
 	    {gal:35,w:23.3,d:20.2,h:24.8}
 	  ]
 	},
-	{ name: 'corner', img: '../img/emptyCornerTank.png', wtop: 95, wleft: 0, dtop: 60, dleft: 165, htop: 0, hleft: 125,
+	corner: { img: '../img/emptyCornerTank.png', wtop: 95, wleft: 0, dtop: 60, dleft: 165, htop: 0, hleft: 125,
 	  data: [
 	    {gal:36,w:33.9,d:24,  h:20.9},
 	    {gal:54,w:39,  d:27.4,h:23},
 	    {gal:92,w:48.5,d:34.3,h:24.2}
 	  ]
 	}
-      ],
+      },
       selectRectangularTank: function(){
-	this.tankShape = this.tankShapes[0];
-	this.tankSizes = this.tankShapes[0].data;
+	var g = this.tankSize.gal;
+	var l = this.tankSize.litre;
+	this.tankSize = {gal:g, litre:l, shape:'rect'};
+	this.tankShape = this.tankShapes[this.tankSize.shape];
 	this.customTankSize();
       },
       selectBowTank: function(){
-	this.tankShape = this.tankShapes[1];
-	this.tankSizes = this.tankShapes[1].data;
+	var g = this.tankSize.gal;
+	var l = this.tankSize.litre;
+	this.tankSize = {gal:g, litre:l, shape:'bow'};
+	this.tankShape = this.tankShapes[this.tankSize.shape];
 	this.customTankSize();
       },
       selectHexTank: function(){
-	this.tankShape = this.tankShapes[2];
-	this.tankSizes = this.tankShapes[2].data;
+	var g = this.tankSize.gal;
+	var l = this.tankSize.litre;
+	this.tankSize = {gal:g, litre:l, shape:'hex'};
+	this.tankShape = this.tankShapes[this.tankSize.shape];
 	this.customTankSize();
       },
       selectCornerTank: function(){
-	this.tankShape = this.tankShapes[3];
-	this.tankSizes = this.tankShapes[3].data;
+	var g = this.tankSize.gal;
+	var l = this.tankSize.litre;
+	this.tankSize = {gal:g, litre:l, shape:'corner'};
+	this.tankShape = this.tankShapes[this.tankSize.shape];
 	this.customTankSize();
       },      
       smallerTank: function(){
 	var tIndex = this.findTankIndex();
 	var g = this.tankSize.gal;
 	if(tIndex == -1){
-	  for (var i = 0; i < this.tankSizes.length; i++) {
-	    if(this.tankSizes[i].gal < g) tIndex = i + 1;
+	  for (var i = 0; i < this.tankShape.data.length; i++) {
+	    if(this.tankShape.data[i].gal < g) tIndex = i + 1;
 	  }
 	}
 	if(tIndex > 0){
@@ -232,17 +238,20 @@
 	var tIndex = this.findTankIndex();
 	var g = this.tankSize.gal;
 	if(tIndex == -1){
-	  for (var i = this.tankSizes.length - 1; i >= 0; i--) {
-	    if(this.tankSizes[i].gal > g) tIndex = i - 1;
+	  for (var i = this.tankShape.data.length - 1; i >= 0; i--) {
+	    if(this.tankShape.data[i].gal > g) tIndex = i - 1;
 	  }
 	}
-	if(tIndex < this.tankSizes.length - 1 && (tIndex > -1 || g < this.tankSizes[0].gal)){
+	if(tIndex < this.tankShape.data.length - 1 && (tIndex > -1 || g < this.tankShape.data[0].gal)){
 	  this.setTankIndex(tIndex+1);
 	}
       },
       setTankIndex: function(i){
-	var t = this.tankSizes[i];
-	this.tankSize = {gal: t.gal, litre: gallonToLitre(t.gal)};
+	var t = this.tankShape.data[i];
+	if(this.tankSize.gal !== t.gal){
+	  var s = this.tankSize.shape;
+	  this.tankSize = {gal: t.gal, litre: gallonToLitre(t.gal), shape: s};
+	}
 	if(this.units == 'usa'){
 	  this.tankWidth=t.w;
 	  this.tankDepth=t.d;
@@ -266,16 +275,16 @@
 	  h = cmToInches(h);
 	}
       
-	for (var i = 0; i < this.tankSizes.length; i++) {
-	  var s = this.tankSizes[i];
+	for (var i = 0; i < this.tankShape.data.length; i++) {
+	  var s = this.tankShape.data[i];
 	  if(g==s.gal && w==s.w && d==s.d && h==s.h) return i;
 	}
 	return -1;
       },
       customTankSize: function(){
       	var g = this.tankSize.gal;
-	for (var i = 0; i < this.tankSizes.length; i++) {
-	  if(this.tankSizes[i].gal == g){
+	for (var i = 0; i < this.tankShape.data.length; i++) {
+	  if(this.tankShape.data[i].gal == g){
 	    this.setTankIndex(i);
 	    return;
 	  }
@@ -286,9 +295,9 @@
 	this.tankPrice=null;
 	this.tankLabel='Custom';
       },
-      ready: function(){
-	this.tankShape = this.tankShapes[0];
-	this.tankSizes = this.tankShapes[0].data;
+      tankSizeChanged: function(oldVal, newVal) {
+	this.tankShape = this.tankShapes[this.tankSize.shape];
+	this.customTankSize();
       }
     });
   </script>    
