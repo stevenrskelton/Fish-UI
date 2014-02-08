@@ -7,7 +7,13 @@
 
 <polymer-element name="search-geography-selection" noscript attributes="species selected">
   <template>
-    <div class="selectIcon" style="background-image:url('{{species.src}}')" on-mouseover="{{selectSpecies}}" on-mouseout="{{unselectSpecies}}"></div>
+    <div class="selectIcon">
+      <div class="icon" style="background-image:url('{{species.src}}')" on-mouseover="{{selectSpecies}}" on-mouseout="{{unselectSpecies}}">
+      </div><div class="text">
+	{{species.name}}<br/>
+	<label>{{species.scientificName}}</label>
+      </div>
+    </div>
   </template>
   <script>
   Polymer('search-geography-selection', {     
@@ -27,31 +33,53 @@
       position:absolute;
       top:100px;
       left:25px;
-      width:54px;
       z-index:10;
-      text-align:center;
       border-radius:4px;
     }    
-    .selectIcon {
-      background-size:cover;
+    .selectIcon .icon {
+      background-size: cover;
       width:54px;
       height:54px;
-      background-position:center;
+      background-position:center center;
       border:2px solid #555;
       border-radius:4px;
-      opacity:0.75;
+      opacity:0.85;
       cursor: pointer;
+      display: inline-block;
+      vertical-align:top;
     }
-    .selectIcon:hover {
+    .selectIcon .text {
+      display: none;
+      color: #ff0;
+      font-weight: bolder;
+      font-size: larger;
+      white-space: nowrap;
+      text-align: left;
+      height: 54px;      
+      opacity: 0.75;
+      background-color: #880;
+      border:2px solid #ff0;
+      border-left: 0;
+      border-radius: 0 4px 4px 0;
+      padding: 0 5px;      
+    }
+    .selectIcon .text label {
+      font-size: smaller;
+    }
+    .selectIcon:hover .icon {
       border:2px solid #ff0;
       opacity:1;
+      border-radius: 4px 0 0 4px;
+    }
+    .selectIcon:hover .text {
+      display: inline-block;
     }
     </style>
     <div style="z-index:-1;background-color:rgb(68, 68, 68);overflow:hidden;width:100%;height:100%;position:fixed;"></div>
     
     <div id="buttons" data-style="max-height:75%;overflow-y:scroll;overflow-x:hidden;">
       <template if="{{currentItems.length>0}}">
-      	<div on-mouseover="{{currentSelected}}" style="cursor:pointer">Current</div>
+      	<div on-mouseover="{{currentSelected}}" style="cursor:pointer;width:54px;text-align:center;">Current</div>
 	<template repeat="{{o in currentItems}}">
 	  <search-geography-selection species="{{o}}" on-selected="{{speciesSelected}}"></search-geography-selection>
 	</template>
