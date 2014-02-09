@@ -66,9 +66,8 @@
       sortField: 'name',
       sortDesc: false,
       changeSort: function(e) {
-	//console.log("change");
 	if(!this.pendingQuery){
-	  var menuItem = e.impl.originalTarget.offsetParent;
+	  var menuItem = e.target;
 	  var id = menuItem.id;
 	  var field = menuItem.getAttribute('field');
 	  if(field != null){
