@@ -12,7 +12,7 @@
 	<div style="margin-top:90px;white-space:nowrap;">
 	  <polymer-ui-icon-button icon="left" on-click={{smallerTank}}></polymer-ui-icon-button>
 	  <div style="vertical-align:middle;display:inline-block;width:75px;">
-	    <input type="number" value="{{tankSize | userTankSize(units) }}" onfocus="this.select()" style="text-align:right;border:none;font-size:16pt;padding-right:2px;width:55px;" onkeydown="return isNumberPress(event)" on-keyup="{{customTankSize}}"/>
+	    <input type="number" value="{{tankSize | userTankSize(units, tankSize)}}" onfocus="this.select()" style="text-align:right;border:none;font-size:16pt;padding-right:2px;width:55px;" onkeydown="return isNumberPress(event)" on-keyup="{{customTankSize}}"/>
 	    {{units | userVolumeUnit}}
 	  </div>
 	  <polymer-ui-icon-button icon="right" on-click="{{largerTank}}"></polymer-ui-icon-button>
@@ -101,11 +101,11 @@
 	return value.litre;
       }
     };
-    PolymerExpressions.prototype.userTankSize.toModel = function(value, units) {
+    PolymerExpressions.prototype.userTankSize.toModel = function(value, units, prev) {
       if(units=='usa'){
-	return {gal: value, litre: gallonToLitre(value)};
+	return {gal: value, litre: gallonToLitre(value), shape: prev.shape};
       }else{
-	return {gal: litreToGallon(value), litre: value};
+	return {gal: litreToGallon(value), litre: value, shape: prev.shape};
       }
     };      
     PolymerExpressions.prototype.userVolumeUnit = function(units) {
@@ -296,6 +296,7 @@
 	this.tankShape = tankShapes[this.tankSize.shape];
 	this.customTankSize();
       },
+      tankShape: null,
       tankSize: { gal: null, shape: 'rect' },
       ready: function(){
 	//set defaults
