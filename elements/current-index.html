@@ -85,7 +85,11 @@
 	  }
 	}
 	this.$.currentItemsStorage.save();
-	document.location.href = 'start.html';
+	if(this.currentItems.length==0){
+	  document.location.href = 'tank.html';
+	}else{
+	  document.location.href = 'search.html';
+	}
       },
       trash: function(){
 	if(confirm('Do you want clear all your selections and start a new tank?')){

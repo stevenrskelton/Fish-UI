@@ -7,7 +7,7 @@
 <link rel="import" href="tank-dimensions.html">
 
 
-<polymer-element name="start-index" noscript>
+<polymer-element name="tank-index" noscript>
   <template>
     <polymer-ui-toolbar theme="polymer-ui-dark-theme" class="align-center polymer-ui-dark-theme flexbox">
 
@@ -38,10 +38,10 @@
     <polymer-localstorage name="units" value="{{units}}" id="units"></polymer-localstorage>
   </template>
   <script>
-    Polymer('start-index',{
+    Polymer('tank-index',{
       units: 'usa',    
       save: function(){
-	document.location.href = 'search.html';
+	document.location.href = 'habitat.html';
       },
       selectMetric: function(){
 	this.units = 'metric';
