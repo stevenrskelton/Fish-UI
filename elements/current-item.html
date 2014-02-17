@@ -4,13 +4,11 @@
 <polymer-element name="current-item" noscript attributes="scientificName name number src remove focus">
   <template>
   
-    <div class="panel" style="vertical-align:top;clear:both;background-color:#ffffe0;">
+    <div class="panel info" style="vertical-align:top;clear:both;">
     
       <polymer-ui-icon-button icon="trash" style="float:right;margin-left:15px" on-click="{{remove}}"></polymer-ui-icon-button>
-      <div style="float:right;margin:-3px 0 -3px;">
-	<input id="number" type="text" class="form-control input-lg" placeholder="#" style="width:100px;text-align:right" value="{{number}}"/>
-	<span class="input-group-addon">Many</span>
-      </div>
+	  
+	  <input id="number" type="text" class="form-control input-lg" placeholder="#" style="width:75px;text-align:right;float:right;margin:-3px 0 -3px;" value="{{number}}"/>
       
       <img title="{{scientificName}}" alt="{{scientificName}}" src="{{src}}" width="100px" height="50px" style="float:left;border-radius:4px;margin:-5px 10px 0 -5px;" />
       

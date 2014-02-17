@@ -58,84 +58,84 @@
   <script>
     function replaceNumberInput(element){
       if(element.value==0 || element.value==''){
-	console.log(element.nextSibling.nextSibling);
-	element.nextSibling.nextSibling.style.display = 'block';
-	element.style.display = 'none';
-	//element.parentNode.addChild(
-//	console.log(element);
-//	console.log(element.value);
+		console.log(element.nextSibling.nextSibling);
+		element.nextSibling.nextSibling.style.display = 'block';
+		element.style.display = 'none';
+		//element.parentNode.addChild(
+	//	console.log(element);
+	//	console.log(element.value);
       }
     }
     function sortByKey(array, op, desc) {
-	return array.sort(function(a, b) {
-	    var x = op(a);
-	    var y = op(b);
-		      
-	    if (typeof x == "string"){
-	      x = x.toLowerCase(); 
-	      y = y.toLowerCase();
-	    }
-	    if(desc){
-	      return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-	    }else{
-	      return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-	    }
-	});
+	  return array.sort(function(a, b) {
+		  var x = op(a);
+		  var y = op(b);
+				
+		  if (typeof x == "string"){
+			x = x.toLowerCase(); 
+			y = y.toLowerCase();
+		  }
+		  if(desc){
+			return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+		  }else{
+			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+		  }
+	  });
     }
     PolymerExpressions.prototype.sortBy = function(value, op, dir) {
       return sortByKey(value, op, dir);
     };
     Polymer('search-purchases',{
       remove: function(e){
-	console.log('remove');
-	console.log(e);      
+		console.log('remove');
+		console.log(e);      
       },
       editCurrent: function(){
-	document.location.href = 'current.html';
+		document.location.href = 'current.html';
       },
       calculateTotals: function(){
-	console.log('calculateTotals fired.');
-	this.asyncFire('polymer-signal', {name: "foo", data: "Foo!"});
+		console.log('calculateTotals fired.');
+		this.asyncFire('polymer-signal', {name: "foo", data: "Foo!"});
       },
       sortSpecies: function(){
-	if(this.sortField != 0){
-	  this.sortField = 0;
-	  this.sortFieldDesc = false;
-	}else{
-	  this.sortFieldDesc = !this.sortFieldDesc;
-	}
-	
-	this.sortFieldOp = function(o){ return o.name || o.scientificName; };
+		if(this.sortField != 0){
+		  this.sortField = 0;
+		  this.sortFieldDesc = false;
+		}else{
+		  this.sortFieldDesc = !this.sortFieldDesc;
+		}
+		
+		this.sortFieldOp = function(o){ return o.name || o.scientificName; };
       },
       sortQuantity: function(){
-	if(this.sortField != 1){
-	  this.sortField = 1;
-	  this.sortFieldDesc = true;
-	}else{
-	  this.sortFieldDesc = !this.sortFieldDesc;
+	  if(this.sortField != 1){
+		this.sortField = 1;
+		this.sortFieldDesc = true;
+	  }else{
+		this.sortFieldDesc = !this.sortFieldDesc;
 	}
 	
 	this.sortFieldOp = function(o){ return o.number * 1; };
       },
       sortPrice: function(){
-	if(this.sortField != 2){
-	  this.sortField = 2;
-	  this.sortFieldDesc = true;
-	}else{
-	  this.sortFieldDesc = !this.sortFieldDesc;
-	}
-	
-	this.sortFieldOp = function(o){ return o.price; };
+		if(this.sortField != 2){
+		  this.sortField = 2;
+		  this.sortFieldDesc = true;
+		}else{
+		  this.sortFieldDesc = !this.sortFieldDesc;
+		}
+		
+		this.sortFieldOp = function(o){ return o.price; };
       },
       sortTotal: function(){
-	if(this.sortField != 3){
-	  this.sortField = 3;
-	  this.sortFieldDesc = true;
-	}else{
-	  this.sortFieldDesc = !this.sortFieldDesc;
-	}
-	
-	this.sortFieldOp = function(o){ return o.number * o.price; };
+		if(this.sortField != 3){
+		  this.sortField = 3;
+		  this.sortFieldDesc = true;
+		}else{
+		  this.sortFieldDesc = !this.sortFieldDesc;
+		}
+		
+		this.sortFieldOp = function(o){ return o.number * o.price; };
       },
       sortFieldOp: function(o){ return o.number * o.price; },
       sortFieldDesc: true,

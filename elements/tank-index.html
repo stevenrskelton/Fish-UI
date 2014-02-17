@@ -41,21 +41,21 @@
     Polymer('tank-index',{
       units: 'usa',    
       save: function(){
-	document.location.href = 'habitat.html';
+		document.location.href = 'habitat.html';
       },
       selectMetric: function(){
-	this.units = 'metric';
-	this.$.units.save();
+		this.units = 'metric';
+		this.$.units.save();
       },
       selectUSA: function(){
-	this.units = 'usa';
-	this.$.units.save();
+		this.units = 'usa';
+		this.$.units.save();
       },      
       trash: function(){
-	if(confirm('Do you want clear all your selections and start a new tank?')){
-	  localStorage.clear();
-	  document.location.href='index.html'
-	}
+		if(confirm('Do you want clear all your selections and start a new tank?')){
+		  localStorage.clear();
+		  document.location.href='index.html'
+		}
       }
     });
   </script>    

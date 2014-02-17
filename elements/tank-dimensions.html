@@ -63,245 +63,245 @@
     function isNumberPress(e){
       var charCode = e.keyCode;
       if (charCode != 46 && charCode > 31 
-	&& (charCode < 48 || charCode > 57))
-	  return false;
+	  && (charCode < 48 || charCode > 57))
+		return false;
 
       return true;
     }
     function inchesToCm(inches){ return Math.round(inches * 2.54); }
     function cmToInches(cm){ 
       if(cm==''){
-	return 0;
+		return 0;
       }else{
-	return Math.round(cm / 2.54); 
+		return Math.round(cm / 2.54); 
       }
     }
     function gallonToLitre(gallon){
       if(gallon=='') return 0;
       var raw = gallon * 3.78541;
       if(raw < 10){
-	return Math.round(raw * 10) / 10;
+		return Math.round(raw * 10) / 10;
       }else{
-	return Math.round(raw);
+		return Math.round(raw);
       }
     }
     function litreToGallon(litre){ 
       if(litre=='') return 0;    
       var raw = litre / 3.78541; 
       if(raw < 5){
-	return Math.round(raw * 10) / 10;
+		return Math.round(raw * 10) / 10;
       }else{
-	return Math.round(raw);
+		return Math.round(raw);
       }
     }
     PolymerExpressions.prototype.userTankSize = function(value, units) {
       if(units=='usa'){
-	return value.gal;
+		return value.gal;
       }else{
-	return value.litre;
+		return value.litre;
       }
     };
     PolymerExpressions.prototype.userTankSize.toModel = function(value, units, prev) {
       if(units=='usa'){
-	return {gal: value, litre: gallonToLitre(value), shape: prev.shape};
+		return {gal: value, litre: gallonToLitre(value), shape: prev.shape};
       }else{
-	return {gal: litreToGallon(value), litre: value, shape: prev.shape};
+		return {gal: litreToGallon(value), litre: value, shape: prev.shape};
       }
     };      
     PolymerExpressions.prototype.userVolumeUnit = function(units) {
       if(units=='usa'){
-	return 'gal';
+		return 'gal';
       }else{
-	return 'L';
+		return 'L';
       }
     };     
     PolymerExpressions.prototype.userLengthUnit = function(units) {
       if(units=='usa'){
-	return '"';
+		return '"';
       }else{
-	return 'cm';
+		return 'cm';
       }
     };
     var tankShapes = {
       rect: { img: '../img/emptyTank.png', wtop: 90, wleft: 10, dtop: 80, dleft: 160, htop: -25, hleft: 140,
-	data: [
-	  {gal:2.5, w:12,d:6, h:8, price: 16},
-	  {gal:5, w:16,d:8, h:10, price: 15},
-	  {gal:10,w:20,d:10,h:12, price: 18},
-	  {gal:15,w:24,d:12,h:12, price: 32},
-	  {gal:16,w:20,d:10,h:18,label:'High', price: 32},
-	  {gal:20,w:24,d:12,h:16,label:'High', price: 31},
-	  {gal:20,w:30,d:12,h:12,label:'Long', price: 34},
-	  {gal:20,w:20,d:10,h:24,label:'Extra High'},
-	  {gal:25,w:24,d:12,h:20},
-	  {gal:29,w:30,d:12,h:18, price:54},
-	  {gal:30,w:36,d:13,h:16, price: 61},
-	  {gal:30,w:24,d:12,h:24,label:'Extra High'},
-	  {gal:30,w:30,d:18,h:12,label:'Breeder'},
-	  {gal:37,w:30,d:12,h:22, price: 71},
-	  {gal:40,w:48,d:13,h:16, price: 100},
-	  {gal:40,w:36,d:18,h:16,label:'Breeder', price: 85},
-	  {gal:40,w:36,d:13,h:20,label:'High', price: {min: 70, max: 80}},
-	  {gal:55,w:48,d:13,h:20, price: {min: 80, max: 112}},
-	  {gal:60,w:48,d:13,h:24},
-	  {gal:65,w:36,d:18,h:24, price: {min:90, max:136}},
-	  {gal:75,w:48,d:18,h:21, price: {min:100, max:140}},
-	  {gal:90,w:48,d:18,h:24, price: {min:170, max:258}},
-	  {gal:110,w:48,d:18,h:30, price: 363},
-	  {gal:120,w:48,d:24,h:24, price: 370},
-	  {gal:120,w:60,d:18,h:26,label:'Extra High', price: {min:200, max:290}},
-	  {gal:125,w:72,d:18,h:22, price: {min:240, max:342}},
-	  {gal:150,w:72,d:18,h:27, price: 525},
-	  {gal:150,w:48,d:24,h:30,label:'Extra High', price: 458},
-	  {gal:180,w:72,d:24,h:30, price: 665},
-	  {gal:220,w:72,d:24,h:30,label:'Extra High', price: 745},
-	  {gal:265,w:82,d:24,h:30, price: 1314}
-	]
+		data: [
+		  {gal:2.5, w:12,d:6, h:8, price: 16},
+		  {gal:5, w:16,d:8, h:10, price: 15},
+		  {gal:10,w:20,d:10,h:12, price: 18},
+		  {gal:15,w:24,d:12,h:12, price: 32},
+		  {gal:16,w:20,d:10,h:18,label:'High', price: 32},
+		  {gal:20,w:24,d:12,h:16,label:'High', price: 31},
+		  {gal:20,w:30,d:12,h:12,label:'Long', price: 34},
+		  {gal:20,w:20,d:10,h:24,label:'Extra High'},
+		  {gal:25,w:24,d:12,h:20},
+		  {gal:29,w:30,d:12,h:18, price:54},
+		  {gal:30,w:36,d:13,h:16, price: 61},
+		  {gal:30,w:24,d:12,h:24,label:'Extra High'},
+		  {gal:30,w:30,d:18,h:12,label:'Breeder'},
+		  {gal:37,w:30,d:12,h:22, price: 71},
+		  {gal:40,w:48,d:13,h:16, price: 100},
+		  {gal:40,w:36,d:18,h:16,label:'Breeder', price: 85},
+		  {gal:40,w:36,d:13,h:20,label:'High', price: {min: 70, max: 80}},
+		  {gal:55,w:48,d:13,h:20, price: {min: 80, max: 112}},
+		  {gal:60,w:48,d:13,h:24},
+		  {gal:65,w:36,d:18,h:24, price: {min:90, max:136}},
+		  {gal:75,w:48,d:18,h:21, price: {min:100, max:140}},
+		  {gal:90,w:48,d:18,h:24, price: {min:170, max:258}},
+		  {gal:110,w:48,d:18,h:30, price: 363},
+		  {gal:120,w:48,d:24,h:24, price: 370},
+		  {gal:120,w:60,d:18,h:26,label:'Extra High', price: {min:200, max:290}},
+		  {gal:125,w:72,d:18,h:22, price: {min:240, max:342}},
+		  {gal:150,w:72,d:18,h:27, price: 525},
+		  {gal:150,w:48,d:24,h:30,label:'Extra High', price: 458},
+		  {gal:180,w:72,d:24,h:30, price: 665},
+		  {gal:220,w:72,d:24,h:30,label:'Extra High', price: 745},
+		  {gal:265,w:82,d:24,h:30, price: 1314}
+		]
       },
       bow: { img: '../img/emptyBowTank.png', wtop: 100, wleft: 10, dtop: 80, dleft: 135, htop: -25, hleft: 105,
-	data: [
-	  {gal:16, w:20.3,d:12.9,h:17.8},
-	  {gal:26, w:24.2,d:14.8,h:20.9},
-	  {gal:36, w:30.3,d:15.5,h:20.9},
-	  {gal:46, w:36.4,d:16.4,h:21.9},
-	  {gal:72, w:48.4,d:18,h:23},
-	  {gal:155,w:72.4,d:24.5,h:25.5}
-	]
+		data: [
+		  {gal:16, w:20.3,d:12.9,h:17.8},
+		  {gal:26, w:24.2,d:14.8,h:20.9},
+		  {gal:36, w:30.3,d:15.5,h:20.9},
+		  {gal:46, w:36.4,d:16.4,h:21.9},
+		  {gal:72, w:48.4,d:18,h:23},
+		  {gal:155,w:72.4,d:24.5,h:25.5}
+		]
       },
       hex: { img: '../img/emptyHexTank.png', wtop: 100, wleft: 10, dtop: 70, dleft: 120, htop: -25, hleft: 76,
-	data: [
-	  {gal:10,w:14.5,d:12.6,h:18.4},
-	  {gal:20,w:18.8,d:16.3,h:20.7},
-	  {gal:35,w:23.3,d:20.2,h:24.8}
-	]
+		data: [
+		  {gal:10,w:14.5,d:12.6,h:18.4},
+		  {gal:20,w:18.8,d:16.3,h:20.7},
+		  {gal:35,w:23.3,d:20.2,h:24.8}
+		]
       },
       corner: { img: '../img/emptyCornerTank.png', wtop: 95, wleft: 0, dtop: 60, dleft: 165, htop: 0, hleft: 125,
-	data: [
-	  {gal:36,w:33.9,d:24,  h:20.9},
-	  {gal:54,w:39,  d:27.4,h:23},
-	  {gal:92,w:48.5,d:34.3,h:24.2}
-	]
+		data: [
+		  {gal:36,w:33.9,d:24,  h:20.9},
+		  {gal:54,w:39,  d:27.4,h:23},
+		  {gal:92,w:48.5,d:34.3,h:24.2}
+		]
       }
     };
     Polymer('tank-dimensions',{
       units: 'usa',
       unitsChanged: function(oldVal, newVal) {
-	this.customTankSize();
+		this.customTankSize();
       },
       selectRectangularTank: function(){
-	var g = this.tankSize.gal;
-	var l = this.tankSize.litre;
-	this.tankSize = {gal:g, litre:l, shape:'rect'};
-	this.tankShape = tankShapes[this.tankSize.shape];
-	this.customTankSize();
+		var g = this.tankSize.gal;
+		var l = this.tankSize.litre;
+		this.tankSize = {gal:g, litre:l, shape:'rect'};
+		this.tankShape = tankShapes[this.tankSize.shape];
+		this.customTankSize();
       },
       selectBowTank: function(){
-	var g = this.tankSize.gal;
-	var l = this.tankSize.litre;
-	this.tankSize = {gal:g, litre:l, shape:'bow'};
-	this.tankShape = tankShapes[this.tankSize.shape];
-	this.customTankSize();
+		var g = this.tankSize.gal;
+		var l = this.tankSize.litre;
+		this.tankSize = {gal:g, litre:l, shape:'bow'};
+		this.tankShape = tankShapes[this.tankSize.shape];
+		this.customTankSize();
       },
       selectHexTank: function(){
-	var g = this.tankSize.gal;
-	var l = this.tankSize.litre;
-	this.tankSize = {gal:g, litre:l, shape:'hex'};
-	this.tankShape = tankShapes[this.tankSize.shape];
-	this.customTankSize();
+		var g = this.tankSize.gal;
+		var l = this.tankSize.litre;
+		this.tankSize = {gal:g, litre:l, shape:'hex'};
+		this.tankShape = tankShapes[this.tankSize.shape];
+		this.customTankSize();
       },
       selectCornerTank: function(){
-	var g = this.tankSize.gal;
-	var l = this.tankSize.litre;
-	this.tankSize = {gal:g, litre:l, shape:'corner'};
-	this.tankShape = tankShapes[this.tankSize.shape];
-	this.customTankSize();
+		var g = this.tankSize.gal;
+		var l = this.tankSize.litre;
+		this.tankSize = {gal:g, litre:l, shape:'corner'};
+		this.tankShape = tankShapes[this.tankSize.shape];
+		this.customTankSize();
       },
       smallerTank: function(){
-	var tIndex = this.findTankIndex();
-	var g = this.tankSize.gal;
-	if(tIndex == -1){
-	  for (var i = 0; i < this.tankShape.data.length; i++) {
-	    if(this.tankShape.data[i].gal < g) tIndex = i + 1;
-	  }
-	}
-	if(tIndex > 0){
-	  this.setTankIndex(tIndex-1);
-	}
+		var tIndex = this.findTankIndex();
+		var g = this.tankSize.gal;
+		if(tIndex == -1){
+		  for (var i = 0; i < this.tankShape.data.length; i++) {
+			if(this.tankShape.data[i].gal < g) tIndex = i + 1;
+		  }
+		}
+		if(tIndex > 0){
+		  this.setTankIndex(tIndex-1);
+		}
       },
       largerTank: function(){
-	var tIndex = this.findTankIndex();
-	var g = this.tankSize.gal;
-	if(tIndex == -1){
-	  for (var i = this.tankShape.data.length - 1; i >= 0; i--) {
-	    if(this.tankShape.data[i].gal > g) tIndex = i - 1;
-	  }
-	}
-	if(tIndex < this.tankShape.data.length - 1 && (tIndex > -1 || g < this.tankShape.data[0].gal)){
-	  this.setTankIndex(tIndex+1);
-	}
+		var tIndex = this.findTankIndex();
+		var g = this.tankSize.gal;
+		if(tIndex == -1){
+		  for (var i = this.tankShape.data.length - 1; i >= 0; i--) {
+			if(this.tankShape.data[i].gal > g) tIndex = i - 1;
+		  }
+		}
+		if(tIndex < this.tankShape.data.length - 1 && (tIndex > -1 || g < this.tankShape.data[0].gal)){
+		  this.setTankIndex(tIndex+1);
+		}
       },
       setTankIndex: function(i){
-	var t = this.tankShape.data[i];
-	if(this.tankSize.gal !== t.gal || this.tankSize.label !== t.label){
-	  var s = this.tankSize.shape;
-	  this.tankSize = {gal: t.gal, litre: gallonToLitre(t.gal), shape: s, label: t.label};
-	}
-	if(this.units == 'usa'){
-	  this.tankWidth=t.w;
-	  this.tankDepth=t.d;
-	  this.tankHeight=t.h;
-	}else{
-	  this.tankWidth=inchesToCm(t.w);
-	  this.tankDepth=inchesToCm(t.d);
-	  this.tankHeight=inchesToCm(t.h);
-	}
-	this.tankLabel=t.label;
-	this.tankPrice=t.price;
-      },
-      findTankIndex: function(){
-	var g = this.tankSize.gal;
-	var w = this.tankWidth;
-	var d = this.tankDepth;
-	var h = this.tankHeight;
-	var l = this.tankSize.label;
-	if(this.units == 'metric'){
-	  w = cmToInches(w);
-	  d = cmToInches(d);
-	  h = cmToInches(h);
-	}
-      
-	for (var i = 0; i < this.tankShape.data.length; i++) {
-	  var s = this.tankShape.data[i];
-	  if(g==s.gal && w==s.w && d==s.d && h==s.h && l==s.label) return i;
-	}
-	return -1;
-      },
-      customTankSize: function(){
-      	var g = this.tankSize.gal;
-      	var l = this.tankSize.label;
-	for (var i = 0; i < this.tankShape.data.length; i++) {
-	  var ts = this.tankShape.data[i];
-	  if(ts.gal == g && ts.label == l){
-	    this.setTankIndex(i);
-	    return;
-	  }
-	}
-	this.tankWidth='';
-	this.tankDepth='';
-	this.tankHeight='';
-	this.tankPrice=null;
-	this.tankLabel='Custom';
+		var t = this.tankShape.data[i];
+		if(this.tankSize.gal !== t.gal || this.tankSize.label !== t.label){
+		  var s = this.tankSize.shape;
+		  this.tankSize = {gal: t.gal, litre: gallonToLitre(t.gal), shape: s, label: t.label};
+		}
+		if(this.units == 'usa'){
+		  this.tankWidth=t.w;
+		  this.tankDepth=t.d;
+		  this.tankHeight=t.h;
+		}else{
+		  this.tankWidth=inchesToCm(t.w);
+		  this.tankDepth=inchesToCm(t.d);
+		  this.tankHeight=inchesToCm(t.h);
+		}
+		this.tankLabel=t.label;
+		this.tankPrice=t.price;
+		  },
+		  findTankIndex: function(){
+		var g = this.tankSize.gal;
+		var w = this.tankWidth;
+		var d = this.tankDepth;
+		var h = this.tankHeight;
+		var l = this.tankSize.label;
+		if(this.units == 'metric'){
+		  w = cmToInches(w);
+		  d = cmToInches(d);
+		  h = cmToInches(h);
+		}
+		  
+		for (var i = 0; i < this.tankShape.data.length; i++) {
+		  var s = this.tankShape.data[i];
+		  if(g==s.gal && w==s.w && d==s.d && h==s.h && l==s.label) return i;
+		}
+		return -1;
+		  },
+		  customTankSize: function(){
+			var g = this.tankSize.gal;
+			var l = this.tankSize.label;
+		for (var i = 0; i < this.tankShape.data.length; i++) {
+		  var ts = this.tankShape.data[i];
+		  if(ts.gal == g && ts.label == l){
+			this.setTankIndex(i);
+			return;
+		  }
+		}
+		this.tankWidth='';
+		this.tankDepth='';
+		this.tankHeight='';
+		this.tankPrice=null;
+		this.tankLabel='Custom';
       },
       tankSizeChanged: function(oldVal, newVal) {
-	this.tankShape = tankShapes[this.tankSize.shape];
-	this.customTankSize();
+		this.tankShape = tankShapes[this.tankSize.shape];
+		this.customTankSize();
       },
       tankShape: null,
       tankSize: { gal: null, shape: 'rect' },
       ready: function(){
-	//set defaults
-	this.tankShape = tankShapes['rect'];
-	this.setTankIndex(5);
+		//set defaults
+		this.tankShape = tankShapes['rect'];
+		this.setTankIndex(5);
       }
     });
   </script>    

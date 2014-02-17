@@ -1,10 +1,11 @@
 <link rel="import" href="../components/polymer/polymer.html">
-<link rel="import" href="current-searchresult.html">
-<link rel="import" href="data-search.html">
 <link rel="import" href="../components/polymer-ui-overlay/polymer-ui-overlay.html">
 <link rel="import" href="../components/polymer-flex-layout/polymer-flex-layout.html">
 <link rel="import" href="../components/polymer-ui-icon/polymer-ui-icon.html">
 <link rel="import" href="../components/polymer-ui-icon-button/polymer-ui-icon-button.html">
+<link rel="import" href="current-searchresult.html">
+<link rel="import" href="data-search.html">
+<link rel="import" href="progress-bar.html">
 
 <polymer-element name="current-search" noscript attributes="toggle search add selectedItems">
   <template>
@@ -24,14 +25,14 @@
 	  
 	  <template if="{{searchResults==null || searchResults.length==0}}">
 	    <template if="{{pendingQuery}}">
-	      <div class="panel go">
-		Searching.
-	      </div>
+		  <progress-bar style="margin:30px;display:block;">
+			<strong>Searching<strong>
+		  </progress-bar>
 	    </template>
 	    <template if="{{!pendingQuery}}">
 	      <div class="panel warning">
-		<h2 style="margin-top:0px;">No search results!</h2>
-		No species match your query.
+			<h2 style="margin-top:0px;">No search results!</h2>
+			No species match your query.
 	      </div>
 	    </template>
 	  </template>
