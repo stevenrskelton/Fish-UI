@@ -10,8 +10,7 @@
     <template if="{{!maximize}}">
       <div class="panel info" style="vertical-align:top;clear:both;border-width:2px;{{ disabled ? 'opacity:0.35' : ''}};
       border-color:{{compatibilityColors[species.compatibility]}};
-      background-image: linear-gradient(to right, {{compatibilityColors[species.compatibility]}} 0%, {{compatibilityColors[species.compatibility]}} 116px, transparent 117px);
-      /*background-color:{{compatibilityBgColors[species.compatibility]}};*/">
+      background-image: linear-gradient(to right, {{compatibilityColors[species.compatibility]}} 0%, {{compatibilityColors[species.compatibility]}} 116px, transparent 117px);">
 
 		<div style="float:right;width:64px;">
 		  <polymer-ui-icon-button hidden?={{selected}} icon="add" style="float:right;margin-right:12px;{{ disabled ? 'display:none' : ''}}" on-click="{{select}}"></polymer-ui-icon-button>
@@ -46,8 +45,7 @@
 		  this.disabled = true;
 		}
 	  },
-	  compatibilityColors: [ 'rgba(100,100,100,0.2)', '#00bf00', '#E3A857', '#ff0000' ],
-	  compatibilityBgColors: [ 'rgba(100,100,100,0.2)', '#bfffbf', '#fffcdf', '#ff8080' ]
+	  compatibilityColors: [ 'rgba(100,100,100,0.2)', '#00bf00', '#E3A857', '#ff0000' ]
     });
   </script>
 </polymer-element>

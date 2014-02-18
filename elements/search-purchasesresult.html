@@ -5,12 +5,15 @@
   <template>
     <tr>
       <td style="font-size:14px">
-	<img title="{{species.scientificName}}" alt="{{species.scientificName}}" src="{{species.src}}" width="90px" height="45px" style="vertical-align:middle;border-radius:4px;" />
-	<strong>{{species.name}}</strong> - <em>{{scientificName}}</em>
-      </td>
-      <td style="text-align:center">
-	<input id="number" type="text" class="form-control input-lg" placeholder="#" style="width:100px;text-align:right" value="{{species.number}}" onblur="replaceNumberInput(this)" on-keyup="{{species.calculateTotals}}"/>
-	<!--<polymer-ui-icon-button icon="trash"></polymer-ui-icon-button>-->
+      
+		<img title="{{species.scientificName}}" alt="{{species.scientificName}}" src="{{species.src}}" width="112px" height="56px" style="float:left;border-radius:4px;margin:-8px 15px 0 -8px;" />
+		
+		<strong>{{species.name}}</strong><br/>
+		{{species.scientificName}}
+	  </td>
+	  <td style="text-align:center">
+		<input id="number" type="text" class="form-control input-lg" placeholder="#" style="width:100px;text-align:right" value="{{species.number}}" onblur="replaceNumberInput(this)" on-keyup="{{species.calculateTotals}}"/>
+		<!--<polymer-ui-icon-button icon="trash"></polymer-ui-icon-button>-->
       </td>
       <td>{{species.price}}</td>
       <td>{{species.number * species.price}}</td>
