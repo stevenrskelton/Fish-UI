@@ -146,7 +146,6 @@ body {
 }
 
 .panel {
-    background-color: #FFFFFF;
     border: 1px solid #DDDDDD;
     border-radius: 4px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
@@ -180,7 +179,7 @@ body {
 
 .btn:hover {
   border-color: #66AFE9;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.075) inset, 0 0 10px rgba(102, 175, 233, 1); 
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.075) inset, 0 0 10px rgba(102, 175, 233, 1);
 }
 
 .btnLabel:hover {
@@ -239,27 +238,26 @@ polymer-ui-tabs {
 }
 
 table.numberTable { 
-  width: 100%; 
-  border-collapse: collapse; 
+  border-collapse: collapse;
 }
 /* Zebra striping */
 table.numberTable tr:nth-of-type(odd) { 
-  background: #ffffe0; 
+  background: #e6f3ff;
 }
 table.numberTable tr:nth-of-type(even) { 
-  background: #fffff0; 
+  background: #E0F0FF;
 }
 table.numberTable th,
 table.numberTable tr:last-of-type { 
-  background: #333; 
-  color: white; 
+  background: #333;
+  color: white;
   font-weight: bold;
   text-align: center;
 }
 table.numberTable td, 
 table.numberTable th { 
-  padding: 6px;   
-  border: 1px solid #ccc; 
+  padding: 6px;  
+  border: 1px solid #ccc;
   text-align: right;
 }
 
@@ -279,4 +277,7 @@ table.numberTable td:first-of-type {
 
 .info {
   background-color: #E0F0FF;
+}
+.info2 {
+  background-color: #E6F3FF;
 }
