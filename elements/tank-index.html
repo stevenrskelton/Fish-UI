@@ -5,7 +5,7 @@
 <link rel="import" href="../components/polymer-localstorage/polymer-localstorage.html">
 
 <link rel="import" href="tank-dimensions.html">
-
+<link rel="import" href="toolbar-units.html">
 
 <polymer-element name="tank-index" noscript>
   <template>
@@ -13,21 +13,9 @@
 
       <polymer-ui-icon-button icon="trash" class="polymer-ui-dark-theme" on-click="{{trash}}"></polymer-ui-icon-button>
       
-      <div flex>How large is your aquarium tank?</div> 
-      
-      <polymer-ui-toolbar responsive class="align-center polymer-ui-dark-theme flexbox" style="text-align:center;font-size:16px;" flex>
-	<div style="width:280px;margin:0 auto">
-	  Units of Measure:
-	  <div style="display:inline-block;width:70px;">
-	    <input type="radio" name="units" id="metricUnits" checked?="{{units==='metric'}}" on-focus="{{selectMetric}}"/>
-	    <label for="metricUnits" class="btnLabel">Metric</label>
-	  </div>
-	  <div style="display:inline-block;width:70px;">
-	    <input type="radio" name="units" id="usaUnits" checked?="{{units!=='metric'}}" on-focus="{{selectUSA}}"/>
-	    <label for="usaUnits" class="btnLabel">USA</label>
-	  </div>
-	</div>
-      </polymer-ui-toolbar>
+      <div>How large is your aquarium tank?</div>
+
+      <toolbar-units units="{{units}}" flex></toolbar-units>
       
       <button type="button" class="btn btn-primary btn-lg" style="margin-right:10px;height:46px;" on-click="{{save}}">Next <polymer-ui-icon icon="shortcut"></polymer-ui-icon></button>
     </polymer-ui-toolbar>
@@ -35,22 +23,12 @@
     <tank-dimensions style="padding:20px 0 60px 0;display:block;" units="{{units}}" tankSize="{{tankSize}}"></tank-dimensions>
  
     <polymer-localstorage name="tankSize" value="{{tankSize}}"></polymer-localstorage>
-    <polymer-localstorage name="units" value="{{units}}" id="units"></polymer-localstorage>
   </template>
   <script>
     Polymer('tank-index',{
-      units: 'usa',    
       save: function(){
-		document.location.href = 'habitat.html';
+		document.location.href = 'filters.html';
       },
-      selectMetric: function(){
-		this.units = 'metric';
-		this.$.units.save();
-      },
-      selectUSA: function(){
-		this.units = 'usa';
-		this.$.units.save();
-      },      
       trash: function(){
 		if(confirm('Do you want clear all your selections and start a new tank?')){
 		  localStorage.clear();

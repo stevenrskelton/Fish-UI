@@ -42,60 +42,60 @@
   <script>
     Polymer('current-index',{
       searchEnter: function(e){
-	if (e.keyCode == 13) {
-	  e.preventDefault();
-	  this.search();
-	}
+		if (e.keyCode == 13) {
+		  e.preventDefault();
+		  this.search();
+		}
       },
       search: function search(){
-	var searchText = this.$.searchText.value;
-	if(searchText == ''){
-	  alert('Please select a species to search for.');
-	}else{
-	  var modal = this.$.currentSearchModal;
-	  modal.search = searchText;
-	  modal.selectedItems = this.currentItems;
-	  modal.toggle();
-	}
+		var searchText = this.$.searchText.value;
+		if(searchText == ''){
+		  alert('Please select a species to search for.');
+		}else{
+		  var modal = this.$.currentSearchModal;
+		  modal.search = searchText;
+		  modal.selectedItems = this.currentItems;
+		  modal.toggle();
+		}
       },
       addItem: function(e){
-	console.log(this.currentItems);
-	this.currentItems.push(e.detail); 
+		console.log(this.currentItems);
+		this.currentItems.push(e.detail); 
       },
       removeItem: function(e){
-	var newArray = [];
-	var scientificName = e.detail;
-	var c = this.currentItems;
-	for(i = 0; i < c.length; i++){
-	  if(c[i].scientificName != scientificName) newArray.push(c[i]);
-	}
-	this.currentItems = newArray;
+		var newArray = [];
+		var scientificName = e.detail;
+		var c = this.currentItems;
+		for(i = 0; i < c.length; i++){
+		  if(c[i].scientificName != scientificName) newArray.push(c[i]);
+		}
+		this.currentItems = newArray;
       },
       ready: function(){
-	this.currentItems = this.currentItems || [];
+		this.currentItems = this.currentItems || [];
       },
       save: function(){
-	var currentItemNodes = this.$.currentItemsTemplate.parentNode.querySelectorAll('current-item');
-	for(i = 0; i < currentItemNodes.length; i++){
-	  console.log(currentItemNodes[i].number);
-	  if(currentItemNodes[i].number == null || currentItemNodes[i].number == ''){
-	    alert('Please enter the number of [' + currentItemNodes[i].scientificName + '] specimen, or remove the species from the list.');
-	    currentItemNodes[i].focus();
-	    return;
-	  }
-	}
-	this.$.currentItemsStorage.save();
-	if(this.currentItems.length==0){
-	  document.location.href = 'tank.html';
-	}else{
-	  document.location.href = 'search.html';
-	}
-      },
-      trash: function(){
-	if(confirm('Do you want clear all your selections and start a new tank?')){
-	  localStorage.clear();
-	  document.location.href='index.html'
-	}
+		var currentItemNodes = this.$.currentItemsTemplate.parentNode.querySelectorAll('current-item');
+		for(i = 0; i < currentItemNodes.length; i++){
+		  console.log(currentItemNodes[i].number);
+		  if(currentItemNodes[i].number == null || currentItemNodes[i].number == ''){
+			alert('Please enter the number of [' + currentItemNodes[i].scientificName + '] specimen, or remove the species from the list.');
+			currentItemNodes[i].focus();
+			return;
+		  }
+		}
+		this.$.currentItemsStorage.save();
+		if(this.currentItems.length==0){
+		  document.location.href = 'tank.html';
+		}else{
+		  document.location.href = 'search.html';
+		}
+		  },
+		  trash: function(){
+		if(confirm('Do you want clear all your selections and start a new tank?')){
+		  localStorage.clear();
+		  document.location.href='index.html'
+		}
       }
     });
   </script>    

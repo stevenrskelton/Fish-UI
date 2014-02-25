@@ -34,10 +34,9 @@
   <template>  
     <polymer-ui-toolbar theme="polymer-ui-dark-theme" class="align-center polymer-ui-dark-theme flexbox" style="position:fixed;top:0;width:100%;z-index:100;">
     
-      <polymer-ui-menu-button selected="4" theme="polymer-ui-dark-theme" icon="menu" id="searchMenu" on-polymer-select="{{selectPanel}}">
+      <polymer-ui-menu-button selected="0" theme="polymer-ui-dark-theme" icon="menu" id="searchMenu" on-polymer-select="{{selectPanel}}">
 		<polymer-ui-menu-item tab="results" title="Find New Livestock">Search Results</polymer-ui-menu-item>
-		<polymer-ui-menu-item tab="habitat" title="Filter for a Habitat" icon="filter">Habitat</polymer-ui-menu-item>
-		<polymer-ui-menu-item tab="behaviour" title="Filter for Behaviour" icon="filter">Behaviour</polymer-ui-menu-item>
+		<polymer-ui-menu-item tab="filters" href="filters.html" icon="filter">Search Filters</polymer-ui-menu-item>
 		<hr/>
 		<polymer-ui-menu-item tab="tank" title="Optimal Tank Setup">Optimal Tank Setup</polymer-ui-menu-item>
 		<polymer-ui-menu-item tab="geography" title="Native Locations">Geographics</polymer-ui-menu-item>
@@ -73,12 +72,6 @@
     <template if="{{selectedTab=='results'}}">
       <search-results purchases="{{purchases}}"></search-results>
     </template>
-    <template if="{{selectedTab=='habitat'}}">
-      <search-habitat></search-habitat>
-    </template>
-    <template if="{{selectedTab=='behaviour'}}">
-      <search-behaviour></search-behaviour>
-    </template>
     <template if="{{selectedTab=='geography'}}">
       <search-geography currentItems="{{currentItems}}" purchases="{{purchases}}"></search-geography>
     </template>
@@ -96,7 +89,12 @@
 		var selection = this.$.searchMenu.selection;
 		if(selection!=null){
 		  this.selectedTab = this.$.searchMenu.selection.getAttribute('tab');
-		  this.$.titleText.innerHTML = this.$.searchMenu.selection.getAttribute('title');
+		  var href = this.$.searchMenu.selection.getAttribute('href');
+		  if(href){
+			document.location.href=href;
+		  }else{
+			this.$.titleText.innerHTML = this.$.searchMenu.selection.getAttribute('title');
+		  }
 		}
       },
       trash: function(){
