@@ -6,8 +6,8 @@
   <template>
     <style type="text/css">
       #templateBody {
-	background-color: #f2f2f2;
-	height:100px;
+		background-color: #f2f2f2;
+		height:100px;
       }      
     </style>
     <div class="collapsableList" theme="polymer-ui-light-theme" on-click="{{selected = !selected}}">
@@ -24,10 +24,10 @@
   <script>
     Polymer('habitat-select',{
       toggle: function(e) {
-	e.preventDefault();
-	e.stopPropagation();
-	this.$.templateCollapse.toggle();
-	return false;
+		e.preventDefault();
+		e.stopPropagation();
+		this.$.templateCollapse.toggle();
+		return false;
       },
       selected: false
     });

@@ -20,7 +20,7 @@
       
       <toolbar-units units="{{units}}" flex></toolbar-units>
 
-      <button type="button" class="btn btn-primary btn-lg" style="margin-right:10px;height:46px;" on-click="{{save}}">Search <polymer-ui-icon icon="shortcut"></polymer-ui-icon></button>
+      <button type="button" class="btn btn-primary btn-lg" style="margin-right:10px;height:46px;" on-click="{{save}}">Next <polymer-ui-icon icon="shortcut"></polymer-ui-icon></button>
     </polymer-ui-toolbar>
 
 	<polymer-ui-sidebar-menu valueattr="lbl" selected="{{item}}" theme="polymer-ui-dark-theme" style="position:absolute;top:0;width:25%;min-width:150px;">
@@ -191,8 +191,7 @@
       },  
       trash: function(){
 		if(confirm('Do you want clear all your selections and start a new tank?')){
-		  localStorage.clear();
-		  document.location.href='index.html'
+		  document.location.href='/'
 		}
       }
     });

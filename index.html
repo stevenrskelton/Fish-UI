@@ -1,96 +1,98 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <title>Sample app</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
-    <script src="components/platform/platform.js"></script>
-    <link rel="import" href="components/polymer/polymer.html">
-    <link rel="stylesheet" href="components/polymer-ui-base/base.css">
-    <link rel="stylesheet" href="css/mybootstrap.css">
-    
-    <link rel="import" href="elements/index-index.html">
-    
-    <link rel="import" href="components/polymer-ui-icon/polymer-ui-icon.html">
+  <head>
+	<title>Sample app</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<script src="components/platform/platform.js"></script>
+	<link rel="import" href="components/polymer/polymer.html">
+	<link rel="stylesheet" href="components/polymer-ui-base/base.css">
+	<link rel="stylesheet" href="css/mybootstrap.css">
+	
+	<link rel="import" href="elements/index-index.html">
+	
+	<link rel="import" href="components/polymer-ui-icon/polymer-ui-icon.html">
   </head>
-  <body theme="polymer-ui-dark-theme" class="polymer-ui-body-text" style="height: 100%;" unresolved>
-    <style>
-      #vcentered {
-	position:absolute;
-	top:50%;
-	margin-top:-200px;
-	height:410px;
-	width:400px;
-      }
-      #centered {
-	margin-left:auto;
-	margin-right:auto;
-	width:400px;  
-      }
-      .button1 {
-	width: 370px;
-	height: 65px;
-      }
-      .logos {
-	position:fixed;
-	left:10px;      
-      }
-      .polymer-logo {
-	top:10px;
-	font-size: 25px;
-	font-family: "Open Sans",​Helvetica,​Arial,​sans-serif;
-	color:#333333;
-	text-decoration: none;
-      }   
-      polymer-ui-tabs div {
-	width: 100px;
-	border: 1px solid black;
-	display: inline-block;
-	height: 30px;
-	line-height: 30px;
-      }
-    </style>
-    <a class="logos polymer-logo" href="http://polymer-project.org" title="This site was created using the Polymer Project and Web Components.">
-      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px"
-	height="32px" viewBox="0 0 50 50" enable-background="new 0 0 50 50" xml:space="preserve" style="vertical-align: middle">
-	<g id="Layer_1" display="none">
-	  <g display="inline">
-	    <g>
-	      <circle fill="#4D4D4D" cx="26.5" cy="25" r="25"/>
-	    </g>
-	  </g>
-	  <path display="inline" fill="#FFFFFF" d="M16.777,11.687l24.019,24.018c0.542,0.542,1.421,0.542,1.964,0s0.543-1.422,0-1.964
-		  l-25-25c-0.542-0.542-1.422-0.542-1.964,0l-5.556,5.556c-0.542,0.542-0.542,1.421,0,1.964l25,25c0.542,0.544,1.422,0.544,1.964,0
-		  c0.543-0.542,0.542-1.422,0-1.964L13.187,15.278L16.777,11.687z"/>
-	  <path display="inline" fill="#FFFFFF" d="M21.803,26.105l-8.616,8.615l3.591,3.592l24.019-24.018c0.542-0.542,1.421-0.542,1.964,0
-		  c0.544,0.542,0.544,1.422,0,1.964l-25,25c-0.542,0.543-1.422,0.543-1.964,0l-5.556-5.556c-0.542-0.542-0.542-1.421,0-1.964
-		  l9.865-9.865L21.803,26.105z"/>
-	  <path display="inline" fill="#FFFFFF" d="M25.664,18.316L35.24,8.74c0.542-0.542,1.422-0.542,1.964,0
-		  c0.543,0.542,0.542,1.421,0,1.964l-9.515,9.514L25.664,18.316z"/>
-	</g>
-	<g id="Layer_2">
-	  <g>
-	    <path fill="#4D4D4D" d="M15.821,23.103c0.858-4.282,4.636-7.508,9.172-7.51h17.076L36.251,5.516h-22.5l-4.054,7.02L15.821,23.103z
-		    "/>
-	    <path fill="#4D4D4D" d="M27.904,33.849c-0.914,0.298-1.891,0.464-2.906,0.464c-3.583,0-6.69-2.012-8.266-4.966L8.349,14.873
-		    L2.501,25l11.25,19.485h7.99L27.904,33.849z"/>
-	    <path fill="#4D4D4D" d="M43.421,17.934H31.174c1.946,1.716,3.182,4.221,3.182,7.019c0,1.412-0.322,2.746-0.88,3.941l0.001,0.002
-		    l-0.006,0.01c-0.235,0.511-0.516,0.994-0.839,1.446l-8.186,14.134h11.805L47.501,25L43.421,17.934z"/>
-	  </g>
-	</g>
-      </svg>Polymer
-    </a>
+  <body theme="polymer-ui-dark-theme" class="polymer-ui-body-text" style="height: 100%;" unresolved onload="localStorage.clear()">
+	<style>
+	  #vcentered {
+		position:absolute;
+		top:50%;
+		margin-top:-200px;
+		height:410px;
+		width:400px;
+	  }
+	  #centered {
+		margin-left:auto;
+		margin-right:auto;
+		width:400px;  
+	  }
+	  .button1 {
+		width: 370px;
+		height: 65px;
+	  }
+	  .logos {
+		position:fixed;
+		left:10px;
+	  }
+	  .polymer-logo {
+		top:10px;
+		font-size: 25px;
+		font-family: "Open Sans",​Helvetica,​Arial,​sans-serif;
+		color:#333333;
+		text-decoration: none;
+	  }   
+	  polymer-ui-tabs div {
+		width: 100px;
+		border: 1px solid black;
+		display: inline-block;
+		height: 30px;
+		line-height: 30px;
+	  }
+	</style>
+	<a class="logos polymer-logo" href="http://polymer-project.org" title="This site was created using the Polymer Project and Web Components.">
+	  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="32px"
+		height="32px" viewBox="0 0 50 50" enable-background="new 0 0 50 50" xml:space="preserve" style="vertical-align: middle">
+		<g id="Layer_1" display="none">
+		  <g display="inline">
+			<g>
+			  <circle fill="#4D4D4D" cx="26.5" cy="25" r="25"/>
+			</g>
+		  </g>
+		  <path display="inline" fill="#FFFFFF" d="M16.777,11.687l24.019,24.018c0.542,0.542,1.421,0.542,1.964,0s0.543-1.422,0-1.964
+			  l-25-25c-0.542-0.542-1.422-0.542-1.964,0l-5.556,5.556c-0.542,0.542-0.542,1.421,0,1.964l25,25c0.542,0.544,1.422,0.544,1.964,0
+			  c0.543-0.542,0.542-1.422,0-1.964L13.187,15.278L16.777,11.687z"/>
+		  <path display="inline" fill="#FFFFFF" d="M21.803,26.105l-8.616,8.615l3.591,3.592l24.019-24.018c0.542-0.542,1.421-0.542,1.964,0
+			  c0.544,0.542,0.544,1.422,0,1.964l-25,25c-0.542,0.543-1.422,0.543-1.964,0l-5.556-5.556c-0.542-0.542-0.542-1.421,0-1.964
+			  l9.865-9.865L21.803,26.105z"/>
+		  <path display="inline" fill="#FFFFFF" d="M25.664,18.316L35.24,8.74c0.542-0.542,1.422-0.542,1.964,0
+			  c0.543,0.542,0.542,1.421,0,1.964l-9.515,9.514L25.664,18.316z"/>
+		</g>
+		<g id="Layer_2">
+		  <g>
+			<path fill="#4D4D4D" d="M15.821,23.103c0.858-4.282,4.636-7.508,9.172-7.51h17.076L36.251,5.516h-22.5l-4.054,7.02L15.821,23.103z
+				"/>
+			<path fill="#4D4D4D" d="M27.904,33.849c-0.914,0.298-1.891,0.464-2.906,0.464c-3.583,0-6.69-2.012-8.266-4.966L8.349,14.873
+				L2.501,25l11.25,19.485h7.99L27.904,33.849z"/>
+			<path fill="#4D4D4D" d="M43.421,17.934H31.174c1.946,1.716,3.182,4.221,3.182,7.019c0,1.412-0.322,2.746-0.88,3.941l0.001,0.002
+				l-0.006,0.01c-0.235,0.511-0.516,0.994-0.839,1.446l-8.186,14.134h11.805L47.501,25L43.421,17.934z"/>
+		  </g>
+		</g>
+	  </svg>Polymer
+	</a>
 
-    <img src="img/html5css3.png" alt="HTML5 CSS3" title="HTML5 CSS3" class="logos" style="height:48px;top:60px;" />
-    
-    <a href="http://www.w3.org/TR/components-intro/"><img src="img/webcomponents.png" alt="Web Components" title="Web Components" class="logos" style="height:48px;top:125px;" /></a>
-    
-    <a href="http://www.gnu.org/licenses/agpl-3.0.html"><img src="img/agplv3-88x31.png" alt="GNU AFFERO GENERAL PUBLIC LICENSE V3" title="GNU AFFERO GENERAL PUBLIC LICENSE V3" class="logos" style="height:31px;top:190px;" /></a>
+	<img src="img/html5css3.png" alt="HTML5 CSS3" title="HTML5 CSS3" class="logos" style="height:48px;top:60px;" />
+	
+	<a href="http://www.w3.org/TR/components-intro/"><img src="img/webcomponents.png" alt="Web Components" title="Web Components" class="logos" style="height:48px;top:125px;" /></a>
+	
+	<a href="http://www.gnu.org/licenses/agpl-3.0.html"><img src="img/agplv3-88x31.png" alt="GNU AFFERO GENERAL PUBLIC LICENSE V3" title="GNU AFFERO GENERAL PUBLIC LICENSE V3" class="logos" style="height:31px;top:190px;" /></a>
 
-    <a href="https://github.com/stevenrskelton/Fish-UI"><img src="img/github.png" alt="GitHub" title="Code for this site is available on GitHub" class="logos" style="height:48px;top:240px;" /></a>
-    
-    <div id="centered">
-      <index-index id="vcentered" class="polymer-ui-dark-theme" style="text-align:center; border-radius: 5px;"></index-index>
-    </div>
+	<a href="https://github.com/stevenrskelton/Fish-UI"><img src="img/github.png" alt="GitHub" title="Code for this site is available on GitHub" class="logos" style="height:48px;top:240px;" /></a>
+	
+	<div id="centered">
+	  <index-index id="vcentered" class="polymer-ui-dark-theme" style="text-align:center; border-radius: 5px;"></index-index>
+	</div>
   </body>
 </html>
