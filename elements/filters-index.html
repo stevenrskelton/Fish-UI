@@ -6,12 +6,28 @@
 <link rel="import" href="../components/polymer-ui-sidebar-menu/polymer-ui-sidebar-menu.html">
 <link rel="import" href="../components/polymer-ui-menu-item/polymer-ui-menu-item.html">
 <link rel="import" href="../components/polymer-media-query/polymer-media-query.html">
-
+<link rel="import" href="../components/polymer-flex-layout/polymer-flex-layout.html">
+      
 <link rel="import" href="toolbar-units.html">
 <link rel="import" href="habitat-search.html">
 
-<polymer-element name="filters-index" noscript>
+<polymer-element name="filters-index" noscript style="height:100%">
   <template>
+  
+	<polymer-media-query query="max-width: 800px" queryMatches="{{bottomScreen}}"></polymer-media-query>
+	<polymer-media-query query="max-width: 600px" queryMatches="{{phoneScreen}}"></polymer-media-query>
+	
+	<polymer-ui-sidebar-menu valueattr="lbl" selected="{{item}}" theme="polymer-ui-dark-theme" style="position:absolute;top:0;left:0;width:25%;min-width:150px;height:100%;">
+	  <polymer-ui-menu-item icon="{{costIcon}}" lbl="Cost" label="Cost"></polymer-ui-menu-item>
+	  <polymer-ui-menu-item icon="{{difficultyIcon}}" lbl="Difficulty" label="Care & Difficulty"></polymer-ui-menu-item>
+	  <polymer-ui-menu-item icon="{{behaviourIcon}}" lbl="Behaviour" label="Species Behaviour"></polymer-ui-menu-item>
+	  <polymer-ui-menu-item icon="{{sizeIcon}}" lbl="Size" label="Species Size"></polymer-ui-menu-item>
+	  <polymer-ui-menu-item icon="{{sustainabilityIcon}}" lbl="Sustainability" label="Sustainability"></polymer-ui-menu-item>
+	  <polymer-ui-menu-item icon="{{habitatIcon}}" lbl="Habitat" label="Tank Appearance / Habitat"></polymer-ui-menu-item>
+	</polymer-ui-sidebar-menu>
+
+	<polymer-flex-layout vertical></polymer-flex-layout>
+	
     <polymer-ui-toolbar theme="polymer-ui-dark-theme" class="align-center polymer-ui-dark-theme flexbox" style="z-index:2">
 
       <polymer-ui-icon-button icon="trash" class="polymer-ui-dark-theme" on-click="{{trash}}"></polymer-ui-icon-button>
@@ -23,26 +39,18 @@
       <button type="button" class="btn btn-primary btn-lg" style="margin-right:10px;height:46px;" on-click="{{save}}">Next <polymer-ui-icon icon="shortcut"></polymer-ui-icon></button>
     </polymer-ui-toolbar>
 
-	<polymer-ui-sidebar-menu valueattr="lbl" selected="{{item}}" theme="polymer-ui-dark-theme" style="position:absolute;top:0;width:25%;min-width:150px;">
-	  <polymer-ui-menu-item icon="{{costIcon}}" lbl="Cost" label="Cost"></polymer-ui-menu-item>
-	  <polymer-ui-menu-item icon="{{difficultyIcon}}" lbl="Difficulty" label="Care & Difficulty"></polymer-ui-menu-item>
-	  <polymer-ui-menu-item icon="{{behaviourIcon}}" lbl="Behaviour" label="Species Behaviour"></polymer-ui-menu-item>
-	  <polymer-ui-menu-item icon="{{sizeIcon}}" lbl="Size" label="Species Size"></polymer-ui-menu-item>
-	  <polymer-ui-menu-item icon="{{sustainabilityIcon}}" lbl="Sustainability" label="Sustainability"></polymer-ui-menu-item>
-	  <polymer-ui-menu-item icon="{{habitatIcon}}" lbl="Habitat" label="Tank Appearance / Habitat"></polymer-ui-menu-item>
-	</polymer-ui-sidebar-menu>
-
-	<polymer-media-query query="max-width: 600px" queryMatches="{{phoneScreen}}"></polymer-media-query>
-	
-	<div style="{{phoneScreen? 'margin-left:150px':'margin-left:25%'}};">
+    <div flex style="{{phoneScreen? 'padding-left:150px':'padding-left:25%'}};overflow-y:auto;width:100%;">
+	  
 	  <template if="{{item=='Cost'}}">
-		<div class="panel info">
-		  <h2>Cost</h2>
+		<div class="factor">
+		  <h1>Cost</h1>
 		  <em>It is important to buy fish within your budget.</em>
-		  <p>
-		  - <input type="checkbox"/>Max price <input type="text"/>
-		  </p>
-		  <p/>
+		</div>
+		
+		<div class="panel info">
+		  <div style="border-bottom:1px solid #DDD">
+			<input type="checkbox"/>Max price <input type="text"/>
+		  </div>
 		  There are many reasons why a fish may be expensive - a higher cost doesn't mean the fish is better or worse.
 		  But in general, the least expensive fish species make the best pets.
 		  
@@ -73,12 +81,16 @@
 			<li>general accidents, and </li>
 			<li>equipment failures or loss of power.</li>
 		  </ul>
-		  
+		</div>
+		
+		<div class="panel info">
 		  Different fish have different requirements, meaning different aquarium equipment is necessisary.
 		  <p>
 		  Some freshwater fish can be kept at room temperature, meaning no heater is required.<br/>
 		  - <input type="checkbox"/>room temperature
 		  </p>
+		</div>
+		<div class="panel info">
 		  <p>
 		  Some fish require higher water flow, meaning additional powerheads need to be purchased.  Other fish
 		  demand low flow, so no or less expensive aggitation such as air pumps can be used.<br/>
@@ -87,8 +99,11 @@
 		</div>
 	  </template>
 	  <template if="{{item=='Difficulty'}}">
+		<div class="factor">
+		  <h1>Care &amp; Difficulty</h1>
+		  <em>It is important to buy fish appropriate to your skill level and commitment.</em>
+		</div>
 		<div class="panel info">
-		  <h2>Difficulty</h2>
 		  There are a lot of mistakes that can lead to loss of livestock:
 		  <ul>
 			<li>improper acclimation,</li>
@@ -110,8 +125,11 @@
 		</div>
 	  </template>
 	  <template if="{{item=='Behaviour'}}">
-		<div class="panel info">		  
-		  <h2>Behaviour and Characteristics</h2>
+		<div class="factor">
+		  <h1>Species Behaviour and Characteristics</h1>
+		  <em>Species behave in different ways, find one that will behave as you expect.</em>
+		</div>
+		<div class="panel info">
 		  - <input type="checkbox"/>community fish<br/>
 		  - <input type="checkbox"/>fast swimmers<br/>
 		  - <input type="checkbox"/>delicate<br/>
@@ -121,11 +139,13 @@
 		</div>
 	  </template>
 	  <template if="{{item=='Size'}}">
+		<div class="factor">
+		  <h1>Species Size</h1>
+		</div>
 		<div class="panel info">
-		  <h2>Species Sizes</h2>
 		  This application will automatically filter out fish too large for your tank, but if you want to 
-		   override this behaviour or further limit your results, check your options below:
-		   <p/>
+		  override this behaviour or further limit your results, check your options below:
+		  <p/>
 		  - <input type="checkbox"/>nano<br/>
 		  - <input type="checkbox"/>small<br/>
 		  - <input type="checkbox"/>medium<br/>
@@ -136,8 +156,10 @@
 		</div>
 	  </template>
 	  <template if="{{item=='Sustainability'}}">
+		<div class="factor">
+		  <h1>Sustainability</h1>
+		</div>
 		<div class="panel info">
-		  <h2>Sustainability</h2>
 		  Most species available in the aquarium trade are sourced directly from the wild.  This isn't always an issue, as
 		  may species are in no jeopardy of overfishing.  There are some species that may be relativily rare or endangered in
 		  the wild, or require special permits for import.
@@ -148,10 +170,11 @@
 		</div>
 	  </template>
 	  <template if="{{item=='Habitat'}}">
+		<div class="factor">
+		  <h1>Tank Appearance &amp; Natural Habitat</h1>
+		  <em>Species can tolerate a set range of conditions in the wild, and this collection of conditions is referred to as a habitat.</em>
+		</div>
 		<div class="panel info">
-		  <h2>Natural Habitat and Climate</h2>
-		  Species can tolerate a set range of conditions in the wild, and this collection of conditions is referred to as a habitat.
-		  <br/>
 		  While some habitats share similiar conditions, and habitat conditions may vary from place to place around the world, 
 		  many fish can only survive in specific conditions of a single habitat.
 		  <p/>
@@ -170,18 +193,22 @@
 		  <habitat-search></habitat-search>
 		</div>
 	  </template>
-	</div>	
+	</div>
 
+	<div style="height:60px" hidden?="{{!bottomScreen}}"></div>
     <polymer-localstorage name="units" value="{{units}}" id="units"></polymer-localstorage>
   </template>
   <style>
-	  polymer-ui-sidebar-menu {
-        width: 240px;
-        height: 100%;
-      }
       html, body {
         height: 100%;
-      }      
+      }
+	  .factor {
+		text-align:center;
+		margin-bottom:1em;
+	  }
+	  .factor h1 {
+		margin-bottom:0;
+	  }
       </style>
   <script>
     Polymer('filters-index',{
