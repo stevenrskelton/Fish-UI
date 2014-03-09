@@ -24,11 +24,11 @@
     Polymer('stats-geography', {
       currentItems: null,
       loadSearchResults: function(e){
-	console.log(e.detail);
-	this.currentItems = e.detail;
+		console.log(e.detail);
+		this.currentItems = e.detail;
       },
       ready: function(){
-	this.$.searchQuery.go();
+		this.$.searchQuery.go();
       }
     });
     </script>

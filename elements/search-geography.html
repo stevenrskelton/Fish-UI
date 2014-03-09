@@ -1,27 +1,26 @@
 <link rel="import" href="../components/polymer/polymer.html">
 <link rel="import" href="../components/polymer-flex-layout/polymer-flex-layout.html">
+<link rel="import" href="../components/d3-datamaps/src/d3-datamaps.html">
 
 <script src="../js/d3/d3.v3.min.js"></script>
-<script src="../js/topojson/topojson.v1.min.js"></script>
-<script src="../js/datamaps/datamaps.js"></script>
 
 <polymer-element name="search-geography-selection" noscript attributes="species selected">
   <template>
     <div class="selectIcon">
       <div class="icon" style="background-image:url('{{species.src}}')" on-mouseover="{{selectSpecies}}" on-mouseout="{{unselectSpecies}}">
       </div><div class="text">
-	{{species.name}}<br/>
-	<label>{{species.scientificName}}</label>
+		{{species.name}}<br/>
+		<label>{{species.scientificName}}</label>
       </div>
     </div>
   </template>
   <script>
   Polymer('search-geography-selection', {     
       selectSpecies: function(){
-	this.fire('selected', this.species);
+		this.fire('selected', this.species);
       },
       unselectSpecies: function(){
-	this.fire('selected', null);
+		this.fire('selected', null);
       }
   }); 
   </script>
@@ -80,147 +79,134 @@
     <div id="buttons" data-style="max-height:75%;overflow-y:scroll;overflow-x:hidden;">
       <template if="{{currentItems.length>0}}">
       	<div on-mouseover="{{currentSelected}}" style="cursor:pointer;width:54px;text-align:center;">Current</div>
-	<template repeat="{{o in currentItems}}">
-	  <search-geography-selection species="{{o}}" on-selected="{{speciesSelected}}"></search-geography-selection>
-	</template>
+			<template repeat="{{o in currentItems}}">
+				<search-geography-selection species="{{o}}" on-selected="{{speciesSelected}}"></search-geography-selection>
+			</template>
       </template>
 
       <template if="{{purchases.length>0}}">
       	<div on-mouseover="{{newSelected}}" style="cursor:pointer;width:54px;text-align:center;">New</div>
-	<template repeat="{{o in purchases}}">
-	  <search-geography-selection species="{{o}}" on-selected="{{speciesSelected}}"></search-geography-selection>
-	</template>  
+			<template repeat="{{o in purchases}}">
+				<search-geography-selection species="{{o}}" on-selected="{{speciesSelected}}"></search-geography-selection>
+			</template>
       </template>
     </div>
-    <div id="container" style="position:relative;width:100%;background-color:#C2DFFF;border-bottom:1px solid black;cursor:crosshair;"></div>
+	<d3-datamaps selected="{{selectedItems}}" rootDirectory="components/d3-datamaps/src/" theme="{{datamapsTheme}}" hoverTemplate="{{hoverTemplate}}" data="{{nativeFish}}"></d3-datamaps>
   </template>
   <script>
     Polymer('search-geography', {
-      map: null,
-      nativeFish: {},
-      ready: function(){
-	this.$.container.style.height = (window.innerWidth * 0.435) + 'px';
-      },
-      observe: {
-	purchases: 'compute',
-	currentItems: 'compute'
-      },
-      speciesSelected: function(e){
-	console.log(e.detail)
-	this.selectedSpecies = e.detail;
-	this.compute();
-      },
-      currentSelected: function(e){
-	console.log('current selected');
-      },
-      newSelected: function(e){
-	console.log('new selected');
-      },      
-      compute: function(){
-	console.log('compute Choropleth');
-	if(this.map==null) return;
+		datamapsTheme: {
+			defaultFill: 'transparent',
+			borderWidth: 1,
+			borderColor: 'rgba(255,255,255,0.1)',
+			highlightFillColor: 'rgba(240,240,51,0.5)',
+			highlightBorderColor: '#DDDD33',
+			highlightBorderWidth: 1,
+			backgroundImage: "url('../components/d3-datamaps/src/SRTM30_Plus/srtm30plus.jpg')", //"url('../src/SRTM30_Plus/srtm30plus_hilldhading_B.overview_res5km.jpg')",
+			backgroundPositionX: 0,
+			backgroundPositionY: 0
+		},
+		hoverTemplate: function(geography, data) { //this function should just return a string
+			var s = '';
+			if(data){
+				var countries = [];
+				for(var i=0;i<999;i++){
+					if(data.hasOwnProperty(i)){
+						countries.push(data[i]);
+					}else break;
+				}
+				s = countries.join(', ');
+			}
+			return '<div class="hoverinfo"><strong>' + geography.properties.name + '</strong><br/>' + s + '</div>';
+		},
+		selectedItems: {},
+		nativeFish: {},
+		observe: {
+			purchases: 'compute',
+			currentItems: 'compute'
+		},
+		speciesSelected: function(e){
+			this.selectedSpecies = e.detail;
+			this.compute();
+		},
+		currentSelected: function(e){
+			console.log('current selected');
+		},
+		newSelected: function(e){
+			console.log('new selected');
+		},
+		compute: function(){
+			console.log('compute Choropleth');
 
-	var fillColors = {};
-	var maxColorsCount = 0;
+			var fillColors = {};
+			var maxColorsCount = 0;
 
-	function fill(f, nativeFish){
-	  if(f.countries!=null){
-	    for(var i=0;i<f.countries.length;i++){
-	      var country = f.countries[i];
-	      var count = fillColors[country];
-	      if(count != null){
-		nativeFish[country].push(f.name);
-	      }else{
-		count = 0;
-		nativeFish[country] = [f.name];
-	      }
-	      count++;
-	      fillColors[country] = count;
-	      if(count > maxColorsCount) maxColorsCount = count;
-	    }
-	  }
-	}
-	
-	if(this.purchases!=null){
-	  var a = this.purchases;
-	  for(var i=0;i<a.length;i++){
-	    fill(a[i], this.nativeFish);
-	  }
-	}
-	if(this.currentItems!=null){
-	  var a = this.currentItems;
-	  for(var i=0;i<a.length;i++){
-	    fill(a[i], this.nativeFish);
-	  }
-	}
-	
-	//replace count with colors
-	for (var property in fillColors) {
-	    if (fillColors.hasOwnProperty(property)) {
-	      var count = fillColors[property];
-	      var color = 'rgb(204,30,' + Math.floor(255 * count / maxColorsCount) + ')';
-	      fillColors[property] = color;
-	    }
-	}
-	
-	//selected
-	if(this.selectedSpecies!=null){
-	  var c = this.selectedSpecies.countries;
-	  if(c!=null){
-	    for(var i=0;i<c.length;i++){
-	      var country = c[i];
-	      fillColors[country] = '#ff0';
-	    }
-	  }
-	}
-	
-	console.log(fillColors);
-	this.map.updateChoropleth(fillColors);
-      },
-      attached: function(){
-	document.body.style.overflow='hidden';
-	this.map = new Datamap({element: this.$.container,
-	  fills: {
-	      defaultFill: '#339933' //any hex, color name or rgb/rgba value
-	  },
-	  geographyConfig: {
-	      dataUrl: 'js/datamaps/world.topo.json', //if not null, datamaps will fetch the map JSON (currently only supports topojson)
-	      hideAntarctica: false,
-	      borderWidth: 1,
-	      borderColor: '#33CC66',
-	      popupTemplate: function(geography, data) { //this function should just return a string
-		var fishInCountry = this.nativeFishByCountry[geography.id];
-		var s = '';
-		if(fishInCountry != undefined){
-		  s = fishInCountry.join(', ');
-		}
-		return '<div class="hoverinfo"><strong>' + geography.properties.name + '</strong><br/>' + s + '</div>';
-	      },
-	      popupOnHover: true, //disable the popup while hovering
-	      highlightOnHover: true,
-	      highlightFillColor: '#FFFF99',
-	      highlightBorderColor: 'rgba(250, 15, 160, 0.2)',
-	      highlightBorderWidth: 2,
-	      nativeFishByCountry: this.nativeFish
-	  }/*,
-		  setProjection: function(element) {
-			  var projection = d3.geo.equirectangular()
-			    .center([19, -3])
-			    .rotate([4.4, 0])
-			    .scale(300)
-			    .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
-			  var path = d3.geo.path()
-			    .projection(projection);
+			function fill(f, nativeFish){
+				if(f.countries!=null){
+					for(var i=0;i<f.countries.length;i++){
+						var country = f.countries[i];
+						var count = fillColors[country];
+						if(count != null){
+							nativeFish[country].push(f.name);
+						}else{
+							count = 0;
+							nativeFish[country] = [f.name];
+						}
+						count++;
+						fillColors[country] = count;
+						if(count > maxColorsCount) maxColorsCount = count;
+					}
+				}
+			}
 
-			  return {path: path, projection: projection};
-		  }*/
-	, done: function(datamap) {
-	    this.parent.compute();
-	  },
-	  parent: this
-	});
-      },
-      detached: function() { document.body.style.overflow='auto'; }
+			if(this.purchases!=null){
+				var a = this.purchases;
+				for(var i=0;i<a.length;i++){
+					fill(a[i], this.nativeFish);
+				}
+			}
+			if(this.currentItems!=null){
+				var a = this.currentItems;
+				for(var i=0;i<a.length;i++){
+					fill(a[i], this.nativeFish);
+				}
+			}
+
+			//replace count with colors
+			for (var property in fillColors) {
+				if (fillColors.hasOwnProperty(property)) {
+					var count = fillColors[property];
+					var color = 'rgba(204,30,' + Math.floor(255 * count / maxColorsCount) + ',0.7)';
+					fillColors[property] = color;
+				}
+			}
+
+			//selected
+			if(this.selectedSpecies!=null){
+				var c = this.selectedSpecies.countries;
+				if(c!=null){
+					for(var i=0;i<c.length;i++){
+						var country = c[i];
+						fillColors[country] = '#ff0';
+					}
+				}
+			}
+
+			//merge into selected
+			for (var key in fillColors) {
+				if (fillColors.hasOwnProperty(key)) {
+					this.selectedItems[key] = fillColors[key];
+				}
+			}
+			//remove any no longer selected
+			for (var key in this.selectedItems) {
+				if (this.selectedItems.hasOwnProperty(key) && !fillColors.hasOwnProperty(key)) {
+					this.selectedItems[key] = null;
+				}
+			}
+		},
+		attached: function(){ document.body.style.overflow='hidden'; },
+		detached: function() { document.body.style.overflow='auto'; }
     });
   </script>    
 </polymer-element>

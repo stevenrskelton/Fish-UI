@@ -5,7 +5,9 @@
 <link rel="import" href="data-field.html">
 <link rel="import" href="data-checkbox.html">
 <link rel="import" href="temperature-range.html">
-<link rel="import" href="fish-geography.html">
+<link rel="import" href="../components/d3-datamaps/src/d3-datamaps.html">
+
+<script src="../js/d3/d3.v3.min.js"></script>
 
 <polymer-element name="fish-species" noscript attributes="species">
   <template>
@@ -59,7 +61,7 @@
 	Other: {{result.other}}
       </template>
     </div>
-    <fish-geography width="1000" countries="{{result.countries}}"></fish-geography>
+    <d3-datamaps selected="{{result.countries}}" style="width:1000px" rootDirectory="../components/d3-datamaps/src/"></d3-datamaps>
     <data-species response="{{result}}" params="{{species}}"></data-species>
   </template>  
   <script>
