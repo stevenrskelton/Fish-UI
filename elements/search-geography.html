@@ -1,6 +1,6 @@
 <link rel="import" href="../components/polymer/polymer.html">
 <link rel="import" href="../components/polymer-flex-layout/polymer-flex-layout.html">
-<link rel="import" href="../components/d3-datamaps/src/d3-datamaps.html">
+<link rel="import" href="../components/d3-geomap/src/d3-geomap.html">
 
 <script src="../js/d3/d3.v3.min.js"></script>
 
@@ -91,20 +91,18 @@
 			</template>
       </template>
     </div>
-	<d3-datamaps selected="{{selectedItems}}" rootDirectory="components/d3-datamaps/src/" theme="{{datamapsTheme}}" hoverTemplate="{{hoverTemplate}}" data="{{nativeFish}}"></d3-datamaps>
+	<d3-geomap selected="{{selectedItems}}" rootDirectory="components/d3-geomap/src/" theme="{{geomapTheme}}" hoverTemplate="{{hoverTemplate}}" data="{{nativeFish}}"></d3-geomap>
   </template>
   <script>
     Polymer('search-geography', {
-		datamapsTheme: {
+		geomapTheme: {
 			defaultFill: 'transparent',
 			borderWidth: 1,
 			borderColor: 'rgba(255,255,255,0.1)',
 			highlightFillColor: 'rgba(240,240,51,0.5)',
 			highlightBorderColor: '#DDDD33',
 			highlightBorderWidth: 1,
-			backgroundImage: "url('../components/d3-datamaps/src/SRTM30_Plus/srtm30plus.jpg')", //"url('../src/SRTM30_Plus/srtm30plus_hilldhading_B.overview_res5km.jpg')",
-			backgroundPositionX: 0,
-			backgroundPositionY: 0
+			backgroundImage: '../components/d3-geomap/src/SRTM30_Plus/srtm30plus.jpg' //'../src/SRTM30_Plus/srtm30plus_hilldhading_B.overview_res5km.jpg'
 		},
 		hoverTemplate: function(geography, data) { //this function should just return a string
 			var s = '';

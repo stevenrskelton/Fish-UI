@@ -5,7 +5,7 @@
 <link rel="import" href="data-field.html">
 <link rel="import" href="data-checkbox.html">
 <link rel="import" href="temperature-range.html">
-<link rel="import" href="../components/d3-datamaps/src/d3-datamaps.html">
+<link rel="import" href="../components/d3-geomap/src/d3-geomap.html">
 
 <script src="../js/d3/d3.v3.min.js"></script>
 
@@ -61,7 +61,7 @@
 	Other: {{result.other}}
       </template>
     </div>
-    <d3-datamaps selected="{{result.countries}}" style="width:1000px" rootDirectory="../components/d3-datamaps/src/"></d3-datamaps>
+    <d3-geomap selected="{{result.countries}}" style="width:1000px" rootDirectory="../components/d3-geomap/src/"></d3-geomap>
     <data-species response="{{result}}" params="{{species}}"></data-species>
   </template>  
   <script>
