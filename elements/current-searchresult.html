@@ -1,23 +1,22 @@
-<link rel="import" href="../components/polymer/polymer.html">
-<link rel="import" href="../components/polymer-ui-icon-button/polymer-ui-icon-button.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer-ui-icon-button/polymer-ui-icon-button.html">
 
 <polymer-element name="current-searchresult" noscript attributes="species add disabled">
-  <template>
-    <div class="panel info" style="{{ disabled ? 'opacity:0.15' : ''}};">
-      <polymer-ui-icon-button id="addButton" icon="add" style="float:right;{{ disabled ? 'display:none' : ''}}" on-click="{{add}}"></polymer-ui-icon-button>
-      
-      <img title="{{species.scientificName}}" alt="{{species.scientificName}}" src="{{species.src}}" width="100px" height="50px" style="float:left;border-radius:4px;margin:-5px 10px 0 -5px;" />
-      
-      <strong>{{species.name}}</strong><br/>
-      {{species.scientificName}}
-    </div>
-  </template>
-  <script>
-    Polymer('current-searchresult', {
-      add: function() {
-		this.fire('add', this.species);
-		this.disabled = true;
-      }
-    });
-  </script>
+	<template>
+		<link rel="stylesheet" href="../css/mybootstrap.css">
+		<div class="panel info" style="{{ disabled ? 'opacity:0.15' : ''}};">
+			<polymer-ui-icon-button id="addButton" icon="add" style="float:right;{{ disabled ? 'display:none' : ''}}" on-click="{{add}}"></polymer-ui-icon-button>
+			<img title="{{species.scientificName}}" alt="{{species.scientificName}}" src="{{species.src}}" width="100px" height="50px" style="float:left;border-radius:4px;margin:-5px 10px 0 -5px;" />
+			<strong>{{species.name}}</strong><br/>
+			{{species.scientificName}}
+		</div>
+	</template>
+	<script>
+	Polymer('current-searchresult', {
+		add: function() {
+			this.fire('add', this.species);
+			this.disabled = true;
+		}
+	});
+	</script>
 </polymer-element>

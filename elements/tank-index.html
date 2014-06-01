@@ -1,39 +1,40 @@
-<link rel="import" href="../components/polymer/polymer.html">
-<link rel="import" href="../components/polymer-ui-toolbar/polymer-ui-toolbar.html">
-<link rel="import" href="../components/polymer-ui-icon-button/polymer-ui-icon-button.html">
-<link rel="import" href="../components/polymer-ui-icon/polymer-ui-icon.html">
-<link rel="import" href="../components/polymer-localstorage/polymer-localstorage.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer-ui-toolbar/polymer-ui-toolbar.html">
+<link rel="import" href="../bower_components/polymer-ui-icon-button/polymer-ui-icon-button.html">
+<link rel="import" href="../bower_components/polymer-ui-icon/polymer-ui-icon.html">
+<link rel="import" href="../bower_components/polymer-localstorage/polymer-localstorage.html">
 
 <link rel="import" href="tank-dimensions.html">
 <link rel="import" href="toolbar-units.html">
 
 <polymer-element name="tank-index" noscript>
-  <template>
-    <polymer-ui-toolbar theme="polymer-ui-dark-theme" class="align-center polymer-ui-dark-theme flexbox">
+	<template>
+		<link rel="stylesheet" href="../css/mybootstrap.css">
+		<polymer-ui-toolbar theme="polymer-ui-dark-theme" class="align-center polymer-ui-dark-theme flexbox">
 
-      <polymer-ui-icon-button icon="trash" class="polymer-ui-dark-theme" on-click="{{trash}}"></polymer-ui-icon-button>
-      
-      <div>How large is your aquarium tank?</div>
+			<polymer-ui-icon-button icon="trash" class="polymer-ui-dark-theme" on-click="{{trash}}"></polymer-ui-icon-button>
 
-      <toolbar-units units="{{units}}" flex></toolbar-units>
-      
-      <button type="button" class="btn btn-primary btn-lg" style="margin-right:10px;height:46px;" on-click="{{save}}">Next <polymer-ui-icon icon="shortcut"></polymer-ui-icon></button>
-    </polymer-ui-toolbar>
+			<div>How large is your aquarium tank?</div>
 
-    <tank-dimensions style="padding:20px 0 60px 0;display:block;" units="{{units}}" tankSize="{{tankSize}}"></tank-dimensions>
+			<toolbar-units units="{{units}}" flex></toolbar-units>
+
+			<button type="button" class="btn btn-primary btn-lg" style="margin-right:10px;height:46px;" on-click="{{save}}">Next <polymer-ui-icon icon="shortcut"></polymer-ui-icon></button>
+		</polymer-ui-toolbar>
+
+		<tank-dimensions style="padding:20px 0 60px 0;display:block;" units="{{units}}" tankSize="{{tankSize}}"></tank-dimensions>
  
-    <polymer-localstorage name="tankSize" value="{{tankSize}}"></polymer-localstorage>
-  </template>
-  <script>
-    Polymer('tank-index',{
-      save: function(){
-		document.location.href = 'filters.html';
-      },
-      trash: function(){
-		if(confirm('Do you want clear all your selections and start a new tank?')){
-		  document.location.href='/'
+		<polymer-localstorage name="tankSize" value="{{tankSize}}"></polymer-localstorage>
+	</template>
+	<script>
+	Polymer('tank-index',{
+		save: function(){
+			document.location.href = 'filters.html';
+		},
+		trash: function(){
+			if(confirm('Do you want clear all your selections and start a new tank?')){
+				document.location.href='/'
+			}
 		}
-      }
-    });
-  </script>    
+	});
+	</script>
 </polymer-element>

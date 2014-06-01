@@ -1,35 +1,35 @@
-<link rel="import" href="../components/polymer/polymer.html">
-<link rel="import" href="../components/polymer-ui-icon-button/polymer-ui-icon-button.html">
-<link rel="import" href="../components/polymer-collapse/polymer-collapse.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer-ui-icon-button/polymer-ui-icon-button.html">
+<link rel="import" href="../bower_components/polymer-collapse/polymer-collapse.html">
 
 <polymer-element name="habitat-select" noscript attributes="name src">
-  <template>
-    <style type="text/css">
-      #templateBody {
-		background-color: #f2f2f2;
-		height:100px;
-      }      
-    </style>
-    <div class="collapsableList" theme="polymer-ui-light-theme" on-click="{{selected = !selected}}">
-      <polymer-ui-icon-button icon="dropdown" on-click="{{toggle}};"></polymer-ui-icon-button> <input type="checkbox" id="isSelected" checked="{{selected}}" /> {{name}} 
-    </div>
-    <table id="templateBody" class="offsetbg" style="width:100%">
-      <tr>
-	<td style="width:100px;"><img src="{{src}}" height="300" style="float:left;border-radius:2px;border-radius:4px;"/></td>
-	<td style="vertical-align:middle;"><content></content></td>
-      </tr>
-    </table>
-    <polymer-collapse closed id="templateCollapse" targetId="templateBody"></polymer-collapse>        
-  </template>
-  <script>
-    Polymer('habitat-select',{
-      toggle: function(e) {
-		e.preventDefault();
-		e.stopPropagation();
-		this.$.templateCollapse.toggle();
-		return false;
-      },
-      selected: false
-    });
-  </script>
+	<template>
+		<style type="text/css">
+		#templateBody {
+			background-color: #f2f2f2;
+			height:100px;
+		}
+		</style>
+		<div class="collapsableList" theme="polymer-ui-light-theme" on-click="{{selected = !selected}}">
+			<polymer-ui-icon-button icon="dropdown" on-click="{{toggle}};"></polymer-ui-icon-button> <input type="checkbox" id="isSelected" checked="{{selected}}" /> {{name}} 
+		</div>
+		<table id="templateBody" class="offsetbg" style="width:100%">
+			<tr>
+				<td style="width:100px;"><img src="{{src}}" height="300" style="float:left;border-radius:2px;border-radius:4px;"/></td>
+				<td style="vertical-align:middle;"><content></content></td>
+			</tr>
+		</table>
+		<polymer-collapse closed id="templateCollapse" targetId="templateBody"></polymer-collapse>
+	</template>
+	<script>
+	Polymer('habitat-select',{
+		toggle: function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			this.$.templateCollapse.toggle();
+			return false;
+		},
+		selected: false
+	});
+	</script>
 </polymer-element>

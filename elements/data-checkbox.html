@@ -1,13 +1,13 @@
-<link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
 
 <polymer-element name="data-checkbox" noscript attributes="data label">
-  <template>
-    <template if="{{data}}">
-      <div style="display:inline-block;color:green;width:12px;">✓</div> {{label}}
-    </template>
-    <template if="{{!data}}">
-      <div style="display:inline-block;color:red;width:12px;font-family:sans;">X</div> {{label}}
-    </template>  
-  </template>
-  <script>Polymer('data-checkbox');</script>
+	<template>
+		<template if="{{data}}">
+			<div style="display:inline-block;color:green;width:12px;">✓</div> {{label}}
+		</template>
+		<template if="{{!data}}">
+			<div style="display:inline-block;color:red;width:12px;font-family:sans;">X</div> {{label}}
+		</template>
+	</template>
+	<script>Polymer('data-checkbox');</script>
 </polymer-element>

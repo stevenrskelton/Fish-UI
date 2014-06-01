@@ -1,41 +1,71 @@
-<link rel="import" href="../components/polymer/polymer.html">
-<link rel="import" href="../components/polymer-localstorage/polymer-localstorage.html">
-<link rel="import" href="../components/polymer-ui-tabs/polymer-ui-tabs.html">
-    
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer-localstorage/polymer-localstorage.html">
+<link rel="import" href="../bower_components/polymer-ui-tabs/polymer-ui-tabs.html">
+
 <polymer-element name="index-budget" noscript attributes="budget focus">
-  <template>
-     <h2 style="margin:20px 0 10px 0">Budget your next purchase</h2>
-	
-    <div class="input-group" style="width:250px;margin-left:auto;margin-right:auto;">
-      <div class="input-group-addon" style="margin-right:-25px;margin-top:4px;position:relative;display:inline-block;font-weight:normal;">$</div><input id="budgetInput" type="text" class="form-control" style="text-align:right;margin-left:12px;" value="{{budget}}" on-keyup="{{budgetChange}}" onfocus="this.select()">
-    </div>
-    
-    <polymer-ui-tabs style="width:300px;margin:0px auto 10px auto;" id="budgetTab">
-      <div on-click="{{setStarterBudget}}" style="border-radius:4px 0px 0px 4px;">Starter</div>
-      <div on-click="{{setAverageBudget}}">Average</div>
-      <div on-click="{{setHighEndBudget}}" style="border-radius:0px 4px 4px 0px;">High-End</div>
-    </polymer-ui-tabs>
-    <polymer-localstorage name="budget" value="{{budget}}" on-polymer-localstorage-load="{{budgetChange}}"></polymer-localstorage>
-  </template>
-  <script>
-    Polymer('index-budget', {
-      setStarterBudget: function(){ this.budget = 10; },
-      setAverageBudget: function(){ this.budget = 25; },
-      setHighEndBudget: function(){ this.budget = 50; },
-      budgetChange: function(){
-	if(this.budget != null){
-	  var v = (this.budget + '').replace(/[^\d]/,'');
-	  if(v=='') v = 10;
-	  this.budget = v * 1;
-	  if(v <= 15){
-	    this.$.budgetTab.selected = 0
-	  }else if(v <= 25){
-	    this.$.budgetTab.selected = 1
-	  }else{
-	    this.$.budgetTab.selected = 2
-	  }
-	}
-      }
-    });
-  </script>    
+	<template>
+		<link rel="stylesheet" href="../css/mybootstrap.css">
+		<style>
+		polymer-ui-tabs > div {
+			width: 100px;
+			border: 1px solid black;
+			height: 30px !important;
+			line-height: 30px !important;
+		}
+		.input-group {
+			width:250px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		.input-group-addon {
+			margin-right:-25px;
+			margin-top:4px;
+			position:relative;
+			display:inline-block;
+			font-weight:normal;
+		}
+		#budgetInput {
+			text-align:right;
+			margin-left:12px;
+		}
+		#budgetTab {
+			width:300px;
+			margin:0px auto 10px auto;
+		}
+		</style>
+
+		<h2 style="margin:20px 0 10px 0">Budget your next purchase</h2>
+
+		<div class="input-group">
+			<div class="input-group-addon">$</div><input id="budgetInput" type="text" class="form-control" value="{{budget}}" on-keyup="{{budgetChange}}" onfocus="this.select()">
+		</div>
+		
+		<polymer-ui-tabs id="budgetTab">
+			<div on-click="{{setStarterBudget}}" style="border-radius:4px 0px 0px 4px;">Starter</div>
+			<div on-click="{{setAverageBudget}}">Average</div>
+			<div on-click="{{setHighEndBudget}}" style="border-radius:0px 4px 4px 0px;">High-End</div>
+		</polymer-ui-tabs>
+		<polymer-localstorage name="budget" value="{{budget}}" on-polymer-localstorage-load="{{budgetChange}}"></polymer-localstorage>
+	</template>
+	<script>
+	Polymer('index-budget', {
+		setStarterBudget: function(){ this.budget = 10; },
+		setAverageBudget: function(){ this.budget = 25; },
+		setHighEndBudget: function(){ this.budget = 50; },
+		budgetChange: function(){
+			if(this.budget != null){
+				var v = (this.budget + '').replace(/[^\d]/,'');
+				if(v=='') v = 10;
+				this.budget = v * 1;
+				if(v <= 15){
+					this.$.budgetTab.selected = 0
+				}else if(v <= 25){
+					this.$.budgetTab.selected = 1
+				}else{
+					this.$.budgetTab.selected = 2
+				}
+			}
+		}
+	});
+	</script>
 </polymer-element>

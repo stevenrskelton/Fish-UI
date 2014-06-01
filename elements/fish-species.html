@@ -1,75 +1,72 @@
-<link rel="import" href="../components/polymer/polymer.html">
-
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/d3-geomap/d3-geomap.html">
 <link rel="import" href="data-species.html">
 <link rel="import" href="data-range.html">
 <link rel="import" href="data-field.html">
 <link rel="import" href="data-checkbox.html">
 <link rel="import" href="temperature-range.html">
-<link rel="import" href="../components/d3-geomap/src/d3-geomap.html">
-
-<script src="../js/d3/d3.v3.min.js"></script>
 
 <polymer-element name="fish-species" noscript attributes="species">
-  <template>
-    <div style="width:440px;display:inline-block;margin:10px;vertical-align:top;">
-      <h1 style="margin:0">{{ result.name }}</h1>
-      <em>{{ result.class + " > " + result.order + " > " + result.family + (result.subfamily != null ? " (" + result.subfamily + ")" : "") + " > " + result.genus + " " + result.species }}</em><br/>
-      <data-field label="Care Level" data="{{result.difficulty}}"></data-field>
-      <data-field label="Availability" data="{{result.availability}}"></data-field>
-      <template if="result.cost != null">
-	<strong>Average Cost:</strong> ${{ result.cost }}<br/>
-      </template>
-      <data-range label="Size" data="{{result.size}}"></data-range><br/>
-      <data-range label="Life Span" data="{{result.lifeSpan}}"></data-range><br/>
-      <div style="max-width:425px;display:inline-block;vertical-align:top;">
-	<template repeat="{{result.images}}">
-	  <img src="{{}}" style="width:100px;vertical-align:top;margin:1px;" />
-	</template>
-      </div>
-     </div>
-     <div style="width:275px;display:inline-block;margin:10px;vertical-align:top;">
-      <h3 style="margin-top:0;margin-bottom:5px;">Water Parameters</h3>
-      <strong>Temperature</strong>: <temperature-range style="display:inline-block;vertical-align:top" value="{{result.temperature}}" width="200"></temperature-range><br/>
-      <data-range label="ph" data="{{result.ph}}"></data-range><br/>
-      <data-range label="Hardness" data="{{result.hardness}}"></data-range><br/>
-      <data-range label="Salinity" data="{{result.salinity}}"></data-range><br/>
-      <data-range label="Minimum Size" data="{{result.tankSize}}"></data-range><br/>
-      <data-field label="Water Flow" data="{{result.waterflow}}"></data-field>
-     </div>
-     <div style="width:275px;display:inline-block;margin:10px;vertical-align:top;">
-      <h3 style="margin-top:0;margin-bottom:5px;">Behaviour</h3>
-      <data-field label="Tank Location" data="{{result.location}}"></data-field>
-      <template if="{{result.minNumber > 1}}">
-	<strong>Minimum Number:</strong> {{ result.minNumber }}<br/>
-      </template>
-      <data-field label="Temperament" data="{{result.temperament}}"></data-field>
-      <template if="{{result.maleRatio > 1 || result.femaleRatio > 1}}">
-	<strong>Male / Female Ratio:</strong> {{ result.maleRatio + ':' + result.femaleRatio }}<br/>
-      </template>
-      <data-checkbox label="Schooling" data="{{result.schooling}}"></data-checkbox><br/>
-      <data-checkbox label="Territorial" data="{{result.territorial}}"></data-checkbox><br/>
-      <data-checkbox label="Breeds" data="{{result.breeds}}"></data-checkbox><br/>
-      <data-checkbox label="Amphidromous" data="{{result.amphidromous}}"></data-checkbox><br/>
-     </div>
-     <div style="width:275px;display:inline-block;margin:10px;vertical-align:top;">
-      <h3 style="margin-top:0;margin-bottom:5px;">Food</h3>
-      <strong>{{ result.diet }}</strong><br/>
-      <data-checkbox label="Pellet" data="{{result.pellet}}"></data-checkbox><br/>
-      <data-checkbox label="Flake" data="{{result.flake}}"></data-checkbox><br/>
-      <data-checkbox label="Algae" data="{{result.algae}}"></data-checkbox><br/>
-      <template if="{{result.other.length > 0}}">
-	Other: {{result.other}}
-      </template>
-    </div>
-    <d3-geomap selected="{{result.countries}}" style="width:1000px" rootDirectory="../components/d3-geomap/src/"></d3-geomap>
-    <data-species response="{{result}}" params="{{species}}"></data-species>
-  </template>  
-  <script>
-    Polymer('fish-species',{      
-      ready: function(){
-	//console.log(this.result.temperature);
-	//console.log(this.result.temperature.min);
-      }
-    });
-  </script>
+	<template>
+		<div style="width:440px;display:inline-block;margin:10px;vertical-align:top;">
+			<h1 style="margin:0">{{ result.name }}</h1>
+			<em>{{ result.class + " > " + result.order + " > " + result.family + (result.subfamily != null ? " (" + result.subfamily + ")" : "") + " > " + result.genus + " " + result.species }}</em><br/>
+			<data-field label="Care Level" data="{{result.difficulty}}"></data-field>
+			<data-field label="Availability" data="{{result.availability}}"></data-field>
+			<template if="result.cost != null">
+				<strong>Average Cost:</strong> ${{ result.cost }}<br/>
+			</template>
+			<data-range label="Size" data="{{result.size}}"></data-range><br/>
+			<data-range label="Life Span" data="{{result.lifeSpan}}"></data-range><br/>
+			<div style="max-width:425px;display:inline-block;vertical-align:top;">
+				<template repeat="{{result.images}}">
+					<img src="{{}}" style="width:100px;vertical-align:top;margin:1px;" />
+				</template>
+			</div>
+		</div>
+		<div style="width:275px;display:inline-block;margin:10px;vertical-align:top;">
+			<h3 style="margin-top:0;margin-bottom:5px;">Water Parameters</h3>
+			<strong>Temperature</strong>: <temperature-range style="display:inline-block;vertical-align:top" value="{{result.temperature}}" width="200"></temperature-range><br/>
+			<data-range label="ph" data="{{result.ph}}"></data-range><br/>
+			<data-range label="Hardness" data="{{result.hardness}}"></data-range><br/>
+			<data-range label="Salinity" data="{{result.salinity}}"></data-range><br/>
+			<data-range label="Minimum Size" data="{{result.tankSize}}"></data-range><br/>
+			<data-field label="Water Flow" data="{{result.waterflow}}"></data-field>
+		</div>
+		<div style="width:275px;display:inline-block;margin:10px;vertical-align:top;">
+			<h3 style="margin-top:0;margin-bottom:5px;">Behaviour</h3>
+			<data-field label="Tank Location" data="{{result.location}}"></data-field>
+			<template if="{{result.minNumber > 1}}">
+				<strong>Minimum Number:</strong> {{ result.minNumber }}<br/>
+			</template>
+			<data-field label="Temperament" data="{{result.temperament}}"></data-field>
+			<template if="{{result.maleRatio > 1 || result.femaleRatio > 1}}">
+				<strong>Male / Female Ratio:</strong> {{ result.maleRatio + ':' + result.femaleRatio }}<br/>
+			</template>
+			<data-checkbox label="Schooling" data="{{result.schooling}}"></data-checkbox><br/>
+			<data-checkbox label="Territorial" data="{{result.territorial}}"></data-checkbox><br/>
+			<data-checkbox label="Breeds" data="{{result.breeds}}"></data-checkbox><br/>
+			<data-checkbox label="Amphidromous" data="{{result.amphidromous}}"></data-checkbox><br/>
+		</div>
+		<div style="width:275px;display:inline-block;margin:10px;vertical-align:top;">
+			<h3 style="margin-top:0;margin-bottom:5px;">Food</h3>
+			<strong>{{ result.diet }}</strong><br/>
+			<data-checkbox label="Pellet" data="{{result.pellet}}"></data-checkbox><br/>
+			<data-checkbox label="Flake" data="{{result.flake}}"></data-checkbox><br/>
+			<data-checkbox label="Algae" data="{{result.algae}}"></data-checkbox><br/>
+			<template if="{{result.other.length > 0}}">
+				Other: {{result.other}}
+			</template>
+		</div>
+		<d3-geomap selected="{{result.countries}}" style="width:1000px" rootDirectory="../bower_components/d3-geomap/"></d3-geomap>
+		<data-species response="{{result}}" params="{{species}}"></data-species>
+	</template>	
+	<script>
+		Polymer('fish-species',{
+			ready: function(){
+				//console.log(this.result.temperature);
+				//console.log(this.result.temperature.min);
+			}
+		});
+	</script>
 </polymer-element>

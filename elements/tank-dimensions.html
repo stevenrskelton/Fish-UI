@@ -1,308 +1,302 @@
-<link rel="import" href="../components/polymer/polymer.html">
-<link rel="import" href="../components/polymer-ui-icon-button/polymer-ui-icon-button.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer-ui-icon-button/polymer-ui-icon-button.html">
 
 <polymer-element name="tank-dimensions" noscript attributes="tankSize units">
-  <template>
-    <div style="width:{{
-      phoneScreen ? '400px' : '680px'
-    }};margin:0 auto;">
-      <div style="width:328px;height:250px;background:url('{{tankShape.img}}');background-repeat:no-repeat;background-position:center;text-align:center;{{
-	phoneScreen ? 'margin-left:40px' : ''
-      }};display:inline-block;vertical-align:top;margin-bottom:20px;"> 
-	<div style="margin-top:90px;white-space:nowrap;">
-	  <polymer-ui-icon-button icon="left" on-click={{smallerTank}}></polymer-ui-icon-button>
-	  <div style="vertical-align:middle;display:inline-block;width:75px;">
-	    <input type="number" value="{{tankSize | userTankSize(units, tankSize)}}" onfocus="this.select()" style="text-align:right;border:none;font-size:16pt;padding-right:2px;width:55px;" onkeydown="return isNumberPress(event)" on-keyup="{{customTankSize}}"/>
-	    {{units | userVolumeUnit}}
-	  </div>
-	  <polymer-ui-icon-button icon="right" on-click="{{largerTank}}"></polymer-ui-icon-button>
-	</div>      
-	<div style="margin-top:-10px;height:20px;">{{tankLabel}}</div>
-	<div style="height:85px;">
-	  <div style="position:relative;top:{{tankShape.wtop}}px;left:{{tankShape.wleft}}px;display:{{tankWidth == '' ? 'none' : 'inline-block'}};text-align:right;width:40px;">{{tankWidth}}{{units | userLengthUnit}}</div>
-	  <div style="position:relative;top:{{tankShape.dtop}}px;left:{{tankShape.dleft}}px;display:{{tankWidth == '' ? 'none' : 'inline-block'}};text-align:left;width:40px;">{{tankDepth}}{{units | userLengthUnit}}</div>
-	  <div style="position:relative;top:{{tankShape.htop}}px;left:{{tankShape.hleft}}px;display:{{tankWidth == '' ? 'none' : 'inline-block'}};text-align:left;width:40px;">{{tankHeight}}{{units | userLengthUnit}}</div>
-	</div>
-      </div>
-
-      <div style="{{
-	phoneScreen ? '' : 'width:310px;display:inline-block;margin: 0 0 0 37px'
-      }};vertical-align:middle;">
-	<div style="height:45px;text-align:center;padding-top:10px;">
-	  <template if="{{tankPrice}}">
-	    <strong>Approximate price:</strong> ${{tankPrice.min ? tankPrice.min + ' - ' + tankPrice.max : tankPrice }}
-	  </template>
-	</div>
-	<div class="panel info" style="margin:0;">
-	  <strong>Tank size</strong> effects many things, such as what species you can support, as well as how many fish you can keep.
-	  Other effects are cost: larger tanks cost more, and maintainance: very small and larger tanks require more maintain while average size tanks (
-	  {{units=='usa' ? '20 - 55 gal' : '75 - 210 L'}}
-	  ) require the least amount of maintainance.
-	</div>
-      </div>
-
-      <div class="panel" style="width:100%;margin-left:0;margin-right:0;">
-	<h3>Shapes of Tanks</h3>
-	<label><input type="radio" name="tankshape" on-click="{{selectRectangularTank}}" checked?="{{tankSize.shape=='rect'}}"/><strong>Rectangular</strong></label> is the standard format,<br/>
-	<label><input type="radio" name="tankshape" on-click="{{selectBowTank}}" checked?="{{tankSize.shape=='bow'}}"/><strong>Bow Front</strong></label> offer better viewing at angles,<br/>
-	<label><input type="radio" name="tankshape" on-click="{{selectHexTank}}" checked?="{{tankSize.shape=='hex'}}"/><strong>Hexagon</strong></label> are best suited for 360° viewing, while <br/>
-	<label><input type="radio" name="tankshape" on-click="{{selectCornerTank}}" checked?="{{tankSize.shape=='corner'}}"/><strong>Corner</strong></label> models are best if the tank sits in a corner.<br/>
-	<h3>Tank Materials</h3>
-	<strong>Glass</strong> tanks are the least expensive and most common,<br/>
-	<strong>Starphire Glass</strong> are a more expensive, low iron glass that is much clearer than standard glass.<br/>
-	<strong>Acrylic</strong> is much lighter and clearer than regular glass, but can be easily scratched during regular algae removal.<br/>
-	<h3>Additional options for Tanks</h3>
-	<strong>Rimless</strong> remove the need for a top center brace by creating extra think walls.<br/>
-	<strong>Euro Brace</strong> also removes the need for a center brace, but by adding extra material around the top edge.<br/>
-	<strong>Silicone</strong> color, whether clear or black, as well as trim color (black is typical, but wood print are available).
-      </div>
-    </div>    
-    <polymer-media-query query="max-width: 640px" queryMatches="{{phoneScreen}}"></polymer-media-query>    
-  </template>
-  <script>
-    function isNumberPress(e){
-      var charCode = e.keyCode;
-      if (charCode != 46 && charCode > 31 
-	  && (charCode < 48 || charCode > 57))
-		return false;
-
-      return true;
-    }
-    function inchesToCm(inches){ return Math.round(inches * 2.54); }
-    function cmToInches(cm){ 
-      if(cm==''){
-		return 0;
-      }else{
-		return Math.round(cm / 2.54); 
-      }
-    }
-    function gallonToLitre(gallon){
-      if(gallon=='') return 0;
-      var raw = gallon * 3.78541;
-      if(raw < 10){
-		return Math.round(raw * 10) / 10;
-      }else{
-		return Math.round(raw);
-      }
-    }
-    function litreToGallon(litre){ 
-      if(litre=='') return 0;    
-      var raw = litre / 3.78541; 
-      if(raw < 5){
-		return Math.round(raw * 10) / 10;
-      }else{
-		return Math.round(raw);
-      }
-    }
-    PolymerExpressions.prototype.userTankSize = function(value, units) {
-      if(units=='usa'){
-		return value.gal;
-      }else{
-		return value.litre;
-      }
-    };
-    PolymerExpressions.prototype.userTankSize.toModel = function(value, units, prev) {
-      if(units=='usa'){
-		return {gal: value, litre: gallonToLitre(value), shape: prev.shape};
-      }else{
-		return {gal: litreToGallon(value), litre: value, shape: prev.shape};
-      }
-    };      
-    PolymerExpressions.prototype.userVolumeUnit = function(units) {
-      if(units=='usa'){
-		return 'gal';
-      }else{
-		return 'L';
-      }
-    };     
-    PolymerExpressions.prototype.userLengthUnit = function(units) {
-      if(units=='usa'){
-		return '"';
-      }else{
-		return 'cm';
-      }
-    };
-    var tankShapes = {
-      rect: { img: '../img/emptyTank.png', wtop: 90, wleft: 10, dtop: 80, dleft: 160, htop: -25, hleft: 140,
-		data: [
-		  {gal:2.5, w:12,d:6, h:8, price: 16},
-		  {gal:5, w:16,d:8, h:10, price: 15},
-		  {gal:10,w:20,d:10,h:12, price: 18},
-		  {gal:15,w:24,d:12,h:12, price: 32},
-		  {gal:16,w:20,d:10,h:18,label:'High', price: 32},
-		  {gal:20,w:24,d:12,h:16,label:'High', price: 31},
-		  {gal:20,w:30,d:12,h:12,label:'Long', price: 34},
-		  {gal:20,w:20,d:10,h:24,label:'Extra High'},
-		  {gal:25,w:24,d:12,h:20},
-		  {gal:29,w:30,d:12,h:18, price:54},
-		  {gal:30,w:36,d:13,h:16, price: 61},
-		  {gal:30,w:24,d:12,h:24,label:'Extra High'},
-		  {gal:30,w:30,d:18,h:12,label:'Breeder'},
-		  {gal:37,w:30,d:12,h:22, price: 71},
-		  {gal:40,w:48,d:13,h:16, price: 100},
-		  {gal:40,w:36,d:18,h:16,label:'Breeder', price: 85},
-		  {gal:40,w:36,d:13,h:20,label:'High', price: {min: 70, max: 80}},
-		  {gal:55,w:48,d:13,h:20, price: {min: 80, max: 112}},
-		  {gal:60,w:48,d:13,h:24},
-		  {gal:65,w:36,d:18,h:24, price: {min:90, max:136}},
-		  {gal:75,w:48,d:18,h:21, price: {min:100, max:140}},
-		  {gal:90,w:48,d:18,h:24, price: {min:170, max:258}},
-		  {gal:110,w:48,d:18,h:30, price: 363},
-		  {gal:120,w:48,d:24,h:24, price: 370},
-		  {gal:120,w:60,d:18,h:26,label:'Extra High', price: {min:200, max:290}},
-		  {gal:125,w:72,d:18,h:22, price: {min:240, max:342}},
-		  {gal:150,w:72,d:18,h:27, price: 525},
-		  {gal:150,w:48,d:24,h:30,label:'Extra High', price: 458},
-		  {gal:180,w:72,d:24,h:30, price: 665},
-		  {gal:220,w:72,d:24,h:30,label:'Extra High', price: 745},
-		  {gal:265,w:82,d:24,h:30, price: 1314}
-		]
-      },
-      bow: { img: '../img/emptyBowTank.png', wtop: 100, wleft: 10, dtop: 80, dleft: 135, htop: -25, hleft: 105,
-		data: [
-		  {gal:16, w:20.3,d:12.9,h:17.8},
-		  {gal:26, w:24.2,d:14.8,h:20.9},
-		  {gal:36, w:30.3,d:15.5,h:20.9},
-		  {gal:46, w:36.4,d:16.4,h:21.9},
-		  {gal:72, w:48.4,d:18,h:23},
-		  {gal:155,w:72.4,d:24.5,h:25.5}
-		]
-      },
-      hex: { img: '../img/emptyHexTank.png', wtop: 100, wleft: 10, dtop: 70, dleft: 120, htop: -25, hleft: 76,
-		data: [
-		  {gal:10,w:14.5,d:12.6,h:18.4},
-		  {gal:20,w:18.8,d:16.3,h:20.7},
-		  {gal:35,w:23.3,d:20.2,h:24.8}
-		]
-      },
-      corner: { img: '../img/emptyCornerTank.png', wtop: 95, wleft: 0, dtop: 60, dleft: 165, htop: 0, hleft: 125,
-		data: [
-		  {gal:36,w:33.9,d:24,  h:20.9},
-		  {gal:54,w:39,  d:27.4,h:23},
-		  {gal:92,w:48.5,d:34.3,h:24.2}
-		]
-      }
-    };
-    Polymer('tank-dimensions',{
-      units: 'usa',
-      unitsChanged: function(oldVal, newVal) {
-		this.customTankSize();
-      },
-      selectRectangularTank: function(){
-		var g = this.tankSize.gal;
-		var l = this.tankSize.litre;
-		this.tankSize = {gal:g, litre:l, shape:'rect'};
-		this.tankShape = tankShapes[this.tankSize.shape];
-		this.customTankSize();
-      },
-      selectBowTank: function(){
-		var g = this.tankSize.gal;
-		var l = this.tankSize.litre;
-		this.tankSize = {gal:g, litre:l, shape:'bow'};
-		this.tankShape = tankShapes[this.tankSize.shape];
-		this.customTankSize();
-      },
-      selectHexTank: function(){
-		var g = this.tankSize.gal;
-		var l = this.tankSize.litre;
-		this.tankSize = {gal:g, litre:l, shape:'hex'};
-		this.tankShape = tankShapes[this.tankSize.shape];
-		this.customTankSize();
-      },
-      selectCornerTank: function(){
-		var g = this.tankSize.gal;
-		var l = this.tankSize.litre;
-		this.tankSize = {gal:g, litre:l, shape:'corner'};
-		this.tankShape = tankShapes[this.tankSize.shape];
-		this.customTankSize();
-      },
-      smallerTank: function(){
-		var tIndex = this.findTankIndex();
-		var g = this.tankSize.gal;
-		if(tIndex == -1){
-		  for (var i = 0; i < this.tankShape.data.length; i++) {
-			if(this.tankShape.data[i].gal < g) tIndex = i + 1;
-		  }
+	<template>
+		<div style="width:{{
+		phoneScreen ? '400px' : '680px'
+		}};margin:0 auto;">
+			<div style="width:328px;height:250px;background:url('{{tankShape.img}}');background-repeat:no-repeat;background-position:center;text-align:center;{{
+				phoneScreen ? 'margin-left:40px' : ''
+				}};display:inline-block;vertical-align:top;margin-bottom:20px;"> 
+				<div style="margin-top:90px;white-space:nowrap;">
+					<polymer-ui-icon-button icon="left" on-click={{smallerTank}}></polymer-ui-icon-button>
+					<div style="vertical-align:middle;display:inline-block;width:75px;">
+						<input type="number" value="{{tankSize | userTankSize(units, tankSize)}}" onfocus="this.select()" style="text-align:right;border:none;font-size:16pt;padding-right:2px;width:55px;" onkeydown="return isNumberPress(event)" on-keyup="{{customTankSize}}"/>
+						{{units | userVolumeUnit}}
+					</div>
+					<polymer-ui-icon-button icon="right" on-click="{{largerTank}}"></polymer-ui-icon-button>
+				</div>
+				<div style="margin-top:-10px;height:20px;">{{tankLabel}}</div>
+				<div style="height:85px;">
+					<div style="position:relative;top:{{tankShape.wtop}}px;left:{{tankShape.wleft}}px;display:{{tankWidth == '' ? 'none' : 'inline-block'}};text-align:right;width:40px;">{{tankWidth}}{{units | userLengthUnit}}</div>
+					<div style="position:relative;top:{{tankShape.dtop}}px;left:{{tankShape.dleft}}px;display:{{tankWidth == '' ? 'none' : 'inline-block'}};text-align:left;width:40px;">{{tankDepth}}{{units | userLengthUnit}}</div>
+					<div style="position:relative;top:{{tankShape.htop}}px;left:{{tankShape.hleft}}px;display:{{tankWidth == '' ? 'none' : 'inline-block'}};text-align:left;width:40px;">{{tankHeight}}{{units | userLengthUnit}}</div>
+				</div>
+			</div>
+			<div style="{{
+			phoneScreen ? '' : 'width:310px;display:inline-block;margin: 0 0 0 37px'
+			}};vertical-align:middle;">
+				<div style="height:45px;text-align:center;padding-top:10px;">
+					<template if="{{tankPrice}}">
+						<strong>Approximate price:</strong> ${{tankPrice.min ? tankPrice.min + ' - ' + tankPrice.max : tankPrice }}
+					</template>
+				</div>
+				<div class="panel info" style="margin:0;">
+					<strong>Tank size</strong> effects many things, such as what species you can support, as well as how many fish you can keep.
+					Other effects are cost: larger tanks cost more, and maintainance: very small and larger tanks require more maintain while average size tanks (
+					{{units=='usa' ? '20 - 55 gal' : '75 - 210 L'}}
+					) require the least amount of maintainance.
+				</div>
+			</div>
+			<div class="panel" style="width:100%;margin-left:0;margin-right:0;">
+				<h3>Shapes of Tanks</h3>
+				<label><input type="radio" name="tankshape" on-click="{{selectRectangularTank}}" checked?="{{tankSize.shape=='rect'}}"/><strong>Rectangular</strong></label> is the standard format,<br/>
+				<label><input type="radio" name="tankshape" on-click="{{selectBowTank}}" checked?="{{tankSize.shape=='bow'}}"/><strong>Bow Front</strong></label> offer better viewing at angles,<br/>
+				<label><input type="radio" name="tankshape" on-click="{{selectHexTank}}" checked?="{{tankSize.shape=='hex'}}"/><strong>Hexagon</strong></label> are best suited for 360° viewing, while <br/>
+				<label><input type="radio" name="tankshape" on-click="{{selectCornerTank}}" checked?="{{tankSize.shape=='corner'}}"/><strong>Corner</strong></label> models are best if the tank sits in a corner.<br/>
+				<h3>Tank Materials</h3>
+				<strong>Glass</strong> tanks are the least expensive and most common,<br/>
+				<strong>Starphire Glass</strong> are a more expensive, low iron glass that is much clearer than standard glass.<br/>
+				<strong>Acrylic</strong> is much lighter and clearer than regular glass, but can be easily scratched during regular algae removal.<br/>
+				<h3>Additional options for Tanks</h3>
+				<strong>Rimless</strong> remove the need for a top center brace by creating extra think walls.<br/>
+				<strong>Euro Brace</strong> also removes the need for a center brace, but by adding extra material around the top edge.<br/>
+				<strong>Silicone</strong> color, whether clear or black, as well as trim color (black is typical, but wood print are available).
+			</div>
+		</div>
+		<polymer-media-query query="max-width: 640px" queryMatches="{{phoneScreen}}"></polymer-media-query>
+	</template>
+	<script>
+		function isNumberPress(e){
+			var charCode = e.keyCode;
+			if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) return false;
+			return true;
 		}
-		if(tIndex > 0){
-		  this.setTankIndex(tIndex-1);
+		function inchesToCm(inches){ return Math.round(inches * 2.54); }
+		function cmToInches(cm){ 
+			if(cm==''){
+				return 0;
+			}else{
+				return Math.round(cm / 2.54); 
+			}
 		}
-      },
-      largerTank: function(){
-		var tIndex = this.findTankIndex();
-		var g = this.tankSize.gal;
-		if(tIndex == -1){
-		  for (var i = this.tankShape.data.length - 1; i >= 0; i--) {
-			if(this.tankShape.data[i].gal > g) tIndex = i - 1;
-		  }
+		function gallonToLitre(gallon){
+			if(gallon=='') return 0;
+			var raw = gallon * 3.78541;
+			if(raw < 10){
+				return Math.round(raw * 10) / 10;
+			}else{
+				return Math.round(raw);
+			}
 		}
-		if(tIndex < this.tankShape.data.length - 1 && (tIndex > -1 || g < this.tankShape.data[0].gal)){
-		  this.setTankIndex(tIndex+1);
+		function litreToGallon(litre){ 
+			if(litre=='') return 0;
+			var raw = litre / 3.78541; 
+			if(raw < 5){
+				return Math.round(raw * 10) / 10;
+			}else{
+				return Math.round(raw);
+			}
 		}
-      },
-      setTankIndex: function(i){
-		var t = this.tankShape.data[i];
-		if(this.tankSize.gal !== t.gal || this.tankSize.label !== t.label){
-		  var s = this.tankSize.shape;
-		  this.tankSize = {gal: t.gal, litre: gallonToLitre(t.gal), shape: s, label: t.label};
+		PolymerExpressions.prototype.userTankSize = function(value, units) {
+			if(units=='usa'){
+				return value.gal;
+			}else{
+				return value.litre;
+			}
+		};
+		PolymerExpressions.prototype.userTankSize.toModel = function(value, units, prev) {
+			if(units=='usa'){
+				return {gal: value, litre: gallonToLitre(value), shape: prev.shape};
+			}else{
+				return {gal: litreToGallon(value), litre: value, shape: prev.shape};
+			}
+		};
+		PolymerExpressions.prototype.userVolumeUnit = function(units) {
+			if(units=='usa'){
+				return 'gal';
+			}else{
+				return 'L';
+			}
+		};
+		PolymerExpressions.prototype.userLengthUnit = function(units) {
+			if(units=='usa'){
+				return '"';
+			}else{
+				return 'cm';
+			}
+		};
+		var tankShapes = {
+			rect: { img: '../img/emptyTank.png', wtop: 90, wleft: 10, dtop: 80, dleft: 160, htop: -25, hleft: 140,
+			data: [
+				{gal:2.5, w:12,d:6, h:8, price: 16},
+				{gal:5, w:16,d:8, h:10, price: 15},
+				{gal:10,w:20,d:10,h:12, price: 18},
+				{gal:15,w:24,d:12,h:12, price: 32},
+				{gal:16,w:20,d:10,h:18,label:'High', price: 32},
+				{gal:20,w:24,d:12,h:16,label:'High', price: 31},
+				{gal:20,w:30,d:12,h:12,label:'Long', price: 34},
+				{gal:20,w:20,d:10,h:24,label:'Extra High'},
+				{gal:25,w:24,d:12,h:20},
+				{gal:29,w:30,d:12,h:18, price:54},
+				{gal:30,w:36,d:13,h:16, price: 61},
+				{gal:30,w:24,d:12,h:24,label:'Extra High'},
+				{gal:30,w:30,d:18,h:12,label:'Breeder'},
+				{gal:37,w:30,d:12,h:22, price: 71},
+				{gal:40,w:48,d:13,h:16, price: 100},
+				{gal:40,w:36,d:18,h:16,label:'Breeder', price: 85},
+				{gal:40,w:36,d:13,h:20,label:'High', price: {min: 70, max: 80}},
+				{gal:55,w:48,d:13,h:20, price: {min: 80, max: 112}},
+				{gal:60,w:48,d:13,h:24},
+				{gal:65,w:36,d:18,h:24, price: {min:90, max:136}},
+				{gal:75,w:48,d:18,h:21, price: {min:100, max:140}},
+				{gal:90,w:48,d:18,h:24, price: {min:170, max:258}},
+				{gal:110,w:48,d:18,h:30, price: 363},
+				{gal:120,w:48,d:24,h:24, price: 370},
+				{gal:120,w:60,d:18,h:26,label:'Extra High', price: {min:200, max:290}},
+				{gal:125,w:72,d:18,h:22, price: {min:240, max:342}},
+				{gal:150,w:72,d:18,h:27, price: 525},
+				{gal:150,w:48,d:24,h:30,label:'Extra High', price: 458},
+				{gal:180,w:72,d:24,h:30, price: 665},
+				{gal:220,w:72,d:24,h:30,label:'Extra High', price: 745},
+				{gal:265,w:82,d:24,h:30, price: 1314}
+			]
+		},
+		bow: { img: '../img/emptyBowTank.png', wtop: 100, wleft: 10, dtop: 80, dleft: 135, htop: -25, hleft: 105,
+			data: [
+				{gal:16, w:20.3,d:12.9,h:17.8},
+				{gal:26, w:24.2,d:14.8,h:20.9},
+				{gal:36, w:30.3,d:15.5,h:20.9},
+				{gal:46, w:36.4,d:16.4,h:21.9},
+				{gal:72, w:48.4,d:18,h:23},
+				{gal:155,w:72.4,d:24.5,h:25.5}
+			]
+		},
+		hex: { img: '../img/emptyHexTank.png', wtop: 100, wleft: 10, dtop: 70, dleft: 120, htop: -25, hleft: 76,
+			data: [
+				{gal:10,w:14.5,d:12.6,h:18.4},
+				{gal:20,w:18.8,d:16.3,h:20.7},
+				{gal:35,w:23.3,d:20.2,h:24.8}
+			]
+		},
+		corner: { img: '../img/emptyCornerTank.png', wtop: 95, wleft: 0, dtop: 60, dleft: 165, htop: 0, hleft: 125,
+			data: [
+				{gal:36,w:33.9,d:24,	h:20.9},
+				{gal:54,w:39,	d:27.4,h:23},
+				{gal:92,w:48.5,d:34.3,h:24.2}
+			]
 		}
-		if(this.units == 'usa'){
-		  this.tankWidth=t.w;
-		  this.tankDepth=t.d;
-		  this.tankHeight=t.h;
-		}else{
-		  this.tankWidth=inchesToCm(t.w);
-		  this.tankDepth=inchesToCm(t.d);
-		  this.tankHeight=inchesToCm(t.h);
-		}
-		this.tankLabel=t.label;
-		this.tankPrice=t.price;
-		  },
-		  findTankIndex: function(){
-		var g = this.tankSize.gal;
-		var w = this.tankWidth;
-		var d = this.tankDepth;
-		var h = this.tankHeight;
-		var l = this.tankSize.label;
-		if(this.units == 'metric'){
-		  w = cmToInches(w);
-		  d = cmToInches(d);
-		  h = cmToInches(h);
-		}
-		  
-		for (var i = 0; i < this.tankShape.data.length; i++) {
-		  var s = this.tankShape.data[i];
-		  if(g==s.gal && w==s.w && d==s.d && h==s.h && l==s.label) return i;
-		}
-		return -1;
-		  },
-		  customTankSize: function(){
+	};
+	Polymer('tank-dimensions',{
+		units: 'usa',
+		unitsChanged: function(oldVal, newVal) {
+			this.customTankSize();
+		},
+		selectRectangularTank: function(){
+			var g = this.tankSize.gal;
+			var l = this.tankSize.litre;
+			this.tankSize = {gal:g, litre:l, shape:'rect'};
+			this.tankShape = tankShapes[this.tankSize.shape];
+			this.customTankSize();
+		},
+		selectBowTank: function(){
+			var g = this.tankSize.gal;
+			var l = this.tankSize.litre;
+			this.tankSize = {gal:g, litre:l, shape:'bow'};
+			this.tankShape = tankShapes[this.tankSize.shape];
+			this.customTankSize();
+		},
+		selectHexTank: function(){
+			var g = this.tankSize.gal;
+			var l = this.tankSize.litre;
+			this.tankSize = {gal:g, litre:l, shape:'hex'};
+			this.tankShape = tankShapes[this.tankSize.shape];
+			this.customTankSize();
+		},
+		selectCornerTank: function(){
+			var g = this.tankSize.gal;
+			var l = this.tankSize.litre;
+			this.tankSize = {gal:g, litre:l, shape:'corner'};
+			this.tankShape = tankShapes[this.tankSize.shape];
+			this.customTankSize();
+		},
+		smallerTank: function(){
+			var tIndex = this.findTankIndex();
+			var g = this.tankSize.gal;
+			if(tIndex == -1){
+				for (var i = 0; i < this.tankShape.data.length; i++) {
+					if(this.tankShape.data[i].gal < g) tIndex = i + 1;
+				}
+			}
+			if(tIndex > 0){
+				this.setTankIndex(tIndex-1);
+			}
+		},
+		largerTank: function(){
+			var tIndex = this.findTankIndex();
+			var g = this.tankSize.gal;
+			if(tIndex == -1){
+				for (var i = this.tankShape.data.length - 1; i >= 0; i--) {
+					if(this.tankShape.data[i].gal > g) tIndex = i - 1;
+				}
+			}
+			if(tIndex < this.tankShape.data.length - 1 && (tIndex > -1 || g < this.tankShape.data[0].gal)){
+				this.setTankIndex(tIndex+1);
+			}
+		},
+		setTankIndex: function(i){
+			var t = this.tankShape.data[i];
+			if(this.tankSize.gal !== t.gal || this.tankSize.label !== t.label){
+				var s = this.tankSize.shape;
+				this.tankSize = {gal: t.gal, litre: gallonToLitre(t.gal), shape: s, label: t.label};
+			}
+			if(this.units == 'usa'){
+				this.tankWidth=t.w;
+				this.tankDepth=t.d;
+				this.tankHeight=t.h;
+			}else{
+				this.tankWidth=inchesToCm(t.w);
+				this.tankDepth=inchesToCm(t.d);
+				this.tankHeight=inchesToCm(t.h);
+			}
+			this.tankLabel=t.label;
+			this.tankPrice=t.price;
+		},
+		findTankIndex: function(){
+			var g = this.tankSize.gal;
+			var w = this.tankWidth;
+			var d = this.tankDepth;
+			var h = this.tankHeight;
+			var l = this.tankSize.label;
+			if(this.units == 'metric'){
+				w = cmToInches(w);
+				d = cmToInches(d);
+				h = cmToInches(h);
+			}
+			for (var i = 0; i < this.tankShape.data.length; i++) {
+				var s = this.tankShape.data[i];
+				if(g==s.gal && w==s.w && d==s.d && h==s.h && l==s.label) return i;
+			}
+			return -1;
+		},
+		customTankSize: function(){
 			var g = this.tankSize.gal;
 			var l = this.tankSize.label;
-		for (var i = 0; i < this.tankShape.data.length; i++) {
-		  var ts = this.tankShape.data[i];
-		  if(ts.gal == g && ts.label == l){
-			this.setTankIndex(i);
-			return;
-		  }
+			for (var i = 0; i < this.tankShape.data.length; i++) {
+				var ts = this.tankShape.data[i];
+				if(ts.gal == g && ts.label == l){
+					this.setTankIndex(i);
+					return;
+				}
+			}
+			this.tankWidth='';
+			this.tankDepth='';
+			this.tankHeight='';
+			this.tankPrice=null;
+			this.tankLabel='Custom';
+		},
+		tankSizeChanged: function(oldVal, newVal) {
+			this.tankShape = tankShapes[this.tankSize.shape];
+			this.customTankSize();
+		},
+		tankShape: null,
+		tankSize: { gal: null, shape: 'rect' },
+		ready: function(){
+			//set defaults
+			this.tankShape = tankShapes['rect'];
+			this.setTankIndex(5);
 		}
-		this.tankWidth='';
-		this.tankDepth='';
-		this.tankHeight='';
-		this.tankPrice=null;
-		this.tankLabel='Custom';
-      },
-      tankSizeChanged: function(oldVal, newVal) {
-		this.tankShape = tankShapes[this.tankSize.shape];
-		this.customTankSize();
-      },
-      tankShape: null,
-      tankSize: { gal: null, shape: 'rect' },
-      ready: function(){
-		//set defaults
-		this.tankShape = tankShapes['rect'];
-		this.setTankIndex(5);
-      }
-    });
-  </script>    
+	});
+	</script>
 </polymer-element>

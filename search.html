@@ -1,113 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sample app</title>
+	<title>Sample app</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="components/platform/platform.js"></script>
-    <link rel="import" href="components/polymer/polymer.html">
-    <link rel="stylesheet" href="components/polymer-ui-base/base.css">
-    <link rel="stylesheet" href="css/mybootstrap.css">
-    
-    <link rel="import" href="elements/search-titlebar.html">
-    <link rel="import" href="elements/search-tank.html">
-    <link rel="import" href="elements/search-purchases.html">
-    <link rel="import" href="elements/search-habitat.html">
-    <link rel="import" href="elements/search-behaviour.html">
-    <link rel="import" href="elements/search-geography.html">
-    <link rel="import" href="elements/search-results.html">
- 
-    <link rel="import" href="components/polymer-ui-toolbar/polymer-ui-toolbar.html">
-    <link rel="import" href="components/polymer-ui-menu-button/polymer-ui-menu-button.html">
-    <link rel="import" href="components/polymer-ui-menu-item/polymer-ui-menu-item.html">
-
-    <style>
-      [navigation] {
-        width: 256px;
-        height: 100%;
-      }
-    </style>    
-  </head>
-  <body unresolved style="padding-top:60px">  
-
-<polymer-element name="search-add" noscript>
-  <template>  
-    <polymer-ui-toolbar theme="polymer-ui-dark-theme" class="align-center polymer-ui-dark-theme flexbox" style="position:fixed;top:0;width:100%;z-index:100;">
-    
-      <polymer-ui-menu-button selected="0" theme="polymer-ui-dark-theme" icon="menu" id="searchMenu" on-polymer-select="{{selectPanel}}">
-		<polymer-ui-menu-item tab="results" title="Find New Livestock">Search Results</polymer-ui-menu-item>
-		<polymer-ui-menu-item tab="filters" href="filters.html" icon="filter">Search Filters</polymer-ui-menu-item>
-		<hr/>
-		<polymer-ui-menu-item tab="tank" title="Optimal Tank Setup">Optimal Tank Setup</polymer-ui-menu-item>
-		<polymer-ui-menu-item tab="geography" title="Native Locations">Geographics</polymer-ui-menu-item>
-		<hr/>
-		<polymer-ui-menu-item tab="purchases" title="Review Your Purchases">Purchase List</polymer-ui-menu-item>
-      </polymer-ui-menu-button>
-      
-      <div tool flex id="titleText"></div>
-    
-      <polymer-ui-toolbar responsive class="align-center polymer-ui-dark-theme flexbox" flex style="text-align:center">
-      
-	  <polymer-flex-layout align="center" style="display: none;">
-	  </polymer-flex-layout>
-	  
-	  <polymer-media-query query="max-width: 800px">
-	  </polymer-media-query>
-	  
-	  <search-titlebar style="width:100%" tankSize="{{tankSize}}" currentItems="{{currentItems}}" budget="{{budget}}" purchases="{{purchases}}" purchasesTotal="{{purchasesTotal}}"></search-titlebar>
-
-      </polymer-ui-toolbar>       
-      
-      <polymer-ui-icon-button tool icon="trash" class="polymer-ui-dark-theme" on-click="{{trash}}">
-      </polymer-ui-icon-button> 
-      
-    </polymer-ui-toolbar>
-
-    <template if="{{selectedTab=='tank'}}">
-      <search-tank tankSize="{{tankSize}}" units="{{units}}"></search-tank>     
-    </template>
-    <template if="{{selectedTab=='purchases'}}">
-      <search-purchases currentItems="{{currentItems}}" budget="{{budget}}" purchases="{{purchases}}" purchasesTotal="{{purchasesTotal}}"></search-purchases>
-    </template>
-    <template if="{{selectedTab=='results'}}">
-      <search-results purchases="{{purchases}}"></search-results>
-    </template>
-    <template if="{{selectedTab=='geography'}}">
-      <search-geography currentItems="{{currentItems}}" purchases="{{purchases}}"></search-geography>
-    </template>
-    
-    <polymer-localstorage name="currentItems" value="{{currentItems}}" autoSaveDisabled></polymer-localstorage>
-    <polymer-localstorage name="budget" value="{{budget}}"></polymer-localstorage>
-    <polymer-localstorage name="purchases" value="{{purchases}}"></polymer-localstorage>
-    <polymer-localstorage name="tankSize" value="{{tankSize}}"></polymer-localstorage>
-    <polymer-localstorage name="units" value="{{units}}"></polymer-localstorage>
-  </template>
-  <script>
-    Polymer('search-add',{
-      selectedTab: null,
-      selectPanel: function(){
-		var selection = this.$.searchMenu.selection;
-		if(selection!=null){
-		  this.selectedTab = this.$.searchMenu.selection.getAttribute('tab');
-		  var href = this.$.searchMenu.selection.getAttribute('href');
-		  if(href){
-			document.location.href=href;
-		  }else{
-			this.$.titleText.innerHTML = this.$.searchMenu.selection.getAttribute('title');
-		  }
-		}
-      },
-      trash: function(){
-		if(confirm('Do you want clear all your selections and start a new tank?')){
-		  localStorage.clear();
-		  document.location.href='index.html'
-		}
-      }      
-    });
-  </script>
-</polymer-element>
-
-    <search-add></search-add>
-  </body> 
+	<script src="bower_components/platform/platform.js"></script>
+	<link rel="stylesheet" href="css/mybootstrap.css">
+	<link rel="import" href="elements/search-index.html">
+	<style>
+	[navigation] {
+		width: 256px;
+		height: 100%;
+	}
+	</style>
+</head>
+<body unresolved style="padding-top:60px">
+	<search-index></search-index>
+</body> 
 </html>
