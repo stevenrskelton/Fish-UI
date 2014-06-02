@@ -17,7 +17,8 @@
     "core-elements": "Polymer/core-elements#~0.3.1",
     "polymer-elements": "Polymer/polymer-elements#~0.3.0",
     "polymer-ui-elements": "Polymer/polymer-ui-elements#~0.2.4",
-    "d3-geomap": "d3-geomap#~0.2.2"
+    "d3-geomap": "d3-geomap#~0.2.2",
+    "sortable-table": "sortable-table#~0.6.0"
   },
   "ignore": [
     "**/.*",

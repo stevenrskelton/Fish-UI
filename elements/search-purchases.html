@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/polymer-ui-icon-button/polymer-ui-icon-button.html">
+<link rel="import" href="../bower_components/sortable-table/sortable-table.html">
 
 <polymer-element name="search-purchases" noscript attributes="currentItems purchases budget purchasesTotal">
 	<template>
@@ -24,37 +25,36 @@
 				Empty! Add new purchases from the <strong>Search Results</strong> screen.
 			</div>
 		</template>
-		<div style="padding:0 5px;width:100%;">
-			<table class="numberTable" style="font-size:18px;width:100%;" hidden?="purchases.length < 1">
-				<tr>
-					<th on-click="{{sortSpecies}}" style="{{sortField==0 ? (sortFieldDesc ? 'text-decoration:overline' : 'text-decoration:underline') : ''}}">Fish</th>
-					<th on-click="{{sortQuantity}}" style="width:100px;{{sortField==1 ? (sortFieldDesc ? 'text-decoration:overline' : 'text-decoration:underline') : ''}}">Quantity</th>
-					<th on-click="{{sortPrice}}" style="{{sortField==2 ? (sortFieldDesc ? 'text-decoration:overline' : 'text-decoration:underline') : ''}}">Price ($)</th>
-					<th on-click="{{sortTotal}}" style="{{sortField==3 ? (sortFieldDesc ? 'text-decoration:overline' : 'text-decoration:underline') : ''}}">Total ($)</th>
-				</tr>
-				<template repeat="{{ purchases | sortBy(sortFieldOp, sortFieldDesc) }}">
-					<tr>
-					<td style="font-size:14px">
-						<img title="{{scientificName}}" alt="{{scientificName}}" src="{{src}}" width="90px" height="45px" style="float:left;border-radius:4px;margin:0 10px 0 0;" />
-						<strong>{{name}}</strong><br/>
-						{{scientificName}}
-					</td>
-					<td style="text-align:center">
-						<input type="text" class="form-control input-lg" placeholder="#" style="width:100px;text-align:right" value="{{number}}" onfocus="this.select()" onblur="replaceNumberInput(this)" on-keyup="{{calculateTotals}}"/>
-						<polymer-ui-icon-button icon="trash" style="display:none" on-click="{{remove}}"></polymer-ui-icon-button>
-					</td>
-					<td style="padding-right:1%">{{price}}</td>
-					<td style="padding-right:1%">{{number*price}}</td>
-					</tr>
-				</template>
-				<tr>
-					<td><div style="width:125px;margin: 0 auto;text-align:right"><div style="float:left">Budget:</div>${{budget}}</div></td>
-					<td style="text-align:center">{{totalNumber}} Fish</td>
-					<td style="background-color:#555;"></td>
-					<td style="color:{{ budget - purchasesTotal >= 0 ? '' : '#ff0000'}};text-align:center;">${{purchasesTotal}}</td>
-				</tr>
-			</table>
-		</div>
+		<template if="{{purchases.length > 0}}">
+			<template id="tableRowTemplate">
+				<td style="font-size:14px">
+					<img title="{{record.row.scientificName}}" alt="{{record.row.scientificName}}" src="{{record.row.src}}" width="90px" height="45px" style="float:left;border-radius:4px;margin:0 10px 0 0;" />
+					<strong>{{record.row.name}}</strong><br/>
+					{{record.row.scientificName}}
+				</td>
+				<td style="text-align:center;width:100px;">
+					<input type="text" class="form-control input-lg" placeholder="#" style="width:100px;text-align:right" value="{{record.row.number}}" onfocus="this.select()" onblur="replaceNumberInput(this)" on-keyup="{{calculateTotals}}"/>
+					<polymer-ui-icon-button icon="trash" style="display:none" on-click="{{remove}}"></polymer-ui-icon-button>
+				</td>
+				<td style="padding-right:1%">{{record.row.price}}</td>
+				<td style="padding-right:1%">{{record.row.number * record.row.price}}</td>
+			</template>
+
+			<template id="nameFooterTemplate">
+				<td class="sortable-table-header" style="text-align:right;padding-right:50px;">Total Purchase Summary</td>
+			</template>
+			<template id="numberFooterTemplate">
+				<td class="sortable-table-header" style="text-align:center">{{values | sum}} Fish</td>
+			</template>
+			<template id="priceFooterTemplate">
+				<td style="background-color:#666;"></td>
+			</template>
+			<template id="totalFooterTemplate">
+				<td class="sortable-table-header" style="color:{{ budget - purchasesTotal >= 0 ? '' : '#ff0000'}};text-align:center;">${{values | sum}}</td>
+			</template>
+
+			<sortable-table rowTemplate="tableRowTemplate" data="{{purchases}}" columns="{{columns}}" hidden?="{{purchases.length < 1}}" style="padding:0 5px;display:block;width:100%"></sortable-table>
+		</template>
 	</template>
 	<script>
 	function replaceNumberInput(element){
@@ -110,6 +110,12 @@
 		return sortByKey(value, op, dir);
 	};
 	Polymer('search-purchases',{
+		columns: [
+			{ name: 'name', title: 'Fish', footerTemplate: 'nameFooterTemplate' },
+			{ name: 'number', title: 'Quantity', footerTemplate: 'numberFooterTemplate' },
+			{ name: 'price', title: 'Price ($)', footerTemplate: 'priceFooterTemplate' },
+			{ name: 'total', title: 'Total ($)', formula: function(row){ return row.number * row.price; }, footerTemplate: 'totalFooterTemplate' }
+		],
 		purchases: [],
 		remove: function(e){
 			console.log('remove');
