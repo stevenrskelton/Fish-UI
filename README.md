@@ -1,6 +1,6 @@
 # Fish UI
 
-[Live Site](http://fish.stevenskelton.ca/)
+[Live Site](https://stevenrskelton.github.io/Fish-UI)
 
 User interface for an fish compatibility and aquarium purchase tool, written using [Polymer Web Components](http://www.polymer-project.org/).
 
