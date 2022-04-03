@@ -1,0 +1,24 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<link rel="import" href="search-geography.html">
+<link rel="import" href="data-search.html">
+
+<polymer-element name="geography-index" noscript>
+	<template>
+		<search-geography currentItems="{{currentItems}}"></search-geography>
+		<data-search id="searchQuery" on-polymer-response="{{loadSearchResults}}"></data-search>
+	</template>
+	<script>
+	Polymer('geography-index', {
+		currentItems: null,
+		loadSearchResults: function(e){
+			console.log(e.detail);
+			this.currentItems = e.detail;
+		},
+		ready: function(){
+			console.log(this.$.searchQuery);
+			this.$.searchQuery.go();
+		}
+	});
+	</script>
+</polymer-element>

@@ -1,0 +1,78 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer-localstorage/polymer-localstorage.html">
+<link rel="import" href="../bower_components/polymer-ui-toolbar/polymer-ui-toolbar.html">
+<link rel="import" href="../bower_components/polymer-ui-menu-button/polymer-ui-menu-button.html">
+<link rel="import" href="../bower_components/polymer-ui-menu-item/polymer-ui-menu-item.html">
+
+<link rel="import" href="search-titlebar.html">
+<link rel="import" href="search-tank.html">
+<link rel="import" href="search-purchases.html">
+<link rel="import" href="search-geography.html">
+<link rel="import" href="search-results.html">
+
+<polymer-element name="search-index" noscript>
+	<template>
+		<polymer-ui-toolbar theme="polymer-ui-dark-theme" class="align-center polymer-ui-dark-theme flexbox" style="position:fixed;top:0;width:100%;z-index:100;">
+			<polymer-ui-menu-button selected="0" theme="polymer-ui-dark-theme" icon="menu" id="searchMenu" on-polymer-select="{{selectPanel}}">
+				<polymer-ui-menu-item tab="results" title="Find New Livestock">Search Results</polymer-ui-menu-item>
+				<polymer-ui-menu-item tab="filters" href="../filters.html" icon="filter">Search Filters</polymer-ui-menu-item>
+				<hr/>
+				<polymer-ui-menu-item tab="tank" title="Optimal Tank Setup">Optimal Tank Setup</polymer-ui-menu-item>
+				<polymer-ui-menu-item tab="geography" title="Native Locations">Geographics</polymer-ui-menu-item>
+				<hr/>
+				<polymer-ui-menu-item tab="purchases" title="Review Your Purchases">Purchase List</polymer-ui-menu-item>
+			</polymer-ui-menu-button>
+
+			<div tool flex id="titleText"></div>
+
+			<polymer-ui-toolbar responsive class="align-center polymer-ui-dark-theme flexbox" flex style="text-align:center">
+				<polymer-flex-layout align="center" style="display: none;"></polymer-flex-layout>
+				<polymer-media-query query="max-width: 800px"></polymer-media-query>
+				<search-titlebar style="width:100%" tankSize="{{tankSize}}" currentItems="{{currentItems}}" budget="{{budget}}" purchases="{{purchases}}" purchasesTotal="{{purchasesTotal}}"></search-titlebar>
+			</polymer-ui-toolbar>
+			<polymer-ui-icon-button tool icon="trash" class="polymer-ui-dark-theme" on-click="{{trash}}"></polymer-ui-icon-button> 
+		</polymer-ui-toolbar>
+
+		<template if="{{selectedTab=='tank'}}">
+			<search-tank tankSize="{{tankSize}}" units="{{units}}"></search-tank>
+		</template>
+		<template if="{{selectedTab=='purchases'}}">
+			<search-purchases currentItems="{{currentItems}}" budget="{{budget}}" purchases="{{purchases}}" purchasesTotal="{{purchasesTotal}}"></search-purchases>
+		</template>
+		<template if="{{selectedTab=='results'}}">
+			<search-results purchases="{{purchases}}"></search-results>
+		</template>
+		<template if="{{selectedTab=='geography'}}">
+			<search-geography currentItems="{{currentItems}}" purchases="{{purchases}}"></search-geography>
+		</template>
+
+		<polymer-localstorage name="currentItems" value="{{currentItems}}" autoSaveDisabled></polymer-localstorage>
+		<polymer-localstorage name="budget" value="{{budget}}"></polymer-localstorage>
+		<polymer-localstorage name="purchases" value="{{purchases}}"></polymer-localstorage>
+		<polymer-localstorage name="tankSize" value="{{tankSize}}"></polymer-localstorage>
+		<polymer-localstorage name="units" value="{{units}}"></polymer-localstorage>
+	</template>
+	<script>
+	Polymer('search-index',{
+		selectedTab: null,
+		selectPanel: function(){
+			var selection = this.$.searchMenu.selection;
+			if(selection!=null){
+				this.selectedTab = this.$.searchMenu.selection.getAttribute('tab');
+				var href = this.$.searchMenu.selection.getAttribute('href');
+				if(href){
+					document.location.href=href;
+				}else{
+					this.$.titleText.innerHTML = this.$.searchMenu.selection.getAttribute('title');
+				}
+			}
+		},
+		trash: function(){
+			if(confirm('Do you want clear all your selections and start a new tank?')){
+				localStorage.clear();
+				document.location.href='index.html'
+			}
+		}
+	});
+	</script>
+</polymer-element>

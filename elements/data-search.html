@@ -1,0 +1,96 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<polymer-element name="data-search" attributes="polymer-response name current tanksize budget skip limit sort desc">
+	<script>
+	var data = [
+		{ scientificName: "Beaufortia kweichowensis", name: "Hillstream Loach", src: "../img/species/hillstreamloach.jpg", bioload: 1, price: 9, countries : ['CHN'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Danio margaritatus", name: "Celestial Pearl Danio", src: "../img/species/Celestichthys_margaritatus.jpg", bioload: 1, price: 5, countries : ['MMR'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Paracheirodon innesi", name: "Neon Tetra", src: "../img/species/800px-Paracheirodon_innesi_(aka).jpg", bioload: 1, price: 1, countries : ['BRA', 'COL', 'PER'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Mikrogeophagus altispinosus", name: "Bolivian Ram", src: "../img/species/Female_Bolivian.jpg", bioload: 3, price: 9, countries : ['BOL','BRA'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Osteoglossum bicirrhosum", name: "Silver Arowana", src: "../img/species/800px-Osteoglossum_bicirrhosum1.jpg", bioload: 5, price: 50, countries : ['BRA','COL','ECU','GUF','GUY','PER'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Paracheirodon axelrodi", name: "Cardinal Tetra ", src: "../img/species/Cardinal_tetra.jpg", bioload: 1, price: 2, countries : ['BRA','COL','VEN'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Ariopsis seemanni", name: "Colombian Shark Catfish ", src: "../img/species/Shark_catfish1.jpg", bioload: 7, price: 11, countries : ['COL', 'CRI', 'ECU', 'SLV', 'GTM', 'MEX', 'NIC', 'PAN', 'PER'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Synodontis multipunctatus", name: "Cuckoo Synodontis", src: "../img/species/Synodontis multipunctatus cuckoo catfish.jpg", bioload: 3, price: 15, countries : ['BDI','COD','TZA','ZMB'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Betta splendens", name: "Siamese Fighting Fish", src: "../img/species/713px-HM_Imbellis_betta-2027.jpg", bioload: 2, price: 5, countries : ['KHM','LAO','THA','VNM'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Cryptoheros spilurus", name: "Blue-Eye Cichlid", src: "../img/species/Cryptoheros_spilurus3453.png", price: 12, bioload: 2, compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Pseudotropheus crabro", name: "Bumblebee Cichlid", src: "../img/species/Bumblebee-full.jpg", bioload: 2, price: 45, countries : ['MWI'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Pseudotropheus elongatus", name: "Slender Mbuna", src: "../img/species/Pseudotropheus_elongatus.jpg", bioload: 2, price: 9, countries : ['MWI','TZA'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Pseudotropheus estherae", name: "Red Zebra Mbuna", src: "../img/species/800px-Metriaclima_estherae-4960.jpg", bioload: 2, price: 8, countries : ['MOZ'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Pseudotropheus lombardoi", name: "Kenyi Cichlid", src: "../img/species/Pseudotropheus_lombardoi_3.jpg", bioload: 2, price: 14, countries : ['MWI'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Pseudotropheus saulosi", name: "Saulosi Mbuna", src: "../img/species/Saulosi_Malesm.jpg", bioload: 2, price: 15, countries : ['MWI'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Pseudotropheus socolofi", name: "Powder Blue Cichlid", src: "../img/species/Pseudotropheus_Socolofi-5882.jpg", bioload: 2, price: 36, countries : ['MWI','MOZ'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Pseudotropheus zebra", name: "Red Zebra Mbuna 'Cobalt Blue'", src: "../img/species/768px-Juvviemaylandiazebra-4412.jpg", bioload: 2, price: 8, countries : ['MWI'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Puntius tetrazona", name: "Tiger Barb", src: "../img/species/Puntius_tetrazona85387.jpg", bioload: 2, price: 3, countries : ['IDN','MYS'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Poecilia reticulata", name: "Guppy", src: "../img/species/Male_Guppy.jpg", bioload: 1, price: 2, countries : ['ATG','BRB','BRA','GUY','TMP','TTO','VEN'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Nothobranchius rachovii", name: "Bluefin Notho Killifish", src: "../img/species/Nothobranchius_rachovii_male.jpg", bioload: 1, price: 9, countries : ['MOZ','ZAF'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Cyprinodon diabolis", name: "Devils Hole Pupfish", src: "../img/species/Cyprinodon_diabolis.jpg", bioload: 1, price: 4, countries : ['USA'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Fundulopanchax gardneri", name: "Blue Lyretail", src: "../img/species/800px-Fundulopanchax_gardneri.png", bioload: 1, price: 7, countries : ['CMR','NGA'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Fundulus auroguttatus", name: "North American Killifish", src: "../img/species/Fundulus_auroguttatus.jpg", bioload: 1, price: 6, countries : ['USA'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Jordanella floridae", name: "American/Florida Flagfish", src: "../img/species/202_AmericanFlorida_Flagfish_Jordanella_floridae.e.jpg", bioload: 2, price: 6, countries : ['USA'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Carassius auratus auratus", name: "Goldfish", src: "../img/species/800px-Common_goldfish.JPG", bioload: 3, price: 1, countries : ['CHN','HKG','JPN','LAO','MAC','MMR','VNM'], compatibility: Math.floor(Math.random()*3+1) },
+		{ scientificName: "Cyprinus carpio", name: "Koi", src: "../img/species/634px-Six_koi.jpg", bioload: 5, price: 20, countries : ['ARM','AUT','AZE','BGR','CHN','CZE','GEO','HUN','KAZ','MKD','MDA','MNG','RUS','SCG','SVK','GBE','UKR','UZB'], compatibility: Math.floor(Math.random()*3+1) }
+	];
+	function sortByKey(array, op, desc) {
+		return array.sort(function(a, b) {
+			var x = op(a);
+			var y = op(b);
+
+			if (typeof x == "string"){
+				x = x.toLowerCase(); 
+				y = y.toLowerCase();
+			}
+			if(desc){
+				return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+			}else{
+				return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+			}
+		});
+	}
+	Polymer('data-search',{
+		name: null,
+		current: [],
+		tanksize: 0,
+		budget: 0,
+		skip: 0,
+		limit: 0,
+		desc: false,
+		sort: null,
+		go: function(){
+			var results = [];
+			if(this.name==null){
+				results = data;
+			}else{
+				var n = this.name.toLowerCase();
+				for(var i=0;i<data.length;i++){
+					if(data[i].scientificName.toLowerCase().indexOf(n) != -1 
+					|| data[i].name.toLowerCase().indexOf(n) != -1){
+					//update status
+						results.push(data[i]);
+					}
+				}
+			}
+			var sortedResults;
+			if(this.sort!=null){
+				var sortField = this.sort;
+				console.log(sortField);
+				console.log(results);
+
+				sortedResults = sortByKey(results, function(o){ return o[sortField]; }, this.desc);
+				console.log(sortedResults);
+			}else{
+				sortedResults = results;
+			}
+			var limitedResults;
+			if(this.limit > 0){
+				limitedResults = sortedResults.slice(this.skip,this.skip + this.limit);
+			}else{
+				limitedResults = sortedResults.slice(this.skip);
+			}
+			var self = this;
+			setTimeout(function(){
+				self.fire('polymer-response', limitedResults);
+			},100);
+		}
+	});
+	</script>
+</polymer-element>

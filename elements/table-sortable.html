@@ -1,0 +1,77 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<polymer-element name="table-sortable" noscript attributes="data calculateTotals">
+	<template>
+		<table class="numberTable" style="font-size:18px">
+			<tr>
+				<th on-click="{{sortSpecies}}">Fish</th>
+				<th on-click="{{sortQuantity}}" style="width:100px">Quantity</th>
+				<th on-click="{{sortCost}}">Cost ($)</th>
+				<th on-click="{{sortTotal}}">Total ($)</th>
+			</tr>
+			<template repeat="{{ data | sortBy(sortField)}}">
+				<tr>
+					<td style="font-size:14px">
+						<img title="{{species}}" alt="{{species}}" src="{{src}}" width="90px" height="45px" style="vertical-align:middle;border-radius:4px;" />
+						<strong>{{name}}</strong> - <em>{{species}}</em>
+					</td>
+					<td>
+						<input id="number" type="text" class="form-control input-lg" placeholder="#" style="width:100px;text-align:right" value="{{number}}" onfocus="this.select()" on-keyup="{{calculateTotals}}"/>
+					</td>
+					<td>{{price}}</td>
+					<td>{{number*price}}</td>
+				</tr>
+			</template>
+			<tr>
+				<td><div style="width:125px;margin: 0 auto;text-align:right"><div style="float:left">Budget:</div>${{budget}}</div></td>
+				<td style="background-color:#555;" colspan="2"></td>
+				<td style="color:{{ budget - purchasesTotal >= 0 ? '' : '#ff0000'}}">{{purchasesTotal}}</td>
+			</tr>
+		</table>
+	</template>
+	<script>
+	function sortByKey(array, op) {
+		return array.sort(function(a, b) {
+			var x = op(a);
+			var y = op(b);
+
+			if (typeof x == "string"){
+				x = x.toLowerCase(); 
+				y = y.toLowerCase();
+			}
+
+			return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+		});
+	}
+	PolymerExpressions.prototype.sortBy = function(value, op) {
+		if(value!=null){
+			return sortByKey(value, op);
+		}else{
+			return value;
+		}
+	};
+	Polymer('table-sortable',{
+		calculateTotals: function(){
+			console.log('calculateTotals fired.');
+			this.asyncFire('polymer-signal', {name: "foo", data: "Foo!"});
+		},
+		sortSpecies: function(){
+			console.log('sortSpecies');
+			this.sortField = function(o){ return o.species; };
+		},
+		sortQuantity: function(){
+			console.log('sortQuantity');
+			this.sortField = function(o){ return o.number; };
+		},
+		sortCost: function(){
+			console.log('sortCost');
+			this.sortField = function(o){ return o.price; };
+		},
+		sortTotal: function(){
+			console.log('sortTotal');
+			this.sortField = function(o){ return o.number * o.price; };
+		},
+		sortField: function(o){ return o.number * o.price; }
+	});
+	</script>
+</polymer-element>

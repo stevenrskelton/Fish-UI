@@ -1,0 +1,94 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer-ui-overlay/polymer-ui-overlay.html">
+<link rel="import" href="../bower_components/polymer-flex-layout/polymer-flex-layout.html">
+<link rel="import" href="../bower_components/polymer-ui-icon/polymer-ui-icon.html">
+<link rel="import" href="../bower_components/polymer-ui-icon-button/polymer-ui-icon-button.html">
+<link rel="import" href="current-searchresult.html">
+<link rel="import" href="data-search.html">
+<link rel="import" href="progress-bar.html">
+
+<polymer-element name="current-search" noscript attributes="toggle search add selectedItems">
+	<template>
+		<link rel="stylesheet" href="../css/mybootstrap.css">
+		<polymer-ui-overlay backdrop id="overlay" style="width:100%;position:fixed;top:0;height:100%;padding-bottom:10px;">
+			<div class="modal-content" style="height:100%;min-width:400px;max-width:600px;margin:5px auto;" flex>
+				<polymer-flex-layout vertical></polymer-flex-layout>
+				<div class="modal-header" style="height:60px;">
+					<polymer-flex-layout></polymer-flex-layout>
+					<div style="display:inline-block;line-height:40px;padding-right:10px;">Search Results for</div>
+					<input type="text" class="form-control input-sm" value="{{search}}" onfocus="this.select()" flex on-keypress="{{searchEnter}}"/>
+					<polymer-ui-icon-button icon="refresh" on-click="{{go}}"></polymer-ui-icon-button> 
+				</div>
+				<div class="modal-body" flex style="overflow-y:scroll">
+					<template repeat="{{s in searchResults}}">
+						<current-searchresult species="{{s}}" on-add="{{add}}" disabled="{{s.disabled}}"></current-searchresult>
+					</template>
+					<template if="{{searchResults==null || searchResults.length==0}}">
+						<template if="{{pendingQuery}}">
+							<progress-bar style="margin:30px;display:block;">
+								<strong>Searching<strong>
+							</progress-bar>
+						</template>
+						<template if="{{!pendingQuery}}">
+							<div class="panel warning">
+								<h2 style="margin-top:0px;">No search results!</h2>
+								No species match your query.
+							</div>
+						</template>
+					</template>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn" overlay-toggle>
+						<polymer-ui-icon icon="close"></polymer-ui-icon> Close
+					</button>
+				</div>
+			</div>
+		</polymer-ui-overlay>
+		<data-search id="searchQuery" sort="name" on-polymer-response="{{loadSearchResults}}"></data-search>
+	</template>
+	<script>
+		Polymer('current-search', {
+			pendingQuery: false,
+			toggle: function(s){
+				console.log(s);
+				console.log('modal-toggle');
+				this.$.overlay.toggle();
+				this.go();
+			},
+			searchEnter: function(e){
+				if (e.keyCode == 13) {
+					e.preventDefault();
+					this.go();
+				}
+			},
+			go: function(){
+				this.searchResults = null;
+				if(!this.pendingQuery){
+					document.body.style.cursor = 'progress';	
+					this.pendingQuery = true;
+					//construct search params
+					this.$.searchQuery.name = this.search;
+					//this.$.searchQuery.current = [];
+					//this.$.searchQuery.tanksize = 0;
+					//this.$.searchQuery.budget = 0;
+					this.$.searchQuery.go();
+				}
+			},
+			loadSearchResults: function(e){
+				console.log('loadSearchResults');
+				document.body.style.cursor = 'default';
+				var r = e.detail;
+				var s = this.selectedItems;
+				if(s != null){
+					for(i = 0; i < r.length; i++){
+						for(j = 0; j < s.length; j++){
+							if(s[j].scientificName == r[i].scientificName) r[i].disabled = true;
+						}
+					}
+				}
+				this.searchResults = r;
+				this.pendingQuery = false;
+			}
+		});
+	</script>	
+</polymer-element>

@@ -1,0 +1,52 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<link rel="import" href="temperature-range.html">
+<link rel="import" href="tank-dimensions.html">
+
+<polymer-element name="search-tank" noscript attributes="tankSize units">
+	<template>
+		<br/>
+		<div style="display:inline-block;margin:10px;vertical-align:top;">
+			<h2>Tank</h2>
+			<tank-dimensions tankSize="{{tankSize}}" units="{{units}}"></tank-dimensions>
+		</div>
+		<div style="width:400px;display:inline-block;margin:10px;vertical-align:top;">
+			<h2>Water Parameters</h2>
+
+			<h3>Freshwater</h3>
+			<h3>Temperature<h3>
+			<temperature-range width="400" value="{{t1}}" units="{{units}}"></temperature-range>
+			<br/>
+			<temperature-range width="400" value="{{t2}}" units="{{units}}"></temperature-range>
+			<br/>
+			<temperature-range width="400" value="{{t3}}" units="{{units}}"></temperature-range>
+			<br/>
+			<temperature-range width="400" value="{{t4}}" units="{{units}}"></temperature-range>
+			<br/>
+			<temperature-range width="400" value="{{t5}}" units="{{units}}"></temperature-range>
+			<br/>
+			<temperature-range width="400" value="{{t6}}" units="{{units}}"></temperature-range>
+			<p/>
+			Water Current:
+			<p/>
+			Water Hardness:
+		</div>
+		<div style="width:400px;display:inline-block;margin:10px;vertical-align:top;">
+			<h2>Aquarium Equipment</h2>
+			Heater?<br/>
+			Powerheads?<br/>
+			Lighting?<br/>
+			Substrate?<br/>
+		</div>
+	</template>
+	<script>
+	Polymer('search-tank',{
+		t1: { min: 75, max: 85, unit: 'F'},
+		t2: { min: 70, max: 78, unit: 'F'},
+		t3: { min: 86, max: 90, unit: 'F'},
+		t4: { min: 65, max: 90, unit: 'F'},
+		t5: { min: 65, max: 67, unit: 'F'},
+		t6: { min: 89, max: 90, unit: 'F'}
+	});
+	</script>
+</polymer-element>

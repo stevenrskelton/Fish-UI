@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>D3 SVG Geographic Map</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="../../platform/platform.js"></script>
+	<link rel="import" href="../d3-geomap.html">
+	<style>
+		p > div {
+			font-style: italic;
+			text-align: center;
+			margin-bottom: 2em;
+			width: 900px;
+			display: inline-block;
+		}
+	</style>
+  </head>
+  <body unresolved>
+
+	<h2>Themes</h2>
+	Default background, land, highlight, and border colors should be exposed.
+
+	<p />
+
+	<template id="example1" bind>
+		<div>
+			<d3-geomap></d3-geomap>
+			Default Theme
+		</div>
+	</template>
+
+	<template id="example2" bind>
+		<div>
+			<d3-geomap theme="{{theme}}"></d3-geomap>
+			Background Image
+		</div>
+	</template>
+
+	<template id="example3" bind>
+		<div>
+			<d3-geomap theme="{{theme}}"></d3-geomap>
+			Full Theme
+		</div>
+	</template>
+	
+	<template id="example4" bind>
+		<div>
+			<d3-geomap theme="{{theme}}" style="border-radius:50px;border:1px solid #ddd;overflow:hidden"></d3-geomap>
+			Partial Theme
+		</div>
+	</template>
+
+	<p />
+
+<script>
+	window.addEventListener('polymer-ready', function(){
+
+		document.getElementById('example1').model = {};
+
+		document.getElementById('example2').model = {
+			theme: {
+				defaultFill: 'transparent',
+				borderWidth: 1,
+				borderColor: 'rgba(255,255,255,0.1)',
+				highlightFillColor: 'rgba(240,240,51,0.5)',
+				highlightBorderColor: '#DDDD33',
+				highlightBorderWidth: 1,
+				backgroundImage: '../SRTM30_Plus/srtm30plus.jpg'
+			}
+		};
+
+		document.getElementById('example3').model = {
+			theme: {
+				backgroundColor: 'LightCyan ',
+				defaultFill: 'Green',
+				borderWidth: 1,
+				borderColor: '#99C68E',
+				highlightFillColor: '#F0F033',
+				highlightBorderColor: '#DDDD33',
+				highlightBorderWidth: 1,
+				cursor: 'crosshair'
+			}
+		};
+
+		document.getElementById('example4').model = {
+			theme: {
+				backgroundColor: '#56A5EC',
+				defaultFill: 'navy'
+			}
+		};
+
+	});
+</script>
+
+  </body>
+</html>

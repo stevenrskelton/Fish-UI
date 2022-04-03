@@ -1,0 +1,37 @@
+{
+  "name": "sortable-table",
+  "version": "0.6.1",
+  "homepage": "https://github.com/stevenrskelton/sortable-table",
+  "description": "Polymer Web Component that generates a sortable <table> from JSON",
+  "main": "sortable-table.html",
+  "authors": [
+    "Steven Skelton"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "keywords": [
+    "web-component",
+    "web-components",
+    "polymer",
+    "table",
+    "grid"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#>=0.3.1"
+  },
+  "_release": "0.6.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.6.1",
+    "commit": "5a55d666000c85fff8623f9e726e3889d55e43eb"
+  },
+  "_source": "git://github.com/stevenrskelton/sortable-table.git",
+  "_target": "~0.6.0",
+  "_originalSource": "sortable-table"
+}

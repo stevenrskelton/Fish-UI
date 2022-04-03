@@ -1,0 +1,30 @@
+{
+  "name": "fish",
+  "version": "0.0.0",
+  "homepage": "https://github.com/stevenrskelton/Fish-UI",
+  "authors": [
+    "Steven Skelton <stevenrskelton@gmail.com>"
+  ],
+  "description": "fish compatibility and purchase selection tool",
+  "main": "src/index.html",
+  "keywords": [
+    "fish"
+  ],
+  "license": "AGPL",
+  "private": true,
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.3.1",
+    "core-elements": "Polymer/core-elements#~0.3.1",
+    "polymer-elements": "Polymer/polymer-elements#~0.3.0",
+    "polymer-ui-elements": "Polymer/polymer-ui-elements#~0.2.4",
+    "d3-geomap": "d3-geomap#~0.2.2",
+    "sortable-table": "sortable-table#~0.6.0"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

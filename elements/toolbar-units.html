@@ -1,0 +1,35 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer-ui-toolbar/polymer-ui-toolbar.html">
+<link rel="import" href="../bower_components/polymer-localstorage/polymer-localstorage.html">
+
+<polymer-element name="toolbar-units" attributes="units">
+	<template>
+		<polymer-ui-toolbar responsive style="text-align:center;font-size:16px;">
+			<div style="width:280px;margin:0 auto">
+			Units of Measure:
+			<div style="display:inline-block;width:70px;">
+				<input type="radio" name="units" id="metricUnits" checked?="{{units==='metric'}}" on-focus="{{selectMetric}}"/>
+				<label for="metricUnits" class="btnLabel">Metric</label>
+			</div>
+			<div style="display:inline-block;width:70px;">
+				<input type="radio" name="units" id="usaUnits" checked?="{{units!=='metric'}}" on-focus="{{selectUSA}}"/>
+				<label for="usaUnits" class="btnLabel">USA</label>
+			</div>
+			</div>
+		</polymer-ui-toolbar>
+		<polymer-localstorage name="units" value="{{units}}" id="units"></polymer-localstorage>
+	</template>
+	<script>
+	Polymer('toolbar-units',{
+		units: 'usa',
+		selectMetric: function(){
+			this.units = 'metric';
+			this.$.units.save();
+		},
+		selectUSA: function(){
+			this.units = 'usa';
+			this.$.units.save();
+		}
+	});
+	</script>
+</polymer-element>

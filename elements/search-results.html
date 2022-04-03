@@ -1,0 +1,180 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer-ui-menu-button/polymer-ui-menu-button.html">
+<link rel="import" href="../bower_components/polymer-ui-icon-button/polymer-ui-icon-button.html">
+<link rel="import" href="../bower_components/polymer-media-query/polymer-media-query.html">
+<link rel="import" href="../bower_components/polymer-flex-layout/polymer-flex-layout.html">
+<link rel="import" href="data-search.html">
+<link rel="import" href="search-searchresult.html">
+<link rel="import" href="progress-bar.html">
+
+<polymer-element name="search-results" noscript attributes="purchases">
+	<template>
+		<div>
+			<polymer-flex-layout></polymer-flex-layout>	
+			<div>
+				<polymer-ui-menu-button selected="0" on-click="{{changeSort}}" icon="sort" style="margin:12px;" theme="polymer-ui-light-theme">
+					<polymer-ui-menu-item id="menuItemSortByCompatibility" icon="up" label="Sort by Compatibility" field="compatibility"></polymer-ui-menu-item>
+					<polymer-ui-menu-item id="menuItemSortByName" icon="up" label="Sort by Name" field="name"></polymer-ui-menu-item>
+					<polymer-ui-menu-item id="menuItemSortByScientificName" icon="up" label="Sort by Scientific Name" field="scientificName"></polymer-ui-menu-item>
+					<polymer-ui-menu-item id="menuItemSortByPrice" icon="up" label="Sort by Price" field="price"></polymer-ui-menu-item>
+				</polymer-ui-menu-button>
+			</div>
+			<div>
+				<h2 style="margin-left:20px;">Search Results</h2>
+			</div>
+			<div flex></div>
+			<div>
+				<polymer-ui-icon-button icon="refresh" style="margin:12px" on-click="{{refresh}}"></polymer-ui-icon-button>
+				<polymer-ui-menu-button selected="0" icon="settings" halign="right" style="margin:12px;" theme="polymer-ui-light-theme">
+					<polymer-ui-menu-item icon="filter" label="Show Low Compatibility Species"></polymer-ui-menu-item>
+					<polymer-ui-menu-item icon="filter" label="Show Incompatible Species"></polymer-ui-menu-item>
+					<polymer-ui-menu-item icon="list" label="Hide Details"></polymer-ui-menu-item>
+					<polymer-ui-menu-item icon="maximize" label="Expand All"></polymer-ui-menu-item>
+				</polymer-ui-menu-button>
+			</div>
+		</div>
+		<template if="{{searchResults==null || searchResults.length==0}}">
+			<template if="{{pendingQuery}}">
+				<progress-bar style="width:90%;margin: 0 auto;display:block;">
+					<strong>Searching<strong>
+				</progress-bar>
+			</template>
+			<template if="{{!pendingQuery}}">
+				<div class="panel warning">
+					<h2 style="margin-top:0px;">No search results!</h2>
+					No species were found that are suitable for your setup.
+					<!--	Factors
+					<ul>
+					
+					</ul>-->
+				</div>
+			</template>
+		</template>
+		<template if="{{searchResults!=null && searchResults.length>0}}">
+			<template repeat="{{searchResults}}">
+				<search-searchresult species="{{}}" on-add="{{addItem}}" maximize="{{maximize}}"></search-searchresult>
+			</template>
+			<template if="{{pendingQuery}}">
+				<progress-bar style="margin:5px 5px 0 5px;height:60px;display:block;">
+					<strong>Loading<strong>
+				</progress-bar>
+			</template>
+			<div style="width:100%;height:{{titlebarBelow ? 65 : 0}}px;background-color:#444"></div>
+		</template>
+		<data-search id="searchQuery" on-polymer-response="{{loadSearchResults}}"></data-search>
+		<polymer-media-query query="max-width: 800px" queryMatches="{{titlebarBelow}}"></polymer-media-query>
+	</template>
+	<script>
+	Polymer('search-results', {
+		maximize: true,
+		toggleSize: function(){
+			console.log('maximize');
+			this.maximize = true;
+		},
+		skip: 0,
+		countPerPage: 0,
+		lastResult: false,
+		pendingQuery: false,
+		maximize: false,
+		sortField: 'compatibility',
+		sortDesc: false,
+		changeSort: function(e) {
+			if(!this.pendingQuery){
+				var menuItem = e.target;
+				var id = menuItem.id;
+				var field = menuItem.getAttribute('field');
+				if(field != null){
+					if(field === this.sortField){
+						//change sort order
+						if(this.$[id].icon == 'up'){
+							this.$[id].icon = 'down';
+						}else{
+							this.$[id].icon = 'up';
+						}
+					}
+					this.sortField = field;
+					this.sortDesc = (this.$[id].icon == 'down');
+					this.refresh();
+				}
+			}
+		},
+		refresh: function(){
+			if(!this.pendingQuery){
+				console.log('refresh');
+				this.searchResults = null;
+				this.lastResult = false;
+				this.skip = 0;
+				this.go();
+			}
+		},
+		go: function(){
+			console.log('go ' + this.pendingQuery + "," + this.lastResult);
+			if(this.pendingQuery==false && this.lastResult==false){
+				document.body.style.cursor = 'progress';
+				this.pendingQuery = true;
+
+				//console.log('GO: skip ' + this.skip + ', limit ' + this.countPerPage + ', sort ' + this.sortField);
+
+				//construct search params
+				//this.$.searchQuery.name = '';
+				//this.$.searchQuery.current = [];
+				//this.$.searchQuery.tanksize = 0;
+				//this.$.searchQuery.budget = 0;
+				this.$.searchQuery.skip = this.skip;
+				this.$.searchQuery.limit = this.countPerPage;
+				this.$.searchQuery.sort = this.sortField;
+				this.$.searchQuery.desc = this.sortDesc;
+				this.$.searchQuery.go();
+			}
+		},
+		loadSearchResults: function(e){
+			//console.log('loadSearchResults');
+			//console.log(this.countPerPage);
+			document.body.style.cursor = 'default';
+			var r = e.detail;
+			//console.log('loadSearchResults ' + r.length);
+			if(r.length == 0){
+				this.lastResult = true;
+			}else{
+				if(this.searchResults==undefined){
+					this.searchResults = r;
+				}else{
+					Array.prototype.push.apply(this.searchResults, r);
+				}
+				this.skip += r.length;
+			}
+			if(document.body.scrollHeight < window.innerHeight){
+				document.body.style.overflowY = "scroll";
+			}
+			this.pendingQuery = false;
+		},
+		attached: function(){
+			document.body.style.overflow='auto';
+			var self = this;
+			window.onscroll = function(ev) {
+				if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+				//console.log('bottom');
+					self.go();
+				}
+			};
+			var resultHeight = 70;
+			this.countPerPage = Math.ceil(window.innerHeight / resultHeight);
+			window.onresize = function(ev) {
+				self.countPerPage = document.body.offsetHeight / resultHeight;
+			};
+			this.go();
+		},
+		detached: function(){
+			window.onscroll = null;
+		},
+		addItem: function(e){
+			//console.log(this.purchases);
+			if(this.purchases==null || this.purchases == "undefined"){
+				this.purchases = [e.detail];
+			}else{
+				this.purchases.push(e.detail); 
+			}
+		}
+	});
+	</script>
+</polymer-element>

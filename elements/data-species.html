@@ -1,0 +1,273 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<polymer-element name="data-species" attributes="params response">
+	<script>
+	var neonTetra = {
+		name: "Neon Tetra",
+		scientificName: 'Paracheirodon innesi',
+		bioload: 1,
+
+		alternativeScientificNames: [
+			'Hyphessobrycon innesi'
+		],
+		class: 'Actinopterygii',
+		order: 'Characiformes',
+		family: 'Characidae',
+		subfamilty: '',
+		genus: 'Paracheirodon',
+		species: 'innesi',
+	
+		geographic: 'South America',
+		habitat: null,
+		availability: 'Very Common',
+		colorations: [],
+		countries: [
+			'BRA', //Brazil
+			'COL', //Colombia
+			'PER' //Peru
+		],
+		ecosystems: [],
+		conservationStatus: 'LC',
+
+		temperature: { min: 71.6, max: 78.8, unit: 'F' },
+		ph: { min: 4.6, max: 7.6, unit: '' },
+		hardness: { min: 4, max: 10, unit: 'dH' },
+		salinity: { min: 0, max: 0, unit: 'ppm' },
+
+		difficulty: 'Easy',
+		price: 1,
+		tankSize: { min: 15, unit: 'gal' },
+		waterflow: 'Low',
+
+		images: [ 
+			'img/species/790px-NeonTetra.JPG', 
+			'img/species/800px-Neonfische.jpg',
+			'img/species/800px-Neonsalmler_Paracheirodon_innesi.jpg',
+			'img/species/800px-Paracheirodon_innesi_(aka).jpg',
+			'img/species/Neonka_obecna_paracheirodon_innesi.jpg',
+			'img/species/Neontetra_tmy.JPG'
+		],
+
+		//animal
+		dimorphic: false,
+		size: { min: 2, max: 3, unit: 'cm' },
+		lifeSpan: { min: 3, max: 10, unit: 'year' },
+
+		//behaviour
+		location: 'Middle',
+		depth: 0,
+		schooling: true,
+		minNumber: 1,
+		territorial: false,
+		temperament: null,
+		nocturnal: false,
+		breeds: true,
+		amphidromous: false,
+		reefCompatible: false,
+		maleRatio: 1,
+		femaleRatio: 2,
+
+		//food
+		diet: 'Omnivore',
+		pellet: true,
+		flake: true,
+		live: true,
+		algae: false,
+		other: null
+	};
+
+	var tigerBarb = {
+		name: "Tiger Barb",
+		alternativeNames: [
+			'Green Tiger Barb', 
+			'Black Tiger Barb', 
+			'Sumatran Barb', 
+			'Sumatra Barb',
+			'Moosbarbe, Gold Banded Barb'
+		],
+		scientificName: 'Puntius tetrazona',
+		bioload: 2,
+
+		alternativeScientificNames: [
+			'Capoeta tetrazona',
+			'Barbus tetrazona',
+			'Barbus tetrazona tetrazona',
+			'Puntius tetrazona',
+			'Systomus tetrazona'
+		],
+		class: 'Actinopterygii',
+		order: 'Characiformes',
+		family: 'Cyprinidae',
+		subfamilty: '',
+		genus: 'Puntigrus',
+		species: 'tetrazona',
+
+		geographic: 'Asia',
+		habitat: null,
+		availability: 'Very Common',
+		colorations: [
+			'albino',
+			'red',
+			'green',
+			'yellow',
+			'orange',
+			'grey',
+			'translucent'
+		],
+		countries: [
+			'IDN', //Indonesia 	
+			'MYS' //Malaysia 	
+		],
+		ecosystems: [],
+		conservationStatus: 'LC',
+
+		temperature: { min: 74, max: 79, unit: 'F' },
+		ph: { min: 6, max: 7, unit: '' },
+		hardness: { min: 5, max: 10, unit: 'dH' },
+		salinity: { min: 0, max: 0, unit: 'ppm' },
+
+		difficulty: 'Easy',
+		price: 3,
+		tankSize: { min: 25, unit: 'gal' },
+		waterflow: null,
+
+		images: [ 
+			'img/species/Puntius_tetrazona85387.jpg', 
+			'img/species/Tiger_Barb.jpg',
+			'img/species/800px-Tigerbabr-4832.jpg',
+			'img/species/800px-Tigerbarbs-8536.jpg'
+		],
+
+		//animal
+		dimorphic: false,
+		size: { min: 2, max: 3, unit: 'cm' },
+		lifeSpan: { min: 5, max: 7, unit: 'year' },
+
+		//behaviour
+		location: null,
+		depth: 0,
+		schooling: true,
+		minNumber: 5,
+		territorial: false,
+		temperament: null,
+		nocturnal: false,
+		breeds: true,
+		amphidromous: false,
+		reefCompatible: false,
+		maleRatio: 1,
+		femaleRatio: 2,
+
+		//food
+		diet: 'Omnivore',
+		pellet: true,
+		flake: true,
+		live: true,
+		algae: false,
+		other: null
+	};
+
+	var colombianCatfish = {
+		name: "Colombian Shark Catfish",
+		alternativeNames: [
+			'Tete Sea Catfish',
+			'Columbian Shark', 
+			'Silver Tipped Shark', 
+			'White Tip Shark Catfish', 
+			'Black Fin Shark', 
+			'Christian Catfish', 
+			'Jordan\'s Catfish', 
+			'West American Cat Shark'
+		],
+		scientificName: 'Ariopsis seemanni',
+		bioload: 7,
+
+		alternativeScientificNames: [
+			'Arius seemanni',
+			'Galeichthys gilberti',
+			'Galeichthys eigenmanni',
+			'Galeichthys simonsi',
+			'Sciades seemanni',
+			'Tachisurus jordani'
+		],
+		class: 'Actinopterygii',
+		order: 'Siluriformes',
+		family: 'Ariidae',
+		subfamilty: '',
+		genus: 'Ariopsis',
+		species: 'seemanni',
+
+		geographic: 'Central America',
+		habitat: null,
+		availability: 'Common',
+		colorations: [],
+		countries: [
+			'COL', //Colombia
+			'CRI', //Costa Rica
+			'ECU', //Ecuador
+			'SLV', //El Salvador
+			'GTM', //Guatemala
+			//'Honduras 	HND',
+			'MEX', //Mexico
+			'NIC', //Nicaragua
+			'PAN', //Panama
+			'PER' //
+		],
+		ecosystems: [],
+		conservationStatus: 'LC',
+
+		temperature: { min: 72, max: 81, unit: 'F' },
+		ph: { min: 6.8, max: 8, unit: '' },
+		hardness: { min: 8, max: 30, unit: 'dH' },
+		salinity: { min: 1.010, max: 1.025, unit: 'sg' },
+
+		difficulty: 'Challenging',
+		price: 11,
+		tankSize: { min: 125, unit: 'gal' },
+		waterflow: null,
+
+		images: [ 
+			'img/species/Shark_catfish1.jpg', 
+			'img/species/Shark_catfish2.jpg'
+		],
+
+		//animal
+		dimorphic: false,
+		size: { min: 30.5, max: 38.1, unit: 'cm' },
+		lifeSpan: { min: 10, max: 15, unit: 'year' },
+
+		//behaviour
+		location: 'Bottom',
+		depth: 0,
+		schooling: true,
+		minNumber: 4,
+		territorial: false,
+		temperament: null,
+		nocturnal: true,
+		breeds: false,
+		amphidromous: true,
+		reefCompatible: false,
+		maleRatio: 1,
+		femaleRatio: 1,
+
+		//food
+		diet: 'Carnivore',
+		pellet: true,
+		flake: false,
+		live: true,
+		algae: false,
+		other: null
+	};
+
+	Polymer('data-species',{
+		attached: function () { 
+			if(this.params == 'barb'){
+				this.response = tigerBarb;
+			}else if(this.params == 'catfish'){
+				this.response = colombianCatfish;
+			}else{
+				this.response = neonTetra;
+			}
+		}
+	});
+	</script>
+</polymer-element>

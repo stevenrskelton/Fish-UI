@@ -1,0 +1,172 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer-ui-icon-button/polymer-ui-icon-button.html">
+<link rel="import" href="../bower_components/sortable-table/sortable-table.html">
+
+<polymer-element name="search-purchases" noscript attributes="currentItems purchases budget purchasesTotal">
+	<template>
+		<link rel="stylesheet" href="../css/mybootstrap.css">
+		<template if="{{currentItems.length > 0}}">
+			<div class="panel">
+				<polymer-ui-icon-button icon="settings" style="float:right;" on-click="{{editCurrent}}"></polymer-ui-icon-button>
+				<h2 style="margin-right:10px;display:inline;vertical-align:middle;">Current Livestock</h2>
+				<div style="display:inline">
+					<template repeat="{{c in currentItems}}">
+						<div style="display:inline-block;margin-right:4px;">
+							<img title="{{c.name}}" alt="{{c.name}}" src="{{c.src}}" width="75px" height="42px" style="vertical-align:middle;border-radius:4px;" />
+							x{{c.number}}
+						</div>
+					</template>
+				</div>
+			</div>
+		</template>
+		<h2 style="margin-left:20px;">Purchase List</h2>
+		<template if="{{!(purchases.length >= 1)}}">
+			<div class="panel warning">
+				Empty! Add new purchases from the <strong>Search Results</strong> screen.
+			</div>
+		</template>
+		<template if="{{purchases.length > 0}}">
+			<template id="tableRowTemplate">
+				<td style="font-size:14px">
+					<img title="{{record.row.scientificName}}" alt="{{record.row.scientificName}}" src="{{record.row.src}}" width="90px" height="45px" style="float:left;border-radius:4px;margin:0 10px 0 0;" />
+					<strong>{{record.row.name}}</strong><br/>
+					{{record.row.scientificName}}
+				</td>
+				<td style="text-align:center;width:100px;">
+					<input type="text" class="form-control input-lg" placeholder="#" style="width:100px;text-align:right" value="{{record.row.number}}" onfocus="this.select()" onblur="replaceNumberInput(this)" on-keyup="{{calculateTotals}}"/>
+					<polymer-ui-icon-button icon="trash" style="display:none" on-click="{{remove}}"></polymer-ui-icon-button>
+				</td>
+				<td style="padding-right:1%">{{record.row.price}}</td>
+				<td style="padding-right:1%">{{record.row.number * record.row.price}}</td>
+			</template>
+
+			<template id="nameFooterTemplate">
+				<td class="sortable-table-header" style="text-align:right;padding-right:50px;">Total Purchase Summary</td>
+			</template>
+			<template id="numberFooterTemplate">
+				<td class="sortable-table-header" style="text-align:center">{{values | sum}} Fish</td>
+			</template>
+			<template id="priceFooterTemplate">
+				<td style="background-color:#666;"></td>
+			</template>
+			<template id="totalFooterTemplate">
+				<td class="sortable-table-header" style="color:{{ budget - purchasesTotal >= 0 ? '' : '#ff0000'}};text-align:center;">${{values | sum}}</td>
+			</template>
+
+			<sortable-table rowTemplate="tableRowTemplate" data="{{purchases}}" columns="{{columns}}" hidden?="{{purchases.length < 1}}" style="padding:0 5px;display:block;width:100%"></sortable-table>
+		</template>
+	</template>
+	<script>
+	function replaceNumberInput(element){
+		if(element.value==0 || element.value==''){
+			console.log(element.nextSibling.nextSibling);
+			element.nextSibling.nextSibling.style.display = 'block';
+			element.style.display = 'none';
+			//element.parentNode.addChild(
+		//	console.log(element);
+		//	console.log(element.value);
+		}
+	}
+	function sortByKey(array, op, desc) {
+		return array.sort(function(a, b) {
+			var x, y;
+			//determine if computed field
+			var formula = null;
+			for(var i=0;i<columns.length;i++){
+				if(columns[i].name===key){
+					formula = columns[i].formula;
+					break;
+				}
+			}
+			if(formula){
+				x = formula(a);
+				y = formula(b);
+			}else{
+				x = a[key];
+				y = b[key];
+			}
+
+			if(typeof x == 'undefined' || typeof y == 'undefined'){
+				//sort undefined after
+				if(typeof x == 'undefined'){
+					return !desc;
+				}else{
+					return desc;
+				}
+			}else{
+				if (typeof x == "string" && typeof y == "string"){
+					x = x.toLowerCase();
+					y = y.toLowerCase();
+				}
+				if(desc){
+					return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+				}else{
+					return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+				}
+			}
+		});
+	}
+	PolymerExpressions.prototype.sortBy = function(value, op, dir) {
+		return sortByKey(value, op, dir);
+	};
+	Polymer('search-purchases',{
+		columns: [
+			{ name: 'name', title: 'Fish', footerTemplate: 'nameFooterTemplate' },
+			{ name: 'number', title: 'Quantity', footerTemplate: 'numberFooterTemplate' },
+			{ name: 'price', title: 'Price ($)', footerTemplate: 'priceFooterTemplate' },
+			{ name: 'total', title: 'Total ($)', formula: function(row){ return row.number * row.price; }, footerTemplate: 'totalFooterTemplate' }
+		],
+		purchases: [],
+		remove: function(e){
+			console.log('remove');
+			console.log(e);
+		},
+		editCurrent: function(){
+			document.location.href = 'current.html';
+		},
+		calculateTotals: function(){
+			console.log('calculateTotals fired.');
+			this.asyncFire('polymer-signal', {name: "foo", data: "Foo!"});
+		},
+		sortSpecies: function(){
+			if(this.sortField != 0){
+				this.sortField = 0;
+				this.sortFieldDesc = false;
+			}else{
+				this.sortFieldDesc = !this.sortFieldDesc;
+			}
+			this.sortFieldOp = function(o){ return o.name || o.scientificName; };
+		},
+		sortQuantity: function(){
+			if(this.sortField != 1){
+				this.sortField = 1;
+				this.sortFieldDesc = true;
+			}else{
+				this.sortFieldDesc = !this.sortFieldDesc;
+			}
+			this.sortFieldOp = function(o){ return o.number * 1; };
+		},
+		sortPrice: function(){
+			if(this.sortField != 2){
+				this.sortField = 2;
+				this.sortFieldDesc = true;
+			}else{
+				this.sortFieldDesc = !this.sortFieldDesc;
+			}
+			this.sortFieldOp = function(o){ return o.price; };
+		},
+		sortTotal: function(){
+			if(this.sortField != 3){
+				this.sortField = 3;
+				this.sortFieldDesc = true;
+			}else{
+				this.sortFieldDesc = !this.sortFieldDesc;
+			}
+			this.sortFieldOp = function(o){ return o.number * o.price; };
+		},
+		sortFieldOp: function(o){ return o.number * o.price; },
+		sortFieldDesc: true,
+		sortField: 3
+	});
+	</script>
+</polymer-element>

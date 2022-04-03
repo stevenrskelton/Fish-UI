@@ -1,0 +1,48 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer-ui-icon-button/polymer-ui-icon-button.html">
+<link rel="import" href="fish-species.html">
+
+<polymer-element name="search-searchresult" noscript attributes="species add maximize purchases">
+	<template>
+		<link rel="stylesheet" href="../css/mybootstrap.css">
+		<template if="{{maximize}}">
+			<fish-species species="{{species}}"></fish-species>
+		</template>
+		<template if="{{!maximize}}">
+			<div class="panel info" style="vertical-align:top;clear:both;border-width:2px;{{ disabled ? 'opacity:0.35' : ''}};
+			border-color:{{compatibilityColors[species.compatibility]}};
+			background-image: linear-gradient(to right, {{compatibilityColors[species.compatibility]}} 0%, {{compatibilityColors[species.compatibility]}} 116px, transparent 117px);">
+				<div style="float:right;width:64px;">
+					<polymer-ui-icon-button hidden?={{selected}} icon="add" style="float:right;margin-right:12px;{{ disabled ? 'display:none' : ''}}" on-click="{{select}}"></polymer-ui-icon-button>
+					<div style="margin:-3px 0 -3px;" hidden?={{!selected}}>
+						<input id="number" type="text" class="form-control input-lg" placeholder="#" style="width:64px;text-align:right;" value="{{species.number}}" on-blur="{{validate}}"/>
+					</div>
+				</div>
+				<div class="input-group-addon" style="float:right;padding-left:0;text-align:right;">
+					${{species.price}}
+				</div>
+				<img title="{{species.scientificName}}" alt="{{species.scientificName}}" src="{{species.src}}" width="112px" height="56px" style="float:left;border-radius:4px;margin:-8px 15px 0 -8px;" />
+				<strong>{{species.name}}</strong><br/>
+				{{species.scientificName}}
+			</div>
+		</template>
+	</template>
+	<script>
+	Polymer('search-searchresult', {
+		select: function(){
+			this.selected = true;
+			this.async(function(){ this.$.number.focus() });
+		},
+		selected: false,
+		validate: function(){
+			if(this.species.number == null || this.species.number == ''){
+				this.selected = false;
+			}else{
+				this.fire('add', this.species);
+				this.disabled = true;
+			}
+		},
+		compatibilityColors: [ 'rgba(100,100,100,0.2)', '#00bf00', '#E3A857', '#ff0000' ]
+	});
+	</script>
+</polymer-element>

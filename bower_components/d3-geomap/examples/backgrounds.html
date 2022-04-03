@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<title>D3 SVG Geographic Map</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="../../platform/platform.js"></script>
+	<link rel="import" href="../d3-geomap.html">
+	<style>
+		p > div {
+			font-style: italic;
+			text-align: center;
+			margin-bottom: 2em;
+			width: 900px;
+			display: inline-block;
+		}
+	</style>
+  </head>
+  <body unresolved>
+
+	<h2>Backgrounds</h2>
+	Different maps available (you are always free to use your own).  Large images, <strong><em>please be patient</em></strong>.
+
+	<p />
+
+	<template id="example1" bind>
+		<div>
+			<d3-geomap theme="{{theme}}"></d3-geomap>
+			Realistic ( 2048 x 1026, 595KB )<br/>
+			&nbsp;
+		</div>
+	</template>
+
+	<template id="example2" bind>
+		<div>
+			<d3-geomap theme="{{theme}}"></d3-geomap>
+			Elevation ( 1920 x 960, 170KB )<br/>
+			<a href="../SRTM30_Plus/srtm30plus_hilldhading_B.overview_res5km.jpg" alt="high resolution">High Resolution Elevation</a> ( 8640 x 4320, 4.2MB )
+		</div>
+	</template>
+
+<script>
+	window.addEventListener('polymer-ready', function(){
+
+		document.getElementById('example1').model = {
+			theme: {
+				defaultFill: 'transparent',
+				borderWidth: 1,
+				borderColor: 'rgba(255,255,255,0.1)',
+				highlightFillColor: 'rgba(240,240,51,0.5)',
+				highlightBorderColor: '#DDDD33',
+				highlightBorderWidth: 1,
+				backgroundImage: '../Equirectangular_projection_SW.jpg'
+			}
+		};
+
+		document.getElementById('example2').model = {
+			theme: {
+				defaultFill: 'transparent',
+				borderWidth: 1,
+				borderColor: 'rgba(255,255,255,0.1)',
+				highlightFillColor: 'rgba(240,240,51,0.5)',
+				highlightBorderColor: '#DDDD33',
+				highlightBorderWidth: 1,
+				backgroundImage: '../SRTM30_Plus/srtm30plus.jpg' //"url('../src/SRTM30_Plus/srtm30plus_hilldhading_B.overview_res5km.jpg')",
+			}
+		};
+
+	});
+</script>
+
+  </body>
+</html>

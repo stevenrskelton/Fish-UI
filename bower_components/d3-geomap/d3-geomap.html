@@ -1,0 +1,366 @@
+<!--
+ https://github.com/stevenrskelton/d3-geomap
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<script src="../d3/d3.min.js"></script>
+<script src="../topojson/topojson.js"></script>
+<script src="datamaps/datamaps.js"></script>
+
+<polymer-element name="d3-geomap" attributes="selected data hover clicked map theme multiselect projection pan zoom hoverTemplate rootDirectory cover">
+  <template>
+	<style>
+		:host { display: block; }
+	</style>
+	<div id="container" style="position:relative;height:inherit;overflow:hidden;"></div>
+  </template>
+  <script>
+
+	var defaultTheme = {
+		defaultFill: '#ABDDA4',
+		defaultSelectedFill: '#FBB917',
+		backgroundColor: 'transparent',
+		borderWidth: 1,
+		borderColor: '#FDFDFD',
+		highlightFillColor: '#FC8D59',
+		highlightBorderColor: 'rgba(250, 15, 160, 0.2)',
+		highlightBorderWidth: 2,
+		cursor: 'pointer',
+		backgroundImage: null
+	};
+
+	function reformatProjection(projection, map){
+		if(projection){
+			if ( map === 'usa' ) {
+				return function(element){
+					var scale = element.offsetWidth;
+					if(projection.scale) scale = scale * projection.scale;
+
+					_projection = d3.geo.albersUsa()
+						.scale(scale)
+						.translate([element.offsetWidth / 2, element.offsetHeight / 2]);
+
+					var path = d3.geo.path()
+						.projection(_projection);
+
+					return {path: path, projection: _projection};
+				}
+			} else if ( map === 'world' ) {
+				return function(element) {
+					var scale = (element.offsetWidth + 1) / 2 / Math.PI;
+					if(projection.scale) scale = scale * projection.scale;
+
+					var rProjection = d3.geo.equirectangular()
+						.center([projection.x || 0, projection.y || 0])
+						.scale(scale)
+						.translate([element.offsetWidth / 2, element.offsetHeight / 1.82]);
+					var path = d3.geo.path()
+						.projection(rProjection);
+
+					return {path: path, projection: rProjection};
+				}
+			}
+		}else return null;
+	}
+	function setSize(node){
+		var height, width;
+		//fill parent element
+		if(node.clientWidth>0){
+			height = node.style.height;
+			width = node.clientWidth;
+			if(!height){
+				if(node.map=='world') height = width * 0.43;
+				else if(node.map=='usa') height = width * 0.465;
+				node.$.container.style.height = height + 'px';
+			}else{
+				node.$.container.style.height = height;
+			}
+		}else if(node.clientHeight>0){
+			height = node.clientHeight;
+			if(node.map=='world') width = Math.floor(height / 0.43);
+			else if(node.map=='usa') width = Math.floor(height / 0.465);
+			node.$.container.style.width = width + 'px';
+		}
+		if(node.d3map && node.d3map.svg){
+			var svg = node.d3map.svg.node();
+			svg.setAttribute('width', width);
+			svg.setAttribute('height', height);
+		}
+		//(500 *2 - 800*0.43) / 500
+		return (node.clientHeight * 2 - node.clientWidth*0.43) / node.clientHeight;
+	}
+
+	Polymer('d3-geomap', {
+		rootDirectory: '../bower_components/d3-geomap/',
+		d3map: null,
+		hover: null,
+		data: null,
+		map: 'world',
+		multiselect: false,
+		cover: false,
+		selected: {},
+		theme: {
+			defaultFill: defaultTheme.defaultFill,
+			defaultSelectedFill: defaultTheme.defaultSelectedFill,
+			backgroundColor: defaultTheme.backgroundColor,
+			borderWidth: defaultTheme.borderWidth,
+			borderColor: defaultTheme.borderColor,
+			highlightFillColor: defaultTheme.highlightFullColor,
+			highlightBorderColor: defaultTheme.highlightBorderColor,
+			highlightBorderWidth: defaultTheme.highlighBorderWidth,
+			cursor: defaultTheme.cursor,
+			backgroundImage: defaultTheme.backgroundImage
+		},
+		attached: function(){
+			var self = this;
+
+			var flexScale = setSize(this);
+			if(this.cover && flexScale > 1) this.projection.scale *= flexScale;
+
+			var projection = reformatProjection(this.projection, self.map);
+
+			//theme
+			this.$.container.style.backgroundColor = this.theme.backgroundColor || defaultTheme.backgroundColor;
+			this.$.container.style.cursor = this.theme.cursor || defaultTheme.cursor;
+
+			this.d3map = new Datamap({
+				element: this.$.container,
+				scope: self.map,
+				fills: {
+					defaultFill: self.theme.defaultFill
+				},
+				data: self.data || {},
+				setProjection: projection,
+				geographyConfig: {
+					dataUrl: self.rootDirectory + '/datamaps/' + self.map + '.topo.json', //if not null, datamaps will fetch the map JSON (currently only supports topojson)
+					hideAntarctica: false,
+					borderWidth: self.theme.borderWidth || defaultTheme.borderWidth,
+					borderColor: self.theme.borderColor || defaultTheme.borderColor,
+					popupTemplate: function(geography, data) { //this function should just return a string
+						if(!self.hover || self.hover.geography.id != geography.id) self.hover = { geography: geography, data: data };
+						if(self.hoverTemplate){
+							 return self.hoverTemplate(geography, data);
+						}else{
+							return '<div class="hoverinfo"><strong>' + geography.properties.name + '</strong></div>';
+						}
+					},
+					popupOnHover: true, //disable the popup while hovering
+					highlightOnHover: true,
+					highlightFillColor: self.theme.highlightFillColor || defaultTheme.highlightFillColor,
+					highlightBorderColor: self.theme.highlightBorderColor || defaultTheme.highlightBorderColor,
+					highlightBorderWidth: self.theme.highlightBorderWidth || defaultTheme.highlighBorderWidth
+				},
+				done: function(datamap) {
+					var subunits = datamap.svg.selectAll('.datamaps-subunit');
+					subunits.on('click', function(geography) {
+						self.itemClicked(geography);
+					});
+					self.selectedChanged(null,self.selected);
+					var observer = new ObjectObserver(self.selected);
+					observer.open(function(added, removed, changed, getOldValueFn) {
+						if(self.d3map){
+							var cleared = self.theme.defaultFill || defaultTheme.defaultFill;;
+							var defaultSelectedFill = self.theme.defaultSelectedFill || defaultTheme.defaultSelectedFill;
+							var selectedToFill = {};
+							Object.keys(removed).forEach(function(property) {
+								//check if it's in data
+								var data;
+								if(self.data) data = self.data[property];
+								if(data){
+									data.color = cleared;
+									selectedToFill[property] = data;
+								}else{
+									var oldVal = getOldValueFn(property);
+									oldVal.color = cleared;
+									selectedToFill[property] = oldVal;
+								}
+							});
+							// respond to changes to the obj.
+							Object.keys(added).forEach(function(property) {
+								if(typeof added[property] === 'string'){
+									selectedToFill[property] = { color: added[property] };
+								}else{
+									selectedToFill[property] = added[property];
+								}
+							});
+							Object.keys(changed).forEach(function(property) {
+								if(typeof changed[property] === 'string'){
+									selectedToFill[property] = { color: changed[property] };
+								}else{
+									selectedToFill[property] = changed[property];
+								}
+							});
+							self.d3map.updateChoropleth(selectedToFill);
+						}
+					});
+					datamap.svg.node().addEventListener("transform",function(){
+						//read translation and apply to image
+						var g = datamap.svg.select('g.datamaps-subunits').node();
+						var transform = g.getAttribute('transform');
+
+						function parse(a){
+							var b={};
+							for (var i in a = a.match(/(\w+\((\-?\d+\.?\d*,?\s?)+\))+/g))
+							{
+								var c = a[i].match(/[\w\.\-]+/g);
+								b[c.shift()] = c;
+							}
+							return b;
+						}
+
+						var p = parse(transform);
+						var translate = p.translate||[0,0];
+						var scale = p.scale||[1];
+						self.projection.zoomScale = scale[0] * 1;
+						self.projection.panX = translate[0] * 1;
+						self.projection.panY = translate[1] * 1;
+					},false);
+					window.addEventListener("resize",function(){
+						setSize(self);
+						self.d3map.redraw();
+					});
+					datamap.svg.node().addEventListener("mouseout",function(){
+						self.hover = null;
+					});
+					self.renderBackgroundImage.call(self);
+					if(self.map=='usa') self.d3map.labels();
+				}
+			});
+			self.mouseChanged();
+		},
+		itemClicked: function(geography){
+			var data = {};
+			//find record
+			var d = this.data;
+			for (var key in d) {
+				if (d.hasOwnProperty(key) && key == geography.id) {
+					data = d[key]
+					break;
+				}
+			}
+			this.fire('clicked', { geography: geography, data: data });
+
+			if(this.multiselect){
+				var color = this.theme.highlightFillColor || defaultTheme.highlightFillColor;
+				var s = this.selected || {};
+				var n = {};
+
+				if(!s[geography.id]) n[geography.id] = color;
+
+				for (var key in s) {
+					if (s.hasOwnProperty(key) && key!=geography.id){
+						n[key] = color;
+					}
+				}
+				this.selected = n;
+			}
+		},
+		selectedChanged: function(oldVal, newVal) {
+			if(this.d3map){
+				var cleared = this.theme.defaultFill;
+				var defaultSelectedFill = this.theme.defaultSelectedFill;
+				var selectedToFill = {};
+
+				//clear old
+				if(oldVal){
+					for (var key in oldVal) {
+						if (oldVal.hasOwnProperty(key)) {
+							//check if it's in data
+							var data;
+							if(this.data) data = this.data[key];
+							if(data){
+								data.color = cleared;
+								selectedToFill[key] = data;
+							}else{
+								oldVal.color = cleared;
+								selectedToFill[key] = oldVal;
+							}
+						}
+					}
+					//handle array
+					if(oldVal.length>0){
+						for(var i=0;i<oldVal.length;i++){
+							var key = oldVal[i];
+							//check if it's in data
+							var data;
+							if(this.data) data = this.data[key];
+							if(data){
+								data.color = cleared;
+								selectedToFill[key] = data;
+							}else{
+								selectedToFill[key] = cleared;
+							}
+						}
+					}
+				}
+				//fill new
+				if(newVal){
+					if(newVal.length>0){
+						//handle array
+						for(var i=0;i<newVal.length;i++){
+							selectedToFill[newVal[i]] = defaultSelectedFill;
+						}
+					}else{
+						for (var key in newVal) {
+							if (newVal.hasOwnProperty(key)) {
+								if(typeof newVal[key] === 'string'){
+									selectedToFill[key] = { color: newVal[key] };
+								}else{
+									selectedToFill[key] = newVal[key];
+								}
+							}
+						}
+					}
+				}
+				this.d3map.updateChoropleth(selectedToFill);
+			}
+		},
+		observe: {
+			'projection.x': 'projectionChanged',
+			'projection.y': 'projectionChanged',
+			'projection.scale': 'projectionChanged',
+			'projection.zoomIncrement': 'mouseChanged',
+			'zoom': 'mouseChanged',
+			'pan': 'mouseChanged',
+			'theme.backgroundImage' : 'renderBackgroundImage'
+		},
+		pan: false,
+		zoom: false,
+		projection: {
+			x: 0,
+			y: 0,
+			scale: 1,
+			zoomIncrement: 0.1,
+			zoomScale: 1,
+			panX: 0,
+			panY: 0
+		},
+		mouseChanged: function(){
+			if(this.d3map){
+				this.d3map.userMovement(null, {
+					zoomIncrement: this.projection.zoomIncrement || 0.1,
+					zoomEnabled: this.zoom,
+					panEnabled: this.pan
+				});
+			}
+		},
+		projectionChanged: function(oldVal, newVal){
+			if(this.d3map){
+				if(this.theme.backgroundImage!='none'){
+					//scale
+					this.renderBackgroundImage();
+				}
+				this.d3map.setProjection = reformatProjection(this.projection, this.map);
+				this.d3map.redraw();
+			}
+		},
+		renderBackgroundImage: function(){
+			if(this.theme.backgroundImage && this.d3map && this.d3map.background){
+				this.d3map.background(null, {
+					backgroundImage: this.theme.backgroundImage || defaultTheme.backgroundImage
+				});
+			}
+		}
+	});
+  </script>    
+</polymer-element>

@@ -1,0 +1,222 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer-ui-toolbar/polymer-ui-toolbar.html">
+<link rel="import" href="../bower_components/polymer-ui-icon-button/polymer-ui-icon-button.html">
+<link rel="import" href="../bower_components/polymer-ui-icon/polymer-ui-icon.html">
+<link rel="import" href="../bower_components/polymer-localstorage/polymer-localstorage.html">
+<link rel="import" href="../bower_components/polymer-ui-sidebar-menu/polymer-ui-sidebar-menu.html">
+<link rel="import" href="../bower_components/polymer-ui-menu-item/polymer-ui-menu-item.html">
+<link rel="import" href="../bower_components/polymer-media-query/polymer-media-query.html">
+<link rel="import" href="../bower_components/polymer-flex-layout/polymer-flex-layout.html">
+
+<link rel="import" href="toolbar-units.html">
+<link rel="import" href="habitat-search.html">
+
+<polymer-element name="filters-index" noscript style="height:100%">
+	<template>
+		<link rel="stylesheet" href="../css/mybootstrap.css">
+		<polymer-media-query query="max-width: 800px" queryMatches="{{bottomScreen}}"></polymer-media-query>
+		<polymer-media-query query="max-width: 600px" queryMatches="{{phoneScreen}}"></polymer-media-query>
+		
+		<polymer-ui-sidebar-menu valueattr="lbl" selected="{{item}}" theme="polymer-ui-dark-theme" style="position:absolute;top:0;left:0;width:25%;min-width:150px;height:100%;">
+			<polymer-ui-menu-item icon="{{costIcon}}" lbl="Cost" label="Cost"></polymer-ui-menu-item>
+			<polymer-ui-menu-item icon="{{difficultyIcon}}" lbl="Difficulty" label="Care & Difficulty"></polymer-ui-menu-item>
+			<polymer-ui-menu-item icon="{{behaviourIcon}}" lbl="Behaviour" label="Species Behaviour"></polymer-ui-menu-item>
+			<polymer-ui-menu-item icon="{{sizeIcon}}" lbl="Size" label="Species Size"></polymer-ui-menu-item>
+			<polymer-ui-menu-item icon="{{sustainabilityIcon}}" lbl="Sustainability" label="Sustainability"></polymer-ui-menu-item>
+			<polymer-ui-menu-item icon="{{habitatIcon}}" lbl="Habitat" label="Tank Appearance / Habitat"></polymer-ui-menu-item>
+		</polymer-ui-sidebar-menu>
+
+		<polymer-flex-layout vertical></polymer-flex-layout>
+		
+		<polymer-ui-toolbar theme="polymer-ui-dark-theme" class="align-center polymer-ui-dark-theme flexbox" style="z-index:2">
+			<polymer-ui-icon-button icon="trash" class="polymer-ui-dark-theme" on-click="{{trash}}"></polymer-ui-icon-button>
+			<div>What factors are most important to you?</div>
+			<toolbar-units units="{{units}}" flex></toolbar-units>
+			<button type="button" class="btn btn-primary btn-lg" style="margin-right:10px;height:46px;" on-click="{{save}}">Next <polymer-ui-icon icon="shortcut"></polymer-ui-icon></button>
+		</polymer-ui-toolbar>
+
+		<div flex style="{{phoneScreen? 'padding-left:150px':'padding-left:25%'}};overflow-y:auto;width:100%;">
+
+			<template if="{{item=='Cost'}}">
+				<div class="factor">
+					<h1>Cost</h1>
+					<em>It is important to buy fish within your budget.</em>
+				</div>
+
+				<div class="panel info">
+					<div style="border-bottom:1px solid #DDD">
+						<input type="checkbox"/>Max price <input type="text"/>
+					</div>
+					There are many reasons why a fish may be expensive - a higher cost doesn't mean the fish is better or worse.
+					But in general, the least expensive fish species make the best pets.
+
+					<h3>Popular fish usually have the lowest price</h3>
+					Popular species make up the majority of sales at a pet store. This means pet stores can make larger volume 
+					purchases, and sell them quicker than other species driving down their costs.
+					<br/>
+					<h3>Cheaper fish are usually hardier</h3>
+					Any fish that dies at the pet store costs the store money, so hardier fish which are less likely to die will
+					cost the store less to stock.
+					<br/>
+					<h3>Cheaper fish usually breed easily</h3>
+					Any fish that breeds quickly and easily will cost less to produce.
+					This means less can be bought, both initially and to replace natural attrition as the fish will reproduce to 
+					appropriate numbers in their tank.
+					<p>
+					<hr/>
+					When making an investment into a more expensive fish, it is important to notet here are many reasons a fish 
+					may die irregardless of the amount and quality of care put into the hobby, such as:
+					<ul>
+						<li>Poor genetics / overbreeding,</li>
+						<li>jumpers,</li>
+						<li>gender balancing,</li>
+						<li>dominance / bullying,</li>
+						<li>bad temperment,</li>
+						<li>picky eaters,</li>
+						<li>natural causes,</li>
+						<li>sucked into filters,</li>
+						<li>general accidents, and </li>
+						<li>equipment failures or loss of power.</li>
+					</ul>
+				</div>
+
+				<div class="panel info">
+					Different fish have different requirements, meaning different aquarium equipment is necessisary.
+					<p>
+					Some freshwater fish can be kept at room temperature, meaning no heater is required.<br/>
+					- <input type="checkbox"/>room temperature
+					</p>
+				</div>
+				<div class="panel info">
+					<p>
+					Some fish require higher water flow, meaning additional powerheads need to be purchased.
+					Other fish demand low flow, so no or less expensive aggitation such as air pumps can be used.<br/>
+					- <input type="checkbox"/>low flow
+					</p>
+				</div>
+			</template>
+			<template if="{{item=='Difficulty'}}">
+				<div class="factor">
+					<h1>Care &amp; Difficulty</h1>
+					<em>It is important to buy fish appropriate to your skill level and commitment.</em>
+				</div>
+				<div class="panel info">
+					There are a lot of mistakes that can lead to loss of livestock:
+					<ul>
+						<li>improper acclimation,</li>
+						<li>variations in water parameters,</li>
+						<li>die on transit,</li>
+						<li>improper habitat,</li>
+						<li>human error,<li>
+						<li>prone to disease,<li>
+						<li>poor water quality, and</li>
+						<li>improperly cycled tank.</li>
+					</ul>
+					<br/>
+					Some species are hardier, and able to better survive life in an aquarium.
+					Other species have exact requirements increasing their difficulty to aquarists.
+					<p>
+					- <input type="checkbox"/>hardy / tolerant<br/>
+					- <input type="checkbox"/>easy feeders<br/>
+					</p>
+				</div>
+			</template>
+			<template if="{{item=='Behaviour'}}">
+				<div class="factor">
+					<h1>Species Behaviour and Characteristics</h1>
+					<em>Species behave in different ways, find one that will behave as you expect.</em>
+				</div>
+				<div class="panel info">
+					- <input type="checkbox"/>community fish<br/>
+					- <input type="checkbox"/>fast swimmers<br/>
+					- <input type="checkbox"/>delicate<br/>
+					- <input type="checkbox"/>schooling<br/>
+					- <input type="checkbox"/>breeding<br/>
+					- <input type="checkbox"/>bottom feeders / clean up crew<br/>
+				</div>
+			</template>
+			<template if="{{item=='Size'}}">
+				<div class="factor">
+					<h1>Species Size</h1>
+				</div>
+				<div class="panel info">
+					This application will automatically filter out fish too large for your tank, but if you want to 
+					override this behaviour or further limit your results, check your options below:
+					<p>
+					- <input type="checkbox"/>nano<br/>
+					- <input type="checkbox"/>small<br/>
+					- <input type="checkbox"/>medium<br/>
+					- <input type="checkbox"/>large<br/>
+					<p>
+					All sizes are based on typical adult length, purchase sizes tend to be much smaller since most stores 
+					sell juveniles.
+				</div>
+			</template>
+			<template if="{{item=='Sustainability'}}">
+				<div class="factor">
+					<h1>Sustainability</h1>
+				</div>
+				<div class="panel info">
+					Most species available in the aquarium trade are sourced directly from the wild.
+					This isn't always an issue, as may species are in no jeopardy of overfishing.
+					There are some species that may be relativily rare or endangered in the wild, or require special permits for import.
+					<p>
+					- <input type="checkbox"/>tank bred<br/>
+					- <input type="checkbox"/>non-endangered<br/>
+					</p>
+				</div>
+			</template>
+			<template if="{{item=='Habitat'}}">
+				<div class="factor">
+					<h1>Tank Appearance &amp; Natural Habitat</h1>
+					<em>Species can tolerate a set range of conditions in the wild, and this collection of conditions is referred to as a habitat.</em>
+				</div>
+				<div class="panel info">
+					While some habitats share similiar conditions, and habitat conditions may vary from place to place around the world, 
+					many fish can only survive in specific conditions of a single habitat.
+					<p>
+					Some of the conditions of a habitat include:
+					<ul>
+						<li>Temperature,</li>
+						<li>Salinity,</li>
+						<li>pH,</li>
+						<li>Water Hardness,</li>
+						<li>Water flow,</li>
+						<li>Vegitation density,</li>
+						<li>Amount of light, and</li>
+						<li>Biological density.</li>
+					</ul>
+					<habitat-search></habitat-search>
+				</div>
+			</template>
+		</div>
+
+		<div style="height:60px" hidden?="{{!bottomScreen}}"></div>
+		<polymer-localstorage name="units" value="{{units}}" id="units"></polymer-localstorage>
+	</template>
+	<style>
+	html, body {
+		height: 100%;
+	}
+	.factor {
+		text-align:center;
+		margin-bottom:1em;
+	}
+	.factor h1 {
+		margin-bottom:0;
+	}
+	</style>
+	<script>
+	Polymer('filters-index',{
+		item: 'Cost',
+		save: function(){
+			document.location.href = 'search.html';
+		},
+		trash: function(){
+			if(confirm('Do you want clear all your selections and start a new tank?')){
+				document.location.href='/'
+			}
+		}
+	});
+	</script>
+</polymer-element>
